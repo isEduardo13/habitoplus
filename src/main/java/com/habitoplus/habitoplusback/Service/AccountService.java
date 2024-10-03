@@ -15,7 +15,7 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
-    public Account getAccountById(Long id) {
+    public Account getAccountById(int id) {
         return accountRepository.findById(id).orElse(null);
     }
     public Account getAccountByEmail(String email) {
@@ -34,7 +34,7 @@ public class AccountService {
         return true;
     }
 
-    public boolean deleteAccount(Long id) {
+    public boolean deleteAccount(int id) {
         Account existingAccount = accountRepository.findById(id).orElse(null);
         if (existingAccount != null) {
             existingAccount.setStatus(false);

@@ -16,7 +16,7 @@ import com.habitoplus.habitoplusback.Model.Account;
 import com.habitoplus.habitoplusback.Service.AccountService;
 
 @RestController
-@RequestMapping("Accounts")
+@RequestMapping("accounts")
 @CrossOrigin(origins = "*" , methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class AccountController {
     
@@ -32,7 +32,7 @@ public class AccountController {
         return accountService.getAccountByEmail(email);
     }
     @GetMapping("/{id}")
-    public Account getAccountById(@PathVariable Long id) {
+    public Account getAccountById(@PathVariable int id) {
         return accountService.getAccountById(id);
     }
     @PostMapping
@@ -44,7 +44,7 @@ public class AccountController {
         return accountService.updateAccount(account);
     }
     @PutMapping("/{id}")
-    public boolean deleteAccount(@PathVariable Long id) {
+    public boolean deleteAccount(@PathVariable int id) {
         return accountService.deleteAccount(id);
     }
 

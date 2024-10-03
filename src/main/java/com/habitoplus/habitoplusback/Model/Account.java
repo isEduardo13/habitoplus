@@ -14,28 +14,30 @@ import jakarta.persistence.Transient;
 public class Account{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long account_id;
+    private int idAccount;
 
-    @Transient
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "idProfile",name = "id_Profile")
     private Profile profile;
 
-    @Column(unique = true, nullable = false, name = "email")
+    @Column(unique = true, name = "email")
     private String email;
 
-    @Column(nullable = false, name = "password")
+    @Column (name = "password")
     private String password;
 
-    @Column(nullable = false, name = "status", columnDefinition = "boolean default false")
+    @Column( name = "status")
     private boolean status;
 
     public Account() {
     }
-    public Long getAccount_id() {
-        return account_id;
+    public int getAccount_id() {
+        return idAccount;
     }
 
-    public void setAccount_id(Long account_id) {
-        this.account_id = account_id;
+    public void setAccount_id(int idAccount) {
+        this.idAccount = idAccount;
     }
 
     public Profile getProfile() {

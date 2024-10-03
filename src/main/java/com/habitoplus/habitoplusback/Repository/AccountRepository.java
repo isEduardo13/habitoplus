@@ -5,7 +5,7 @@
     import com.habitoplus.habitoplusback.Model.Account;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, Long> {
+public interface AccountRepository extends JpaRepository<Account, Integer> {
     Account findByEmail(String email);
 
 }
