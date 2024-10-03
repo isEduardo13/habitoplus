@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +27,7 @@ public class AccountController {
     public List<Account> getAllAccounts() {
         return accountService.getAllAccounts();
     }
-    @GetMapping 
+    @GetMapping("/email")
     public Account getAccountByEmail(@RequestParam String email) {
         return accountService.getAccountByEmail(email);
     }
@@ -33,15 +35,15 @@ public class AccountController {
     public Account getAccountById(@PathVariable Long id) {
         return accountService.getAccountById(id);
     }
-    @GetMapping
+    @PostMapping
     public Account addAccount(Account account) {
         return accountService.addAccount(account);
     }
-    @GetMapping
+    @PutMapping
     public boolean updateAccount(Account account) {
         return accountService.updateAccount(account);
     }
-    @GetMapping
+    @PutMapping("/{id}")
     public boolean deleteAccount(@PathVariable Long id) {
         return accountService.deleteAccount(id);
     }
