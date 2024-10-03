@@ -15,7 +15,7 @@ import com.habitoplus.habitoplusback.Service.AccountService;
 
 @RestController
 @RequestMapping("Accounts")
-@CrossOrigin(origins = "http://localhost:3000" , methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin(origins = "*" , methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class AccountController {
     
     @Autowired
