@@ -21,6 +21,7 @@ public class AccountService {
     public Account getAccountByEmail(String email) {
         return accountRepository.findByEmail(email);
     }
+    
     public Account addAccount(Account account) {
         return accountRepository.save(account);
     }
@@ -34,12 +35,15 @@ public class AccountService {
     }
 
     public boolean deleteAccount(Long id) {
-        Account existingAccount = accountRepository.findById(account.getAccount_id()).orElse(null);
-        existingAccount.setStatus(false);
-        accountRepository.save(existingAccount);
-        return true;
+        Account existingAccount = accountRepository.findById(id).orElse(null);
+        if (existingAccount != null) {
+            existingAccount.setStatus(false);
+            accountRepository.save(existingAccount);
+            return true;
+        }
+        return false;
     }
-
+}
 
     
-}
+
