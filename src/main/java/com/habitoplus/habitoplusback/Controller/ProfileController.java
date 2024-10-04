@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.habitoplus.habitoplusback.Model.Profile;
 import com.habitoplus.habitoplusback.Service.ProfileService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
