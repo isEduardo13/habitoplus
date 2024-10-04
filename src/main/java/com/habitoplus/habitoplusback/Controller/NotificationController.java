@@ -26,9 +26,9 @@ public class NotificationController {
      public List<Notification> getAllNotifications() {
          return notificationService.getAllNotifications();
      }
-     @GetMapping("/Mensaje")
-        public Notification getNotificationByMensaje(@RequestParam String mensaje) {
-            return notificationService.getNotificationByMensaje(mensaje);
+     @GetMapping("/message")
+        public Notification getNotificationByMessage(@RequestParam String message) {
+            return notificationService.getNotificationByMessage(message);
         }
         @GetMapping("/{id}")
         public Notification getNotificationById(@PathVariable int id) {

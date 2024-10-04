@@ -19,17 +19,17 @@ public class Notification {
     @ManyToOne
     private Profile profile;
 
-    @Column(unique = true, name = "mensaje")
-    private String mensaje;
+    @Column(unique = true, name = "message")
+    private String message;
 
-    @Column( name = "fechaInicio")
-    private String fechaInicio;
+    @Column( name = "startDate")
+    private String startDate;
 
-    @Column( name = "fechaFin")
-    private String fechaFin;
+    @Column( name = "endDate")
+    private String endDate;
 
-    @Column( name = "diasConsecutivos")
-    private int diasConsecutivos;
+    @Column( name = "consecutiveDays")
+    private int consecutiveDays;
 
     public Notification() {
     }
@@ -47,36 +47,36 @@ public class Notification {
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
-    public String getMensaje() {
-        return mensaje;
+    public String getMessage() {
+        return message;
     }
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
+    public void setMessage(String message) {
+        this.message = message;
     }
-    public String getFechaInicio() {
-        return fechaInicio;
+    public String getStartDate() {
+        return startDate;
     }
-    public void setFechaInicio(String fechaInicio) {
-        this.fechaInicio = fechaInicio;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
-    public String getFechaFin() {
-        return fechaFin;
+    public String getEndDate() {
+        return endDate;
     }
-    public void setFechaFin(String fechaFin) {
-        this.fechaFin = fechaFin;
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
-    public int getDiasConsecutivos() {
-        return diasConsecutivos;
+    public int getConsecutiveDays() {
+        return consecutiveDays;
     }
-    public void setDiasConsecutivos(int diasConsecutivos) {
-        this.diasConsecutivos = diasConsecutivos;
+    public void setConsecutiveDays(int consecutiveDays) {
+        this.consecutiveDays = consecutiveDays;
     }
-    public Notification(Profile profile, String mensaje, String fechaInicio, String fechaFin, int diasConsecutivos) {
+    public Notification(Profile profile, String message, String startDate, String endDate, int consecutiveDays) {
         this.profile = profile;
-        this.mensaje = mensaje;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
-        this.diasConsecutivos = diasConsecutivos;
+        this.message = message;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.consecutiveDays = consecutiveDays;
     }
 
 }

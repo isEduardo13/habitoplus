@@ -9,5 +9,5 @@ import com.habitoplus.habitoplusback.Model.Notification;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Integer> {
-   Notification findByMensaje(String mensaje);
+   Notification findByMessage(String message);
 }

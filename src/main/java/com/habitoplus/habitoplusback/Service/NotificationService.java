@@ -21,18 +21,18 @@ public class NotificationService {
     public Notification getNotificationById(int id) {
         return notificationRepository.findById(id).orElse(null);
     }
-    public Notification getNotificationByMensaje(String mensaje) {
-      return notificationRepository.findByMensaje(mensaje);
+    public Notification getNotificationByMessage(String menssage) {
+      return notificationRepository.findByMessage(menssage);
     }
     public Notification addNotification(Notification notification) {
         return notificationRepository.save(notification);
     }
     public boolean updateNotification(Notification notification) {
         Notification existingNotification = notificationRepository.findById(notification.getId()).orElse(null);
-        existingNotification.setDiasConsecutivos(notification.getDiasConsecutivos());
-        existingNotification.setFechaInicio(notification.getFechaInicio());
-        existingNotification.setFechaFin(notification.getFechaFin());
-        existingNotification.setMensaje(notification.getMensaje());
+        existingNotification.setConsecutiveDays(notification.getConsecutiveDays());
+        existingNotification.setStartDate(notification.getStartDate());
+        existingNotification.setEndDate(notification.getEndDate());
+        existingNotification.setMessage(notification.getMessage());
         return true;
     }
     public boolean deleteNotification(int id) {
