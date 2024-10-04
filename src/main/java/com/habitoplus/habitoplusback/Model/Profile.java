@@ -1,8 +1,11 @@
 package com.habitoplus.habitoplusback.Model;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 
@@ -15,6 +18,8 @@ public class Profile {
     @OneToOne(mappedBy = "profile")
     private Account account;
 
+    @OneToMany(mappedBy = "profile")
+    private List<Notification> notifications;
 
     @Transient
     private Photo photo;
