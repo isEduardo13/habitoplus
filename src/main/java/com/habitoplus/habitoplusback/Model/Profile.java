@@ -17,6 +17,9 @@ public class Profile {
 
     @OneToOne(mappedBy = "profile")
     private Account account;
+    
+    private Notification notification;
+
     public int getIdProfile() {
         return idProfile;
     }
