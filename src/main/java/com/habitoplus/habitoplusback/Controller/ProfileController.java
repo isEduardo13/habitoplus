@@ -23,7 +23,7 @@ public class ProfileController {
     private ProfileService profileService;
     
     @GetMapping
-    private List<Profile> getAllProfiles() {
+    public List<Profile> getAllProfiles() {
         return profileService.getAllProfiles();
     }
 
