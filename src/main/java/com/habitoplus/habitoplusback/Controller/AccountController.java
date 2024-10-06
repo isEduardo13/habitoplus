@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import com.habitoplus.habitoplusback.Model.Account;
 import com.habitoplus.habitoplusback.Service.AccountService;
+
 
 @RestController
 @RequestMapping("accounts")
@@ -36,7 +38,7 @@ public class AccountController {
         return accountService.getAccountById(id);
     }
     @PostMapping
-    public Account addAccount(Account account) {
+    public Account addAccount( @RequestBody Account account) {
         return accountService.addAccount(account);
     }
     @PutMapping
