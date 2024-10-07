@@ -29,7 +29,7 @@ public class AccountController {
     public List<Account> getAllAccounts() {
         return accountService.getAllAccounts();
     }
-    @GetMapping("/email")
+    @GetMapping("/query")
     public Account getAccountByEmail(@RequestParam String email) {
         return accountService.getAccountByEmail(email);
     }

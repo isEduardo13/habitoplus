@@ -1,12 +1,15 @@
 package com.habitoplus.habitoplusback.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.habitoplus.habitoplusback.Repository.AccountRepository;
 import com.habitoplus.habitoplusback.Repository.ProfileRepository;
-import com.mongodb.internal.connection.Time;
 
 import jakarta.transaction.Transactional;
 
@@ -35,14 +38,17 @@ public class AccountService {
     public Account addAccount(Account account) {
         if (account.getProfile() == null) {
             Profile profile = new Profile();
+            profile.Inicializar();
             profileRepository.save(profile);
             account.setProfile(profile);
         } else {
-            profileRepository.save(account.getProfile());
+            Profile profile = account.getProfile();
+            profileRepository.save(profile);
         }
 
         return accountRepository.save(account);
     }
+
     public boolean updateAccount(Account account) {
         Account existingAccount = accountRepository.findById(account.getAccount_id()).orElse(null);
         existingAccount.setEmail(account.getEmail());

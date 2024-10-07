@@ -1,6 +1,9 @@
 package com.habitoplus.habitoplusback.Model;
 
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,19 +30,19 @@ public class Profile {
 
     private String age;
 
-    private String gener;
+    private String gender;
 
-    private String Preferences;
+    private String preferences;
 
-    private String desciption;
+    private String description;
 
     private String numberPhone;
 
     private Boolean status;
 
-    private String DateOfRegistration;
+    private String dateOfRegistration;
 
-    private String LastConnnetion;
+    private String lastConnetion;
 
 
     public Photo getPhoto() {
@@ -90,28 +93,28 @@ public class Profile {
         this.age = age;
     }
 
-    public String getGener() {
-        return gener;
+    public String getGender() {
+        return gender;
     }
 
-    public void setGener(String gener) {
-        this.gener = gener;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getPreferences() {
-        return Preferences;
+        return preferences;
     }
 
     public void setPreferences(String preferences) {
-        Preferences = preferences;
+        this.preferences = preferences;
     }
 
-    public String getDesciption() {
-        return desciption;
+    public String setDescription() {
+        return description;
     }
 
-    public void setDesciption(String desciption) {
-        this.desciption = desciption;
+    public void setDescription(String desciption) {
+        this.description = desciption;
     }
 
     public String getNumberPhone() {
@@ -131,19 +134,19 @@ public class Profile {
     }
 
     public String getDateOfRegistration() {
-        return DateOfRegistration;
+        return dateOfRegistration;
     }
 
     public void setDateOfRegistration(String dateOfRegistration) {
-        DateOfRegistration = dateOfRegistration;
+        this.dateOfRegistration = dateOfRegistration;
     }
 
-    public String getLastConnnetion() {
-        return LastConnnetion;
+    public String getLastConnection() {
+        return lastConnetion;
     }
 
-    public void setLastConnnetion(String lastConnnetion) {
-        LastConnnetion = lastConnnetion;
+    public void setLastConnection(String lastConnnetion) {
+        lastConnetion = lastConnnetion;
     }
     public int getIdProfile() {
         return idProfile;
@@ -152,5 +155,22 @@ public class Profile {
 
     public void setIdProfile(int idProfile) {
         this.idProfile = idProfile;
+    }
+
+    public void  Inicializar() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedDate = LocalDate.now().format(formatter);
+        this.dateOfRegistration= formattedDate;
+        this.status = true;
+        this.lastConnetion = formattedDate;
+        this.age = "N/A";
+        this.gender = "Unknown";
+        this.numberPhone = "N/A";
+        this.preferences = "N/A";
+        this.description = "N/A";
+        this.lastName = "N/A";
+        this.name = "N/A";
+        this.username = "N/A";
+        this.birthDate = "N/A";
     }
 }
