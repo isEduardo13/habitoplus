@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.habitoplus.habitoplusback.Model.Group;
+import com.habitoplus.habitoplusback.Model.GroupMember;
 import com.habitoplus.habitoplusback.Repository.GroupRepository;
 
 import jakarta.transaction.Transactional;
@@ -13,23 +14,36 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class GroupService {
+	
     @Autowired
-	private GroupRepository repo;
+	private GroupRepository groupRepository;
+
+	@Autowired
+	private RequestService requestService;
+
+	@Autowired
+	private GroupMemberService memberService;
 
 	public List<Group> getAll() {
-		return repo.findAll();
+		return groupRepository.findAll();
 	}
 
     public Group getByIdGroup(Integer idGroup) {
-		return repo.findById(idGroup).get();
+		return groupRepository.findById(idGroup).get();
 	}
 
 	public void save(Group group) {
-		repo.save(group);
+		groupRepository.save(group);
 	}
 
 	public void delete(Integer idGroup) {
-		repo.deleteById(idGroup);
+		groupRepository.deleteById(idGroup);
 	}
+
+	public List<GroupMember> getGroupMembers(Integer idGroup){
+		return groupRepository.findById(idGroup).get().getMembers();
+	}
+	
+	
     
 }

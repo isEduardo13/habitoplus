@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.habitoplus.habitoplusback.Model.GroupMember;
+import com.habitoplus.habitoplusback.Model.GroupMemberPK;
 import com.habitoplus.habitoplusback.Repository.GroupMemberRepository;
 
 import jakarta.transaction.Transactional;
