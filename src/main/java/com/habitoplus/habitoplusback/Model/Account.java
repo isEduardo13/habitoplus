@@ -10,12 +10,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Account{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAccount;
+    @NotBlank
+    @Size(min =  1 ,max = 50, message = "Email must be between 1 and 50 characters")
     @Column(unique = true, name = "email")
     private String email;
 

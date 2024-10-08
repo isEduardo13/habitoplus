@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExeptionHandlerAdvice {
     @ExceptionHandler(NoSuchElementException.class) 
-    public ResponseEntity<?>handleException(NoSuchElementException e){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Element not found");
+    public ResponseEntity<String>handleException(NoSuchElementException e){
+     return new ResponseEntity<>("The requested element does not exist", HttpStatus.NOT_FOUND);   
     }
    
 
