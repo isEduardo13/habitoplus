@@ -1,4 +1,5 @@
 package com.habitoplus.habitoplusback.Model;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,10 +16,12 @@ public class Profile {
     @OneToOne(mappedBy = "profile")
     private Account account;
 
+    @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL)
+    private Streak streak;
 
     @Transient
     private Photo photo;
-
+    
 
     public int getIdProfile() {
         return idProfile;

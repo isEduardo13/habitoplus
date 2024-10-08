@@ -35,6 +35,10 @@ public class Habit {
     @NotBlank
     @Size(min = 4, max = 5)
     private String priority;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "streak_id")
+    private Streak streak;
 
     public Integer getId_habit() {
         return id_habit;
@@ -64,6 +68,10 @@ public class Habit {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Boolean getStatus() {
         return status;
     }
@@ -80,9 +88,20 @@ public class Habit {
         this.priority = priority;
     }
 
+    public Streak getStreak() {
+        return streak;
+    }
+
+    public void setStreak(Streak streak) {
+        this.streak = streak;
+    }
+
     @Override
     public String toString() {
-        return id_habit + " :: " + category_id + " :: " + habit_name + " :: " + description
-                + " :: " + status + " :: " + priority;
+        return "Habit [id_habit=" + id_habit + ", category_id=" + category_id + ", habit_name=" + habit_name
+                + ", description=" + description + ", status=" + status + ", priority=" + priority + ", streak="
+                + streak + "]";
     }
+
+    
 }
