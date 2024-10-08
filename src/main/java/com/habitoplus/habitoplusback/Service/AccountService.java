@@ -1,18 +1,11 @@
 package com.habitoplus.habitoplusback.Service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.habitoplus.habitoplusback.Repository.AccountRepository;
 import com.habitoplus.habitoplusback.Repository.ProfileRepository;
-
 import jakarta.transaction.Transactional;
-
 import com.habitoplus.habitoplusback.Model.Account;
 import com.habitoplus.habitoplusback.Model.Profile;
 
