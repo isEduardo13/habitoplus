@@ -32,10 +32,4 @@ public class ExeptionHandlerAdvice {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
     }
 
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<String> handleException(NoSuchElementException e) {
-        return new ResponseEntity<>("The requested element does not exist", HttpStatus.NOT_FOUND);
-
-    }
-
 }
