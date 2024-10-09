@@ -17,6 +17,15 @@ public class ProfileService {
    public List<Profile> getAllProfiles() {
        return profileRepository.findAll();
    }
+   //add a profile
+
+    public Profile addProfile(Profile profile) {
+         return profileRepository.save(profile);
+    }
+
+    public Profile getProfileById(int id) {
+        return profileRepository.findById(id).orElse(null);
+    }
 
 
 }

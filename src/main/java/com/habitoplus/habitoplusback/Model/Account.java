@@ -1,5 +1,7 @@
 package com.habitoplus.habitoplusback.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,6 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import jakarta.persistence.Id;
 
 @Entity
@@ -14,12 +18,8 @@ public class Account{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAccount;
-
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "idProfile",name = "id_Profile")
-    private Profile profile;
-
+    @NotBlank
+    @Size(min =  1 ,max = 50, message = "Email must be between 1 and 50 characters")
     @Column(unique = true, name = "email")
     private String email;
 
@@ -28,9 +28,12 @@ public class Account{
 
     @Column( name = "status")
     private boolean status;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_Profile", referencedColumnName = "idProfile")
+    @JsonProperty("profile")
+    private Profile profile;
 
-    public Account() {
-    }
     public int getAccount_id() {
         return idAccount;
     }
@@ -68,12 +71,6 @@ public class Account{
     }
 
     public void setStatus(boolean status) {
-        this.status = status;
-    }
-    public Account(Profile profile, String email, String password, boolean status) {
-        this.profile = profile;
-        this.email = email;
-        this.password = password;
         this.status = status;
     }
 }
