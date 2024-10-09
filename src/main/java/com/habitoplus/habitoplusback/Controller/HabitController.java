@@ -69,9 +69,9 @@ public class HabitController {
                                         @Content
                         })
         })
-        @GetMapping("{id_habit}")
-        public ResponseEntity<?> getByHabitId(@PathVariable Integer id_habit) {
-                Habit habit = service.getByHabitId(id_habit);
+        @GetMapping("{idHabit}")
+        public ResponseEntity<?> getByHabitId(@PathVariable Integer idHabit) {
+                Habit habit = service.getByHabitId(idHabit);
                 return new ResponseEntity<Habit>(habit, HttpStatus.OK);
         }
 
@@ -108,12 +108,31 @@ public class HabitController {
                                         @Content
                         })
         })
-        @PutMapping("{habit_id}")
-        public ResponseEntity<?> updateHabit(@RequestBody Habit habit, @PathVariable Integer id_habit) {
-                Habit auxHabit = service.getByHabitId(id_habit);
-                habit.setId_habit((auxHabit.getId_habit()));
-                service.save(auxHabit);
+        @PutMapping("{idHabit}")
+        public ResponseEntity<?> updateHabit(@RequestBody Habit habit, @PathVariable Integer idHabit) {
+                service.update(idHabit, habit);
                 return new ResponseEntity<String>("Update record", HttpStatus.OK);
+        }
+
+        @Operation(summary = "Update habit status")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Habit status successfully updated", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = Habit.class))
+                        }),
+                        @ApiResponse(responseCode = "400", description = "Invalid habit data or habit ID", content = {
+                                        @Content
+                        }),
+                        @ApiResponse(responseCode = "404", description = "Habit not found", content = {
+                                        @Content
+                        }),
+                        @ApiResponse(responseCode = "500", description = "Internal server error", content = {
+                                        @Content
+                        })
+        })
+        @PutMapping("{idHabit}/status")
+        public ResponseEntity<?> updateHabit(@PathVariable Integer idHabit, @RequestBody boolean status) {
+                service.updateStatus(idHabit, status);
+                return new ResponseEntity<String>("Updated status", HttpStatus.OK);
         }
 
         @Operation(summary = "Delete a habit by ID")
@@ -131,9 +150,9 @@ public class HabitController {
                                         @Content
                         })
         })
-        @DeleteMapping("{id_habit}")
-        public ResponseEntity<?> deleteHabit(@PathVariable Integer id_habit) {
-                service.deleteHabit(id_habit);
+        @DeleteMapping("{idHabit}")
+        public ResponseEntity<?> deleteHabit(@PathVariable Integer idHabit) {
+                service.deleteHabit(idHabit);
                 return new ResponseEntity<String>("Deleted record", HttpStatus.OK);
         }
 }

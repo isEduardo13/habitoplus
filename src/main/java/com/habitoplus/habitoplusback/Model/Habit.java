@@ -18,7 +18,7 @@ public class Habit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_habit;
+    private Integer idHabit;
     @NotBlank(message = "la categoria es obligatoria")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
@@ -35,17 +35,23 @@ public class Habit {
     @NotBlank
     @Size(min = 4, max = 5)
     private String priority;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "streak_id")
     private Streak streak;
 
-    public Integer getId_habit() {
-        return id_habit;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idProfile")
+    @JsonBackReference
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Profile profile;
+
+    public Integer getIdHabit() {
+        return idHabit;
     }
 
-    public void setId_habit(Integer id_habit) {
-        this.id_habit = id_habit;
+    public void setIdHabit(Integer idHabit) {
+        this.idHabit = idHabit;
     }
 
     public Category getCategory_id() {
@@ -96,12 +102,19 @@ public class Habit {
         this.streak = streak;
     }
 
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
     @Override
     public String toString() {
-        return "Habit [id_habit=" + id_habit + ", category_id=" + category_id + ", habit_name=" + habit_name
+        return "Habit [id_habit=" + idHabit + ", category_id=" + category_id + ", habit_name=" + habit_name
                 + ", description=" + description + ", status=" + status + ", priority=" + priority + ", streak="
                 + streak + "]";
     }
 
-    
 }

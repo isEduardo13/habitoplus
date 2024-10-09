@@ -26,12 +26,12 @@ public class HabitService {
         return repo.findAll();
     }
 
-    public Habit getByHabitId(Integer id_habit) {
-        return repo.findById(id_habit).get();
+    public Habit getByHabitId(Integer idHabit) {
+        return repo.findById(idHabit).get();
     }
 
     public void save(Habit habit) {
-        // Verificar si la categoría ya existe o debe ser guardada
+        // Verificar si la categoría ya existe
         Category category = habit.getCategory_id();
         if (category.getCategory_id() != null) {
             category = categoryRepository.findById(category.getCategory_id())
@@ -42,14 +42,22 @@ public class HabitService {
         repo.save(habit);
     }
 
-    public void update(Integer id_habit, Habit habit) {
-        if (repo.findById(id_habit).isPresent()) {
+    public void update(Integer idHabit, Habit habit) {
+        if (repo.findById(idHabit).isPresent()) {
             repo.save(habit);
         }
     }
 
-    public void deleteHabit(Integer id_habit) {
-        repo.deleteById(id_habit);
+    public void updateStatus(Integer idHabit, boolean status) {
+        if (repo.findById(idHabit).isPresent()) {
+            Habit habit = repo.findById(idHabit).get();
+            habit.setStatus(status);
+            repo.save(habit);
+        }
+    }
+
+    public void deleteHabit(Integer idHabit) {
+        repo.deleteById(idHabit);
     }
 
 }
