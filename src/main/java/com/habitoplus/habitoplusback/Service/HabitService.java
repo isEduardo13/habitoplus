@@ -32,13 +32,13 @@ public class HabitService {
 
     public void save(Habit habit) {
         // Verificar si la categoría ya existe
-        Category category = habit.getCategory_id();
-        if (category.getCategory_id() != null) {
-            category = categoryRepository.findById(category.getCategory_id())
+        Category category = habit.getCategory();
+        if (category.getIdCategory() != null) {
+            category = categoryRepository.findById(category.getIdCategory())
                     .orElseThrow(() -> new NoSuchElementException("Category not found"));
         }
 
-        habit.setCategory_id(category);
+        habit.setCategory(category);
         repo.save(habit);
     }
 

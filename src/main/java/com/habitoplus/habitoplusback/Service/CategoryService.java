@@ -21,7 +21,7 @@ public class CategoryService {
         return categoryRepo.findAll();
     }
 
-    public Category getByCategoryId(Integer categoryId) {
-        return categoryRepo.findById(categoryId).get();
+    public Category getByCategoryId(Integer idCategory) {
+        return categoryRepo.findById(idCategory).get();
     }
 }

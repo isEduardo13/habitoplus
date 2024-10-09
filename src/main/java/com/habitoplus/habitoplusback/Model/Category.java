@@ -19,7 +19,7 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer category_id;
+    private Integer idCategory;
     @NotBlank
     @Size(min = 1, max = 50)
     @JsonProperty("name")
@@ -28,25 +28,25 @@ public class Category {
     @JsonProperty("description")
     private String description;
     @JsonManagedReference
-    @OneToMany(mappedBy = "category_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Habit> habits;
 
     public Category() {
 
     }
 
-    public Category(Integer category_id, String name, String description) {
-        this.category_id = category_id;
+    public Category(Integer idCategory, String name, String description) {
+        this.idCategory = idCategory;
         this.category_name = name;
         this.description = description;
     }
 
-    public Integer getCategory_id() {
-        return category_id;
+    public Integer getIdCategory() {
+        return idCategory;
     }
 
-    public void setCategory_id(Integer category_id) {
-        this.category_id = category_id;
+    public void setIdCategory(Integer idCategory) {
+        this.idCategory = idCategory;
     }
 
     public String getCategory_name() {
@@ -65,8 +65,16 @@ public class Category {
         this.description = description;
     }
 
+    public List<Habit> getHabits() {
+        return habits;
+    }
+
+    public void setHabits(List<Habit> habits) {
+        this.habits = habits;
+    }
+
     @Override
     public String toString() {
-        return category_id + " :: " + category_name + " :: " + description;
+        return idCategory + " :: " + category_name + " :: " + description;
     }
 }
