@@ -18,4 +18,5 @@ public class StreakDTO {
     public int getConsecutiveDays() {
         return consecutiveDays;
     }
+    
 }

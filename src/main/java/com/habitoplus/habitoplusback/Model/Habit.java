@@ -33,10 +33,12 @@ public class Habit {
     @NotBlank
     @Size(min = 4, max = 5)
     private String priority;
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "streak_id")
+    @JoinColumn(name = "idStreak")
     private Streak streak;
+    
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idProfile")

@@ -21,7 +21,7 @@ public class StreakService {
     public List<Streak> getAllStreaks(){
         return streakRepository.findAll();
     }
-
+    
     public void createStreak(Streak streak){
         streakRepository.save(streak);
     }

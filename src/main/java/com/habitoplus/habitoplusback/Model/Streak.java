@@ -24,7 +24,7 @@ public class Streak {
     // consecutiveDays, startDate, endDate
 
     @OneToOne
-    @JoinColumn(name = "profile_id", referencedColumnName = "idProfile")
+    @JoinColumn(name = "idProfile", referencedColumnName = "idProfile")
     private Profile profile;
     
     @JsonManagedReference
