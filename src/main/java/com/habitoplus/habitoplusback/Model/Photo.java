@@ -14,6 +14,7 @@ public class Photo {
 
     private String idProfile;
     private String idPhoto;
+    private String idImage;
 
     public Photo() {
     }
@@ -36,6 +37,14 @@ public class Photo {
     }
     public void setIdPhoto(String idPhoto) {
         this.idPhoto = idPhoto;
+    }
+    
+    public String getIdImage() {
+        return idImage;
+    }
+
+    public void setIdImage(String idImage) {
+        this.idImage = idImage;
     }
     public Photo(String idProfile, String idPhoto) {
         this.idProfile = idProfile;
