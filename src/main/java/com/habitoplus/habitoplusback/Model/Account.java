@@ -17,7 +17,7 @@ import jakarta.validation.constraints.Size;
 public class Account{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idAccount;
+    private Integer idAccount;
     @NotBlank
     @Size(min =  1 ,max = 50, message = "Email must be between 1 and 50 characters")
     @Column(unique = true, name = "email")
@@ -27,7 +27,7 @@ public class Account{
     private String password;
 
     @Column( name = "status")
-    private boolean status;
+    private Boolean status;
     
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_Profile", referencedColumnName = "idProfile")

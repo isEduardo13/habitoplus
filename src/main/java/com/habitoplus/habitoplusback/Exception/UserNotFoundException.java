@@ -1,4 +1,4 @@
-package com.habitoplus.habitoplusback.Exeption;
+package com.habitoplus.habitoplusback.Exception;
 
 public class UserNotFoundException extends Exception {
     

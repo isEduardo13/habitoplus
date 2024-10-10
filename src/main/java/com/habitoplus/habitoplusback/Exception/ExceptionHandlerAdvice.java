@@ -1,4 +1,4 @@
-package com.habitoplus.habitoplusback.Exeption;
+package com.habitoplus.habitoplusback.Exception;
 
 
 import org.hibernate.exception.ConstraintViolationException;
@@ -68,7 +68,7 @@ public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<?> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("An unexpected error occurred:" + e.getMessage());
     }
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -90,6 +90,11 @@ public class ExceptionHandlerAdvice {
     public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Malformed JSON request");
     }
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<?> handleInvalidCredentialsException(InvalidCredentialsException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+
 
 
 }

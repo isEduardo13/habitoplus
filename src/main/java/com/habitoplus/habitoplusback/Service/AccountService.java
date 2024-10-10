@@ -6,6 +6,10 @@ import org.springframework.stereotype.Service;
 import com.habitoplus.habitoplusback.Repository.AccountRepository;
 import com.habitoplus.habitoplusback.Repository.ProfileRepository;
 import jakarta.transaction.Transactional;
+
+import java.util.NoSuchElementException;
+
+import com.habitoplus.habitoplusback.Exception.UserAlreadyExistsException;
 import com.habitoplus.habitoplusback.Model.Account;
 import com.habitoplus.habitoplusback.Model.Profile;
 
@@ -21,14 +25,21 @@ public class AccountService {
     }
 
     public Account getAccountById(int id) {
-        return accountRepository.findById(id).orElse(null);
+        if (accountRepository.findById(id).isEmpty()) {
+            throw new NoSuchElementException();
+            
+        }
+        return accountRepository.findById(id).get();
     }
     public Account getAccountByEmail(String email) {
         return accountRepository.findByEmail(email);
     }
     
     @Transactional
-    public Account addAccount(Account account) {
+    public Account addAccount(Account account)  {
+        if (accountRepository.findByEmail(account.getEmail()) != null) {
+            throw new UserAlreadyExistsException("User with email " + account.getEmail() + " already exists");   
+        }
         if (account.getProfile() == null) {
             Profile profile = new Profile();
             profile.Inicializar();
@@ -42,16 +53,28 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    public boolean updateAccount(Account account) {
-        Account existingAccount = accountRepository.findById(account.getAccount_id()).orElse(null);
+
+    public Account updateAccount(Account account) {
+
+        if (accountRepository.findById(account.getAccount_id()).isEmpty()) {
+            throw new NoSuchElementException();     
+        }
+        Account existingAccount = accountRepository.findById(account.getAccount_id()).get();
+        
         existingAccount.setEmail(account.getEmail());
         existingAccount.setPassword(account.getPassword());
         existingAccount.setStatus(account.isStatus());  
-        return true;
+        
+        return accountRepository.save(existingAccount);
     }
 
     public boolean deleteAccount(int id) {
-        Account existingAccount = accountRepository.findById(id).orElse(null);
+        
+        if (accountRepository.findById(id).isEmpty()) {
+            throw new NoSuchElementException();     
+        }
+        Account existingAccount = accountRepository.findById(id).get();
+
         if (existingAccount != null) {
             existingAccount.setStatus(false);
             accountRepository.save(existingAccount);
