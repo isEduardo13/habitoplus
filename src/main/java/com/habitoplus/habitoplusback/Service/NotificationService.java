@@ -18,24 +18,25 @@ public class NotificationService {
     public List<Notification> getAllNotifications() {
         return notificationRepository.findAll();
     }
-    public Notification getNotificationById(int id) {
+    public Notification getNotificationById(Integer id) {
         return notificationRepository.findById(id).orElse(null);
     }
-    public Notification getNotificationByMessage(String menssage) {
-      return notificationRepository.findByMessage(menssage);
-    }
+    
     public Notification addNotification(Notification notification) {
+        System.out.println(notification.toString());
         return notificationRepository.save(notification);
+
     }
     public boolean updateNotification(Notification notification) {
         Notification existingNotification = notificationRepository.findById(notification.getId()).orElse(null);
-        existingNotification.setConsecutiveDays(notification.getConsecutiveDays());
-        existingNotification.setStartDate(notification.getStartDate());
-        existingNotification.setEndDate(notification.getEndDate());
+        existingNotification.setProfile(notification.getProfile());
+        existingNotification.setType(notification.getType());
+        existingNotification.setDate(notification.getDate());
+        existingNotification.setRead(notification.getRead());
         existingNotification.setMessage(notification.getMessage());
         return true;
     }
-    public boolean deleteNotification(int id) {
+    public boolean deleteNotification(Integer id) {
         Notification existingNotification = notificationRepository.findById(id).orElse(null);
         if (existingNotification != null) {
             notificationRepository.delete(existingNotification);
