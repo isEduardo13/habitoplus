@@ -17,32 +17,39 @@ import jakarta.transaction.Transactional;
 public class StreakService {
     @Autowired
     private StreakRepository streakRepository;
-    //obtener todas las rachas
-    public List<Streak> getAllStreaks(){
+
+    // obtener todas las rachas
+    public List<Streak> getAllStreaks() {
         return streakRepository.findAll();
     }
 
-    public void createStreak(Streak streak){
+    public void createStreak(Streak streak) {
         streakRepository.save(streak);
     }
-    
+
     // al consultar solo se extraen los dias consecutivos de racha por un id
-    public StreakDTO getStreak(int idStreak){
+    public StreakDTO getStreak(int idStreak) {
         Optional<Streak> optionalStreak = streakRepository.findById(idStreak);
         if (optionalStreak.isPresent()) {
             Streak streak = optionalStreak.get();
             // Usando el constructor de Streak
             return new StreakDTO(streak.getStartDate(), streak.getConsecutiveDays());
         }
-        return null; 
+        return null;
     }
-    // al tener un dia en el que no se cumplan objetivos la racha se actualiza a 0 automaticamente
+
+    // al tener un dia en el que no se cumplan objetivos la racha se actualiza a 0
+    // automaticamente
     public void putStreak(int id) {
         Streak streak = streakRepository.findById(id).orElse(null);
         if (streak != null) {
             streak.setConsecutiveDays(0);
             streakRepository.save(streak);
         }
+    }
+
+    public Streak getByStreaktId(Integer idStreak) {
+        return streakRepository.findById(idStreak).get();
     }
 
 }
