@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import com.habitoplus.habitoplusback.Dto.ForgotPasswordRequest;
+import com.habitoplus.habitoplusback.Dto.RegisterRequest;
 import com.habitoplus.habitoplusback.Exception.InvalidCredentialsException;
 import com.habitoplus.habitoplusback.Exception.UserAlreadyExistsException;
 import com.habitoplus.habitoplusback.Model.Account;
@@ -31,12 +34,25 @@ public class AuthService {
         }
     }
 
-    public Account register(Account account) {
-         if (accountRepository.findByEmail(account.getEmail()) != null) {
-            throw new UserAlreadyExistsException("Email already registered");   
+    public RegisterRequest register(RegisterRequest request) {
+        if (accountRepository.findByEmail(request.getEmail()) != null) {
+            throw new UserAlreadyExistsException("User with email " + request.getEmail() + " already exists");
         }
-        return accountRepository.save(account);
-        }
+        Account account = new Account();
+        account.setEmail(request.getEmail());
+        account.setPassword(request.getPassword());
+        account.setStatus(true);
+            Profile profile = new Profile();
+            profile.Inicializar();
+            profileRepository.save(profile);
+            account.setProfile(profile);
+        
+
+        accountRepository.save(account);
+        return request;
+    }
+      
+        
 
         public void forgotPassword(ForgotPasswordRequest request) {
             String email = request.getEmail();
@@ -51,17 +67,15 @@ public class AuthService {
             }
         }
 
-        public void logout( Integer id) {
-        Profile profileValid = profileRepository.findById(id).get();
-        if (profileValid == null) {
-            throw new NoSuchElementException("Profile not found");
-            
-        }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedDate = LocalDate.now().format(formatter);
-        profileValid.setLastConnection(formattedDate);
-        profileRepository.save(profileValid);
+    public void logout(Integer id) {
+        Optional<Profile> optionalProfile = profileRepository.findById(id);
+        Profile profileValid = optionalProfile.orElseThrow(() -> new NoSuchElementException("Profile not found"));
 
-        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String formattedDate = LocalDateTime.now().format(formatter);
+        profileValid.setLastConnection(formattedDate);
+
+        profileRepository.save(profileValid);
     }
+
 }

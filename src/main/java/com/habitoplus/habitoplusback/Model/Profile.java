@@ -1,7 +1,9 @@
 package com.habitoplus.habitoplusback.Model;
 
 
+import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import jakarta.persistence.Entity;
@@ -42,7 +44,7 @@ public class Profile {
 
     private String dateOfRegistration;
 
-    private String lastConnetion;
+    private String lastConnection;
 
 
     public Photo getPhoto() {
@@ -142,11 +144,11 @@ public class Profile {
     }
 
     public String getLastConnection() {
-        return lastConnetion;
+        return lastConnection;
     }
 
     public void setLastConnection(String lastConnnetion) {
-        lastConnetion = lastConnnetion;
+        lastConnection = lastConnnetion;
     }
     public int getIdProfile() {
         return idProfile;
@@ -157,12 +159,16 @@ public class Profile {
         this.idProfile = idProfile;
     }
 
-    public void  Inicializar() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String formattedDate = LocalDate.now().format(formatter);
-        this.dateOfRegistration= formattedDate;
+     public void Inicializar() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+        String formattedDate = LocalDate.now().format(dateFormatter);
+        String formattedLastConnection = LocalDateTime.now().format(dateTimeFormatter);
+
+        this.dateOfRegistration = formattedDate;
         this.status = true;
-        this.lastConnetion = formattedDate;
+        this.lastConnection = formattedLastConnection;
         this.age = "N/A";
         this.gender = "Unknown";
         this.numberPhone = "N/A";

@@ -82,6 +82,16 @@ public class AccountService {
         }
         return false;
     }
+    public boolean DefinitiveDeleteAccount(int id) {
+        
+        if (accountRepository.findById(id).isEmpty()) {
+            throw new NoSuchElementException();     
+        }
+        Account existingAccount = accountRepository.findById(id).get();
+        profileRepository.delete(existingAccount.getProfile());
+        accountRepository.delete(existingAccount);
+        return true;
+    }
 }
 
     

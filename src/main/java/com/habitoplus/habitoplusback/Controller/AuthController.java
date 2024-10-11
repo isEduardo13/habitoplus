@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import com.habitoplus.habitoplusback.Model.Account;
 import com.habitoplus.habitoplusback.Dto.ForgotPasswordRequest;
 import com.habitoplus.habitoplusback.Dto.LoginRequest;
+import com.habitoplus.habitoplusback.Dto.RegisterRequest;
 import com.habitoplus.habitoplusback.Service.AuthService;
 import com.habitoplus.habitoplusback.Service.ProfileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -40,10 +42,11 @@ public class AuthController {
         @ApiResponse(responseCode = "201", description = "Return account", content = {
             @Content(mediaType = "application/json")})
     @PostMapping("/register")
-    public ResponseEntity<Account> register(@RequestBody Account account) {
-        Account createdAccount = authService.register(account);
-        return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
+    public ResponseEntity<RegisterRequest> register(@RequestBody RegisterRequest request) {
+        RegisterRequest registerRequest = authService.register(request);
+        return new ResponseEntity<>(registerRequest, HttpStatus.CREATED);
     }
+
     @Operation(summary = "forgot-password")
         @ApiResponse(responseCode = "200", description = "Return message", content = {
             @Content(mediaType = "application/json")})
@@ -53,7 +56,7 @@ public class AuthController {
         return new ResponseEntity<>("Password reset code sent to email", HttpStatus.OK);
     }
     @Operation(summary = "logout")
-        @ApiResponse(responseCode = "200", description = "Return message", content = {
+        @ApiResponse(responseCode = "200", description = "Return message ", content = {
             @Content(mediaType = "application/json")})
     @PostMapping("/logout/{id}")
     public ResponseEntity<String> logout(@PathVariable Integer id) {
