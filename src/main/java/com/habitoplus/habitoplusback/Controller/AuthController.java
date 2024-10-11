@@ -1,22 +1,20 @@
 package com.habitoplus.habitoplusback.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.habitoplus.habitoplusback.Model.Account;
+
 import com.habitoplus.habitoplusback.Dto.ForgotPasswordRequest;
 import com.habitoplus.habitoplusback.Dto.LoginRequest;
 import com.habitoplus.habitoplusback.Dto.RegisterRequest;
 import com.habitoplus.habitoplusback.Service.AuthService;
-import com.habitoplus.habitoplusback.Service.ProfileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -27,8 +25,6 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @Autowired
-    private ProfileService profileService;
 
     @Operation(summary = "login")
         @ApiResponse(responseCode = "200", description = "Return token", content = {
