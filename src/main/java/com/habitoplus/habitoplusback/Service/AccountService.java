@@ -11,6 +11,7 @@ import com.habitoplus.habitoplusback.Repository.ProfileRepository;
 import jakarta.transaction.Transactional;
 import java.util.NoSuchElementException;
 
+import com.habitoplus.habitoplusback.Exception.UserAlreadyExistsException;
 import com.habitoplus.habitoplusback.Model.Account;
 import com.habitoplus.habitoplusback.Model.Profile;
 

@@ -1,4 +1,4 @@
-package com.habitoplus.habitoplusback.Dto;
+package com.habitoplus.habitoplusback.dto;
 
 public class RegisterRequest {
     private String email;
