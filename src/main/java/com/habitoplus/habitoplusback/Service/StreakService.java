@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.habitoplus.habitoplusback.Model.Streak;
 import com.habitoplus.habitoplusback.Repository.StreakRepository;
-import com.habitoplus.habitoplusback.dto.StreakDTO;
+import com.habitoplus.habitoplusback.Dto.StreakDTO;
 
 import jakarta.transaction.Transactional;
 

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.habitoplus.habitoplusback.Model.Streak;
 import com.habitoplus.habitoplusback.Service.StreakService;
-import com.habitoplus.habitoplusback.dto.StreakDTO;
+import com.habitoplus.habitoplusback.Dto.StreakDTO;
 
 
 @RestController

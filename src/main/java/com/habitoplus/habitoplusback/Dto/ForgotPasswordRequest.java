@@ -1,4 +1,4 @@
-package com.habitoplus.habitoplusback.dto;
+package com.habitoplus.habitoplusback.Dto;
 
 public class ForgotPasswordRequest {
     private String email;

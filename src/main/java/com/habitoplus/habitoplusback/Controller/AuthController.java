@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import com.habitoplus.habitoplusback.dto.ForgotPasswordRequest;
-import com.habitoplus.habitoplusback.dto.LoginRequest;
-import com.habitoplus.habitoplusback.dto.RegisterRequest;
+import com.habitoplus.habitoplusback.Dto.ForgotPasswordRequest;
+import com.habitoplus.habitoplusback.Dto.LoginRequest;
+import com.habitoplus.habitoplusback.Dto.RegisterRequest;
 import com.habitoplus.habitoplusback.Service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

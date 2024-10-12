@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import com.habitoplus.habitoplusback.dto.ForgotPasswordRequest;
-import com.habitoplus.habitoplusback.dto.RegisterRequest;
+import com.habitoplus.habitoplusback.Dto.ForgotPasswordRequest;
+import com.habitoplus.habitoplusback.Dto.RegisterRequest;
 import com.habitoplus.habitoplusback.Exception.InvalidCredentialsException;
 import com.habitoplus.habitoplusback.Exception.UserAlreadyExistsException;
 import com.habitoplus.habitoplusback.Model.Account;
