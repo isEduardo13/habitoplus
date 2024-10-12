@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.habitoplus.habitoplusback.Model.Category;
 import com.habitoplus.habitoplusback.Model.Habit;
 import com.habitoplus.habitoplusback.Model.Profile;
@@ -113,27 +114,16 @@ public class HabitController {
                 habit.setPriority(habitDTO.getPriority());
                 habit.setHabit_name(habitDTO.getHabitName());
 
-                // Obtener y validar la categoría por ID
+                // Obtener la categoría por ID
                 Category category = categoryService.getByCategoryId(habitDTO.getCategoryId());
-                if (category == null) {
-                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category not found");
-                }
                 habit.setCategory(category);
 
-                // Validar y cargar la racha por ID
-                if (habitDTO.getStreakId() != null) {
-                        Streak streak = streakService.getByStreaktId(habitDTO.getStreakId());
-                        if (streak == null) {
-                                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Streak not found");
-                        }
-                        habit.setStreak(streak);
-                }
+                //Cargar la racha por ID
+                Streak streak = streakService.getByStreaktId(habitDTO.getStreakId());
+                habit.setStreak(streak);
 
-                // Validar y cargar el perfil por ID
+                //Cargar el perfil por ID
                 Profile profile = profileService.getProfileById(habitDTO.getProfileId());
-                if (profile == null) {
-                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Profile not found");
-                }
                 habit.setProfile(profile);
 
                 // Guardar el hábito
@@ -158,7 +148,23 @@ public class HabitController {
                         })
         })
         @PutMapping("{idHabit}")
-        public ResponseEntity<?> updateHabit(@RequestBody Habit habit, @PathVariable Integer idHabit) {
+        public ResponseEntity<?> updateHabit(@RequestBody HabitDTO habitDTO, @PathVariable Integer idHabit) {
+                // Buscar entidades relacionadas
+                Category category = categoryService.getByCategoryId(habitDTO.getCategoryId());
+                Streak streak = streakService.getByStreaktId(habitDTO.getStreakId());
+                Profile profile = profileService.getProfileById(habitDTO.getProfileId());
+
+                // Crear un objeto Habit a partir de HabitDTO y establecer las relaciones
+                Habit habit = new Habit();
+                habit.setCategory(category);
+                habit.setDescription(habitDTO.getDescription());
+                habit.setStatus(habitDTO.getStatus());
+                habit.setPriority(habitDTO.getPriority());
+                habit.setStreak(streak);
+                habit.setProfile(profile);
+                habit.setHabit_name(habitDTO.getHabitName());
+
+                // Llamar al servicio para actualizar
                 service.update(idHabit, habit);
                 return new ResponseEntity<String>("Update record", HttpStatus.OK);
         }
