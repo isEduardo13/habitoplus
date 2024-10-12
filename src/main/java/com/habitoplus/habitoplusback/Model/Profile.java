@@ -31,6 +31,15 @@ public class Profile {
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Habit> habits;
     
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GroupMember> members;
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Request> requests;
+
+    @Transient
+    private List<Comment> comments;  // No se almacenará en la colección Group
+
     @Transient
     private Photo photo;
 
