@@ -16,9 +16,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.habitoplus.habitoplusback.Model.Category;
 import com.habitoplus.habitoplusback.Model.Habit;
+import com.habitoplus.habitoplusback.Model.Profile;
+import com.habitoplus.habitoplusback.Model.Streak;
+import com.habitoplus.habitoplusback.Service.CategoryService;
 import com.habitoplus.habitoplusback.Service.HabitService;
+import com.habitoplus.habitoplusback.Service.ProfileService;
+import com.habitoplus.habitoplusback.Service.StreakService;
+import com.habitoplus.habitoplusback.Dto.HabitDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -27,9 +34,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
-@Tag(name = "Habit")
+@Tag(name = "Habit", description = "")
 @RequestMapping("habits")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
                 RequestMethod.DELETE })
@@ -37,6 +45,15 @@ public class HabitController {
 
         @Autowired
         private HabitService service;
+
+        @Autowired
+        private CategoryService categoryService;
+
+        @Autowired
+        private StreakService streakService;
+
+        @Autowired
+        private ProfileService profileService;
 
         @Operation(summary = "Get all the user's habits")
         @ApiResponses(value = {
@@ -77,10 +94,11 @@ public class HabitController {
                 return new ResponseEntity<Habit>(habit, HttpStatus.OK);
         }
 
+        @PostMapping("/register")
         @Operation(summary = "Register a new habit")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "Habit successfully registered", content = {
-                                        @Content(mediaType = "application/json", schema = @Schema(implementation = Habit.class))
+                        @ApiResponse(responseCode = "201", description = "Habit successfully registered", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = HabitDTO.class))
                         }),
                         @ApiResponse(responseCode = "400", description = "Invalid habit data", content = {
                                         @Content
@@ -89,10 +107,29 @@ public class HabitController {
                                         @Content
                         })
         })
-        @PostMapping
-        public ResponseEntity<?> registerhabit(@RequestBody Habit habit) {
+        public ResponseEntity<?> registerHabit(@Valid @RequestBody HabitDTO habitDTO) {
+                Habit habit = new Habit();
+                habit.setDescription(habitDTO.getDescription());
+                habit.setStatus(habitDTO.getStatus());
+                habit.setPriority(habitDTO.getPriority());
+                habit.setHabit_name(habitDTO.getHabitName());
+
+                // Obtener la categoría por ID
+                Category category = categoryService.getByCategoryId(habitDTO.getCategoryId());
+                habit.setCategory(category);
+
+                //Cargar la racha por ID
+                Streak streak = streakService.getByStreaktId(habitDTO.getStreakId());
+                habit.setStreak(streak);
+
+                //Cargar el perfil por ID
+                Profile profile = profileService.getProfileById(habitDTO.getProfileId());
+                habit.setProfile(profile);
+
+                // Guardar el hábito
                 service.save(habit);
-                return new ResponseEntity<String>("Save record", HttpStatus.OK);
+
+                return ResponseEntity.status(HttpStatus.CREATED).body(habitDTO);
         }
 
         @Operation(summary = "Update a habit")
@@ -111,7 +148,23 @@ public class HabitController {
                         })
         })
         @PutMapping("{idHabit}")
-        public ResponseEntity<?> updateHabit(@RequestBody Habit habit, @PathVariable Integer idHabit) {
+        public ResponseEntity<?> updateHabit(@RequestBody HabitDTO habitDTO, @PathVariable Integer idHabit) {
+                // Buscar entidades relacionadas
+                Category category = categoryService.getByCategoryId(habitDTO.getCategoryId());
+                Streak streak = streakService.getByStreaktId(habitDTO.getStreakId());
+                Profile profile = profileService.getProfileById(habitDTO.getProfileId());
+
+                // Crear un objeto Habit a partir de HabitDTO y establecer las relaciones
+                Habit habit = new Habit();
+                habit.setCategory(category);
+                habit.setDescription(habitDTO.getDescription());
+                habit.setStatus(habitDTO.getStatus());
+                habit.setPriority(habitDTO.getPriority());
+                habit.setStreak(streak);
+                habit.setProfile(profile);
+                habit.setHabit_name(habitDTO.getHabitName());
+
+                // Llamar al servicio para actualizar
                 service.update(idHabit, habit);
                 return new ResponseEntity<String>("Update record", HttpStatus.OK);
         }
@@ -132,8 +185,8 @@ public class HabitController {
                         })
         })
         @PutMapping("{idHabit}/status")
-        public ResponseEntity<?> updateHabit(@PathVariable Integer idHabit, @RequestBody boolean status) {
-                service.updateStatus(idHabit, status);
+        public ResponseEntity<?> update(@PathVariable Integer idHabit, @RequestBody Boolean status) {
+                service.update(idHabit, status);
                 return new ResponseEntity<String>("Updated status", HttpStatus.OK);
         }
 

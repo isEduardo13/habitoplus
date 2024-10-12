@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -22,21 +23,22 @@ public class Habit {
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idCategory")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Category category;
     @NotBlank
     @JsonProperty("name")
     private String habit_name;
     @NotBlank
     private String description;
-    @NotBlank
     private Boolean status;
-    @NotBlank
+    @NotNull
     @Size(min = 4, max = 5)
     private String priority;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idStreak")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Streak streak;
     
     @JsonBackReference
