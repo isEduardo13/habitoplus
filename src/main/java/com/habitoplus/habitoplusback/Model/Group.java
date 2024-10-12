@@ -4,44 +4,54 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.habitoplus.habitoplusback.enums.GroupType;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
-@Table(name = "tblgroup")
+@Table(name = "`group`")
 public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idGroup;
+    private Integer idGroup;
+
     @Column(nullable = false, name="name")
     private String name;
-    @Column(nullable = false, name="descripcion")
+
+    @Column(nullable = false, name="description")
     private String description;
-    @Column(nullable = false, name="privacy")
-    private boolean privacy;
-    @Column(nullable = false, name="creationDate")
+
+    // @ValidEnum(enumClass = GroupType.class, message = "The group type must be one of the allowed values: PUBLIC, PRIVATE")
+    @Enumerated(EnumType.STRING)
+    private GroupType groupType; 
+
+    @Column(nullable = false, name="creation_date")
     private Date creationDate;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GroupMember> members;
-
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    private List<GroupMember> members = new ArrayList<>();
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Request> requests = new ArrayList<>();
 
-    public int getIdGroup() {
+    @Transient
+    private List<Comment> comments;  // No se almacenará en la colección Group
+
+    public Integer getIdGroup() {
         return idGroup;
     }
 
-    public void setIdGroup(int idGroup) {
+    public void setIdGroup(Integer idGroup) {
         this.idGroup = idGroup;
     }
 
@@ -59,12 +69,15 @@ public class Group {
     public void setDescription(String description) {
         this.description = description;
     }
-    public boolean getPrivacy() {
-        return privacy;
+
+    public GroupType getGroupType() {
+        return groupType;
     }
-    public void setPrivacy(boolean privacy) {
-        this.privacy = privacy;
+
+    public void setGroupType(GroupType groupType) {
+        this.groupType = groupType;
     }
+
 
     public Date getCreationDate() {
         return creationDate;
@@ -72,14 +85,6 @@ public class Group {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
     }
 
     public List<GroupMember> getMembers() {
@@ -98,5 +103,12 @@ public class Group {
         this.requests = requests;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
 }

@@ -1,54 +1,71 @@
 package com.habitoplus.habitoplusback.Model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name="tblComment")
+
+@Document(collection = "Comment")
 public class Comment {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idComment;
+    private CommentPK commentPK;
 
-    @ManyToOne(fetch= FetchType.LAZY, optional= false)
-    @JoinColumn(name= "idGroup")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Group group;
+    private Integer idGroup;
+    
+    private Integer idProfile;
 
-    @ManyToOne(fetch= FetchType.LAZY, optional= false)
-    @JoinColumn(name= "idProfile")
-    private Profile profile;
+    private LocalDateTime dateTime;
 
-    public Group getGroup() {
-        return group;
-    } 
+    private String content;
 
-    public void setGroup(Group group) {
-        this.group = group;
+    public Comment(String content, LocalDateTime dateTime, Integer idGroup, Integer idProfile) {
+        this.content = content;
+        this.dateTime = dateTime;
+        this.idGroup = idGroup;
+        this.idProfile = idProfile;
+        this.commentPK = new CommentPK(idGroup, idProfile, dateTime);
     }
 
-    public Profile getProfile() {
-        return profile;
+    
+    public Integer getIdGroup() {
+        return idGroup;
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public void setIdGroup(Integer idGroup) {
+        this.idGroup = idGroup;
     }
 
-    public int getIdComment() {
-        return idComment;
+    public Integer getIdProfile() {
+        return idProfile;
     }
 
-    public void setIdComment(int idComment) {
-        this.idComment = idComment;
+    public void setIdProfile(Integer idProfile) {
+        this.idProfile = idProfile;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }    
+
+    public CommentPK getCommentPK() {
+        return commentPK;
+    }
+
+    public void setCommentPK(CommentPK commentPK) {
+        this.commentPK = commentPK;
+    }
 }

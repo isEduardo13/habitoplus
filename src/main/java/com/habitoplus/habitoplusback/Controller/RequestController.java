@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.habitoplus.habitoplusback.Model.GroupMember;
 import com.habitoplus.habitoplusback.Model.Request;
 import com.habitoplus.habitoplusback.Service.RequestService;
 
@@ -25,59 +27,145 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("request")
-@CrossOrigin(origins="*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
+@RequestMapping("requests")
+@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE,
+		RequestMethod.PUT })
+@Tag(name = "Requests", description = "Provides methods for managing requests")
 public class RequestController {
-    @Autowired
-    private RequestService service;
+	@Autowired
+	private RequestService service;
 
-    @Operation(summary = "Get all request")
-    @ApiResponse(responseCode = "200", description = "Found Requests", content = {
-        @Content(mediaType= "application/json", array= @ArraySchema(schema= @Schema(implementation = Request.class)))
-    })
-    @GetMapping
-    public List<Request> getAll(){
-        return service.getAll();
-    }
-
-    @Operation(summary = "Get a Request by its ID")
+	@Operation(summary = "Get all requests")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Request found", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = Request.class)) }),
-			@ApiResponse(responseCode = "400", description = "Invalid identifier supplied", content = @Content),
-			@ApiResponse(responseCode = "404", description = "Request not found", content = @Content),
-			@ApiResponse(responseCode = "500", description = "Internal error on the server", content = @Content)})
-	@GetMapping("{idRequest}")
-	public ResponseEntity<?> getByIdRequest(@PathVariable Integer idRequest) {
-		Request request = service.getByIdRequest(idRequest);
+			@ApiResponse(responseCode = "200", description = "Found requests", content = {
+					@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Request.class)))
+			}),
+			@ApiResponse(responseCode = "204", description = "No request found"),
+			@ApiResponse(responseCode = "400", description = "Bad request", content = {
+					@Content
+			}),
+			@ApiResponse(responseCode = "500", description = "Internal server error", content = {
+					@Content
+			})
+	})
+	@GetMapping
+	public List<Request> getAll() {
+		return service.getAll();
+	}
+
+	@Operation(summary = "Get a Request by its ID")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Found request", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Request.class))
+			}),
+			@ApiResponse(responseCode = "400", description = "Invalid request ID", content = {
+					@Content
+			}),
+			@ApiResponse(responseCode = "404", description = "Request not found", content = {
+					@Content
+			}),
+			@ApiResponse(responseCode = "500", description = "Internal server error", content = {
+					@Content
+			})
+	})
+	@GetMapping("{idGroup}/{idProfile}")
+	public ResponseEntity<?> getByIdRequest(@PathVariable Integer idGroup, @PathVariable Integer idProfile) {
+		Request request = service.getById(idGroup, idProfile);
 		return new ResponseEntity<Request>(request, HttpStatus.OK);
 	}
 
-    @PostMapping
+	@Operation(summary = "Register a new request")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Request successfully registered", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Request.class))
+			}),
+			@ApiResponse(responseCode = "400", description = "Invalid request data", content = {
+					@Content
+			}),
+			@ApiResponse(responseCode = "500", description = "Internal server error", content = {
+					@Content
+			})
+	})
+	@PostMapping
 	public ResponseEntity<?> add(@RequestBody Request request) {
 		service.save(request);
 		return new ResponseEntity<String>("Saved record", HttpStatus.OK);
 	}
 
-    @PutMapping("{idRequest}")
-	public ResponseEntity<?> update(@RequestBody Request request, @PathVariable Integer idRequest) {
-		Request auxRequest = service.getByIdRequest(idRequest);
-		request.setIdRequest(auxRequest.getIdRequest());
-		service.save(request);
+	@Operation(summary = "Update a request")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Request successfully updated", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Request.class))
+			}),
+			@ApiResponse(responseCode = "400", description = "Invalid request data or group ID y profile ID", content = {
+					@Content
+			}),
+			@ApiResponse(responseCode = "404", description = "Request not found", content = {
+					@Content
+			}),
+			@ApiResponse(responseCode = "500", description = "Internal server error", content = {
+					@Content
+			})
+	})
+	@PutMapping("{idRequest}")
+	public ResponseEntity<?> updateRequest(@RequestBody Request request, @PathVariable Integer idGroup, @PathVariable Integer idProfile) {
+		Request auxRequest = service.getById(idGroup, idProfile);
+		auxRequest.getGroup().setIdGroup(idGroup);
+		auxRequest.getProfile().setIdProfile(idProfile);
+		service.save(auxRequest);
 		return new ResponseEntity<String>("Updated record", HttpStatus.OK);
 	}
 
-    @DeleteMapping("{idRequest}")
-	public ResponseEntity<?> delete(@PathVariable Integer idRequest ) {
-		service.delete(idRequest);
+	@Operation(summary = "Delete a request by ID")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Request successfully deleted", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+                        }),
+                        @ApiResponse(responseCode = "400", description = "Invalid group ID or profile ID", content = {
+                                        @Content
+                        }),
+                        @ApiResponse(responseCode = "404", description = "Request not found", content = {
+                                        @Content
+                        }),
+                        @ApiResponse(responseCode = "500", description = "Internal server error", content = {
+                                        @Content
+                        })
+        })
+	@DeleteMapping("{idGroup}/{idProfile}")
+	public ResponseEntity<?> deleteRequest(@PathVariable Integer idGroup, @PathVariable Integer idProfile) {
+		service.delete(idGroup, idProfile);
 		return new ResponseEntity<String>("Deleted record", HttpStatus.OK);
 	}
 
-	@PutMapping("{idRequest}/acceptUser")
-	public ResponseEntity<?> acceptUser(@PathVariable Integer idRequest) {
-		service.acceptUser(idRequest);
+	@Operation(summary = "Accept a request from a user")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Request update successful, the request was accepted and the user was added to the request group.", content = {
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Request.class))
+			}),
+			@ApiResponse(responseCode = "400", description = "Invalid group ID or profile ID", content = {
+					@Content
+			}),
+			@ApiResponse(responseCode = "404", description = "Request not found", content = {
+					@Content
+			}),
+			@ApiResponse(responseCode = "500", description = "Internal server error", content = {
+					@Content
+			})
+	})
+	@PutMapping("{idGroup}/{idProfile}/acceptUser")
+	public ResponseEntity<?> acceptUser(@PathVariable Integer idGroup, @PathVariable Integer idProfile) {
+		service.acceptUser(idGroup, idProfile);
 		return new ResponseEntity<String>("Updated record", HttpStatus.OK);
+	}
+
+	@Operation(summary = "Get all groups with pagination")
+	@GetMapping(value="pagination", params = {"page", "size"})
+	public List<Request> getAllPaginated(@RequestParam(value = "page", defaultValue="0", required=false) int
+	page, @RequestParam(value = "pageSize", defaultValue="10", required = false) int pageSize){
+		List<Request> requests = service.getAll(page, pageSize);
+		return requests;
 	}
 }
