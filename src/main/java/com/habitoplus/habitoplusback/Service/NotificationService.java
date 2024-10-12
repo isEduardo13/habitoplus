@@ -39,7 +39,7 @@ public class NotificationService {
             notificationToUpdate.setMessage(notificationDetails.getMessage());
             notificationToUpdate.setType(notificationDetails.getType());
             notificationToUpdate.setDate(notificationDetails.getDate());
-            notificationToUpdate.setRead(notificationDetails.getRead());
+            notificationToUpdate.setIsRead(notificationDetails.getIsRead());
 
             return notificationRepository.save(notificationToUpdate);
         } else {
@@ -48,11 +48,8 @@ public class NotificationService {
     }
 
     // Método para eliminar una notificación por ID
-    public void deleteNotificationById(int id) {
-        if (notificationRepository.existsById(id)) {
-            notificationRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Notification not found with id: " + id);
-        }
+    public void deleteNotification(int id) {
+        notificationRepository.deleteById(id);
     }
+    
 }
