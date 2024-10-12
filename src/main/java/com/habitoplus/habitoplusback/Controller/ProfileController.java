@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.habitoplus.habitoplusback.Model.Profile;
 import com.habitoplus.habitoplusback.Service.ProfileService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.web.bind.annotation.GetMapping;
 
 
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 @RequestMapping("profiles")
 @CrossOrigin(origins = "*" , methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@Tag(name = "Profiles", description = "Provides all the operations related to the profile")
 public class ProfileController {
 
     @Autowired
