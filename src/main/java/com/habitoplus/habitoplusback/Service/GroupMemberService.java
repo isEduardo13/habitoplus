@@ -8,11 +8,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.habitoplus.habitoplusback.Dto.GroupDto;
+import com.habitoplus.habitoplusback.Dto.GroupMemberWithGroupDto;
 import com.habitoplus.habitoplusback.Model.GroupMember;
 import com.habitoplus.habitoplusback.Model.GroupMemberPK;
 import com.habitoplus.habitoplusback.Repository.GroupMemberRepository;
-import com.habitoplus.habitoplusback.dto.GroupDto;
-import com.habitoplus.habitoplusback.dto.GroupMemberWithGroupDto;
 import com.habitoplus.habitoplusback.enums.Role;
 
 import jakarta.transaction.Transactional;

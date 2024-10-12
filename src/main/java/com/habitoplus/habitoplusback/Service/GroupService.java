@@ -16,10 +16,10 @@ import com.habitoplus.habitoplusback.Model.Profile;
 import com.habitoplus.habitoplusback.Model.Request;
 import com.habitoplus.habitoplusback.Repository.GroupRepository;
 import com.habitoplus.habitoplusback.Repository.ProfileRepository;
-import com.habitoplus.habitoplusback.dto.CommentWithProfileDto;
-import com.habitoplus.habitoplusback.dto.GroupMemberWithProfileDto;
-import com.habitoplus.habitoplusback.dto.ProfileDto;
-import com.habitoplus.habitoplusback.dto.RequestWithProfileDto;
+import com.habitoplus.habitoplusback.Dto.CommentWithProfileDto;
+import com.habitoplus.habitoplusback.Dto.GroupMemberWithProfileDto;
+import com.habitoplus.habitoplusback.Dto.ProfileDto;
+import com.habitoplus.habitoplusback.Dto.RequestWithProfileDto;
 import com.habitoplus.habitoplusback.enums.Role;
 
 import jakarta.transaction.Transactional;

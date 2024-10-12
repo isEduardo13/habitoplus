@@ -26,9 +26,9 @@ import com.habitoplus.habitoplusback.Model.Group;
 import com.habitoplus.habitoplusback.Model.GroupMember;
 import com.habitoplus.habitoplusback.Model.Request;
 import com.habitoplus.habitoplusback.Service.GroupService;
-import com.habitoplus.habitoplusback.dto.CommentWithProfileDto;
-import com.habitoplus.habitoplusback.dto.GroupMemberWithProfileDto;
-import com.habitoplus.habitoplusback.dto.RequestWithProfileDto;
+import com.habitoplus.habitoplusback.Dto.CommentWithProfileDto;
+import com.habitoplus.habitoplusback.Dto.GroupMemberWithProfileDto;
+import com.habitoplus.habitoplusback.Dto.RequestWithProfileDto;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
