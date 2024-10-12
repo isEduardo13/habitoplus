@@ -26,7 +26,6 @@ public class StreakService {
         streakRepository.save(streak);
     }
     
-    // al consultar solo se extraen los dias consecutivos de racha por un id
     public StreakDTO getStreak(int idStreak){
         Optional<Streak> optionalStreak = streakRepository.findById(idStreak);
         if (optionalStreak.isPresent()) {

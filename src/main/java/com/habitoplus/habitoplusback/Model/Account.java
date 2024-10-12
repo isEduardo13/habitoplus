@@ -1,5 +1,6 @@
 package com.habitoplus.habitoplusback.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
@@ -32,6 +33,7 @@ public class Account{
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_Profile", referencedColumnName = "idProfile")
     @JsonProperty("profile")
+    @JsonManagedReference
     private Profile profile;
 
     public int getAccount_id() {

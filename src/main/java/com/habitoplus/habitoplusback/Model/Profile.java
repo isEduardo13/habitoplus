@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
@@ -21,12 +22,8 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idProfile;
     
-
-    @OneToOne(mappedBy = "profile")
-    private Account account;
-
-    
-    @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_Streak", referencedColumnName = "idStreak")
     private Streak streak;
 
     @JsonManagedReference
@@ -187,5 +184,7 @@ public class Profile {
         this.name = "N/A";
         this.username = "N/A";
         this.birthDate = "N/A";
+        this.habits = null;
+        this.streak = null;
     }
 }
