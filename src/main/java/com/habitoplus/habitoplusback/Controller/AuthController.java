@@ -1,5 +1,6 @@
 package com.habitoplus.habitoplusback.Controller;
 
+import org.hibernate.annotations.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
 @RequestMapping("/auth")
@@ -34,9 +37,9 @@ public class AuthController {
         String token = authService.login(loginRequest.getEmail(), loginRequest.getPassword());
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
-    @Operation(summary = "register")
+        @Operation(summary = "register")
         @ApiResponse(responseCode = "201", description = "Return account", content = {
-            @Content(mediaType = "application/json")})
+            @Content(mediaType = "application/json",array = @ArraySchema(schema = @Schema(implementation = RegisterRequest.class)))})
     @PostMapping("/register")
     public ResponseEntity<RegisterRequest> register(@RequestBody RegisterRequest request) {
         RegisterRequest registerRequest = authService.register(request);

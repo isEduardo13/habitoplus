@@ -40,7 +40,13 @@ public class AccountController {
     public List<Account> getAllAccounts() {
         return accountService.getAllAccounts();
     }
-
+    @Operation(summary = "Get all accounts with pagination")
+    @ApiResponse(responseCode = "200", description = "Returns the accounts by pages ", content = {
+            @Content(mediaType = "application/json", array =@ArraySchema(schema = @Schema(implementation = Account.class)))})
+    @GetMapping("/paginated/{page}/{pageSize}")
+    public List<Account> getAllAccountsWithPaginated(@PathVariable int page, @PathVariable int pageSize) {
+        return accountService.getAllAccountsWithPaginated(page, pageSize);
+    }
     @Operation(summary = "Get account by Email")
         @ApiResponse(responseCode = "200", description = "Return account by email", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))})

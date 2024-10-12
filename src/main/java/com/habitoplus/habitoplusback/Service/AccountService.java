@@ -2,6 +2,8 @@ package com.habitoplus.habitoplusback.Service;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.habitoplus.habitoplusback.Repository.AccountRepository;
 import com.habitoplus.habitoplusback.Repository.ProfileRepository;
@@ -24,6 +26,12 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
+    public List<Account> getAllAccountsWithPaginated(int page ,int pageSize) {
+        PageRequest pageRequest = PageRequest.of(page, pageSize);
+        Page<Account> pageResult = accountRepository.findAll(pageRequest);
+        return pageResult.getContent();
+    }
+
     public Account getAccountById(int id) {
         if (accountRepository.findById(id).isEmpty()) {
             throw new NoSuchElementException();
@@ -33,6 +41,10 @@ public class AccountService {
     }
     public Account getAccountByEmail(String email) {
         return accountRepository.findByEmail(email);
+    }
+
+    public List<Account> getAccountsByEmail(String email) {
+        return accountRepository.getAccoutsByEmail(email);
     }
     
     @Transactional
@@ -92,6 +104,7 @@ public class AccountService {
         accountRepository.delete(existingAccount);
         return true;
     }
+
 }
 
     
