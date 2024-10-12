@@ -16,8 +16,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.habitoplus.habitoplusback.Controller.GroupMemberController;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 public class GroupMemberControllerTest {

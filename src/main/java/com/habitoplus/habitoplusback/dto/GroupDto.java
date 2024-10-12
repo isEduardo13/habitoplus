@@ -1,4 +1,4 @@
-package com.habitoplus.habitoplusback.Dto;
+package com.habitoplus.habitoplusback.dto;
 
 import com.habitoplus.habitoplusback.enums.GroupType;
 
