@@ -1,11 +1,16 @@
 package com.habitoplus.habitoplusback.Model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -14,7 +19,7 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int category_id;
+    private Integer idCategory;
     @NotBlank
     @Size(min = 1, max = 50)
     @JsonProperty("name")
@@ -22,23 +27,26 @@ public class Category {
     @NotBlank
     @JsonProperty("description")
     private String description;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Habit> habits;
 
-    public Category(){
-        
+    public Category() {
+
     }
 
-    public Category(int category_id, String name, String description){
-        this.category_id = category_id;
+    public Category(Integer idCategory, String name, String description) {
+        this.idCategory = idCategory;
         this.category_name = name;
         this.description = description;
     }
 
-    public int getCategory_id() {
-        return category_id;
+    public Integer getIdCategory() {
+        return idCategory;
     }
 
-    public void setCategory_id(int category_id) {
-        this.category_id = category_id;
+    public void setIdCategory(Integer idCategory) {
+        this.idCategory = idCategory;
     }
 
     public String getCategory_name() {
@@ -57,8 +65,16 @@ public class Category {
         this.description = description;
     }
 
+    public List<Habit> getHabits() {
+        return habits;
+    }
+
+    public void setHabits(List<Habit> habits) {
+        this.habits = habits;
+    }
+
     @Override
     public String toString() {
-        return category_id + " :: " + category_name + " :: " + description;
+        return idCategory + " :: " + category_name + " :: " + description;
     }
 }

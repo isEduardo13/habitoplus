@@ -21,8 +21,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
+@Tag(name = "Category")
 @RequestMapping("categories")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET })
 public class CategoryController {
@@ -63,9 +65,9 @@ public class CategoryController {
                     @Content
             })
     })
-    @GetMapping("{categoryId}")
-    public ResponseEntity<?> getByCategoryId(@PathVariable Integer categoryId) {
-        Category category = service.getByCategoryId(categoryId);
+    @GetMapping("{idCategory}")
+    public ResponseEntity<?> getByCategoryId(@PathVariable Integer idCategory) {
+        Category category = service.getByCategoryId(idCategory);
         return new ResponseEntity<Category>(category, HttpStatus.OK);
     }
     
