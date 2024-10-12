@@ -44,7 +44,7 @@ public class Notification {
     @NotNull(message = "Read status cannot be null")
     private Boolean isRead; 
 
-    // Getters and Setters
+
     public int getId() {
         return id;
     }

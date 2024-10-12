@@ -15,22 +15,20 @@ public class NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    // Método para agregar una nueva notificación
+   
     public Notification addNotification(Notification notification) {
         return notificationRepository.save(notification);
     }
 
-    // Método para consultar todas las notificaciones
+    
     public List<Notification> getAllNotifications() {
         return notificationRepository.findAll();
     }
 
-    // Método para consultar una notificación por ID
     public Optional<Notification> getNotificationById(int id) {
         return notificationRepository.findById(id);
     }
-
-    // Método para actualizar una notificación existente
+    
     public Notification updateNotification(int id, Notification notificationDetails) {
         Optional<Notification> optionalNotification = notificationRepository.findById(id);
 
@@ -47,7 +45,7 @@ public class NotificationService {
         }
     }
 
-    // Método para eliminar una notificación por ID
+    
     public void deleteNotification(int id) {
         notificationRepository.deleteById(id);
     }
