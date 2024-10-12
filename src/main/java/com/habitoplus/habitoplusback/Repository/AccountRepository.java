@@ -1,4 +1,4 @@
-    package com.habitoplus.habitoplusback.Repository;
+package com.habitoplus.habitoplusback.Repository;
 
     import org.springframework.stereotype.Repository;
 

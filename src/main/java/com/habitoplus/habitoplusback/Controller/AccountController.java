@@ -23,19 +23,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-
 @RestController
 @RequestMapping("accounts")
-@CrossOrigin(origins = "*" , methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
+        RequestMethod.DELETE })
 @Tag(name = "Accounts", description = "Provides all the operations related to the account")
 public class AccountController {
-    
+
     @Autowired
     private AccountService accountService;
 
     @Operation(summary = "Get all accounts")
     @ApiResponse(responseCode = "200", description = "Return all accounts", content = {
-            @Content(mediaType = "application/json", array =@ArraySchema(schema = @Schema(implementation = Account.class)))})
+            @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Account.class))) })
     @GetMapping
     public List<Account> getAllAccounts() {
         return accountService.getAllAccounts();
