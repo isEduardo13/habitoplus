@@ -1,4 +1,4 @@
-package com.habitoplus.habitoplusback.controller;
+package com.habitoplus.habitoplusback.Controller;
 
 import java.util.List;
 
@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.habitoplus.habitoplusback.model.Request;
-import com.habitoplus.habitoplusback.service.RequestService;
+import com.habitoplus.habitoplusback.Model.GroupMember;
+import com.habitoplus.habitoplusback.Model.Request;
+import com.habitoplus.habitoplusback.Service.RequestService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
