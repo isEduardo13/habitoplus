@@ -16,13 +16,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idProfile;
-    
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_Streak", referencedColumnName = "idStreak")
     private Streak streak;
@@ -30,7 +32,7 @@ public class Profile {
     @JsonManagedReference
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Habit> habits;
-    
+
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupMember> members;
 
@@ -38,35 +40,55 @@ public class Profile {
     private List<Request> requests;
 
     @Transient
-    private List<Comment> comments;  // No se almacenará en la colección Group
+    private List<Comment> comments;
 
     @Transient
     private Photo photo;
 
+    @NotBlank
+    @Size(min = 1, max = 50, message = "Username must be between 1 and 50 characters")
     private String username;
 
+    @NotBlank
+    @Size(min = 2, max = 50, message = "Name must be between 1 and 50 characters")
     private String name;
 
+    @NotBlank
+    @Size(min = 1, max = 50, message = "Last name must be between 1 and 50 characters")
     private String lastName;
 
+    @NotBlank()
+    @Size(min = 1, max = 10, message = "Birth date must be between 1 and 10 characters")
     private String birthDate;
 
+    @NotBlank
+    @Size(min = 1, max = 3, message = "Age must be between 1 and 3 characters")
     private String age;
-
+    @NotBlank
+    @Size(min = 1, max = 17, message = "Gender must be between 1 and 17 characters example Male / male / MALE / M / m\r\n"+ "Female / female / FEMALE / F / f\r\n" + "Not prefer to say ")
     private String gender;
 
+    @NotBlank
+    @Size(min = 1, max = 50, message = "Preferences must be between 1 and 50 characters")
     private String preferences;
 
+    @NotBlank
+    @Size(min = 1, max = 100, message = "Description must be between 1 and 100 characters")
     private String description;
-
+    @NotBlank
+    @Size(min = 1, max = 15, message = "Number phone must be between 1 and 15 characters")
     private String numberPhone;
-
+    @NotBlank
+    @Size(min = 1, max = 1, message = "Status must be 1 or 0")
     private Boolean status;
 
+    @NotBlank
+    @Size(min = 1, max = 10, message = "Date of registration must be between 1 and 10 characters")
     private String dateOfRegistration;
 
+    @NotBlank
+    @Size(min = 1, max = 19, message = "Last connection must be between 1 and 19 characters")
     private String lastConnection;
-
 
     public Photo getPhoto() {
         return photo;
@@ -171,6 +193,7 @@ public class Profile {
     public void setLastConnection(String lastConnnetion) {
         lastConnection = lastConnnetion;
     }
+
     public int getIdProfile() {
         return idProfile;
     }
@@ -179,7 +202,7 @@ public class Profile {
         this.idProfile = idProfile;
     }
 
-     public void Inicializar() {
+    public void Inicializar() {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
@@ -189,15 +212,15 @@ public class Profile {
         this.dateOfRegistration = formattedDate;
         this.status = true;
         this.lastConnection = formattedLastConnection;
-        this.age = "N/A";
-        this.gender = "Unknown";
-        this.numberPhone = "N/A";
-        this.preferences = "N/A";
-        this.description = "N/A";
-        this.lastName = "N/A";
-        this.name = "N/A";
-        this.username = "N/A";
-        this.birthDate = "N/A";
+        this.age = "xx";
+        this.gender = "Prefer not to say";
+        this.numberPhone = "xxx-xxx-xxxx";
+        this.preferences = "preference";
+        this.description = "description";
+        this.lastName = "LasterName";
+        this.name = "Name";
+        this.username = "Username";
+        this.birthDate = "xx-xx-xxxx";
         this.habits = null;
         this.streak = null;
     }

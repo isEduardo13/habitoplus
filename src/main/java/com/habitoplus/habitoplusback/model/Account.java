@@ -24,6 +24,8 @@ public class Account{
     @Column(unique = true, name = "email")
     private String email;
 
+    @NotBlank
+    @Size(min =  1 ,max = 15, message = "Password must be between 1 and 15s characters")
     @Column (name = "password")
     private String password;
 
