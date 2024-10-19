@@ -202,6 +202,14 @@ public class Profile {
         this.idProfile = idProfile;
     }
 
+    public List<Habit> getHabits() {
+        return habits;
+    }
+
+    public void setHabits(List<Habit> habits) {
+        this.habits = habits;
+    }
+
     public void Inicializar() {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
