@@ -32,14 +32,14 @@ public class StreakController {
         List<Streak> streaks = streakService.getAllStreaks();
         return ResponseEntity.ok(streaks);
     }
-    //crear una nueva racha
+
     @PostMapping
     public ResponseEntity<?> createStreak(@RequestBody Streak streak){
         streakService.createStreak(streak);
         System.out.println(streak.toString());
         return new ResponseEntity<String>("Saved record", HttpStatus.OK);
     }
-    //obtener racha por id
+
     @GetMapping("/{idStreak}")
     public ResponseEntity<StreakDto> getStreak(@PathVariable("idStreak") int idStreak){
         StreakDto streakDTO = streakService.getStreak(idStreak);
@@ -49,7 +49,7 @@ public class StreakController {
         return ResponseEntity.notFound().build();
     }
 
-    //reiniciar racha a 0 si el se detecta que el usuario no ha cumplido sus habitos en un solo dia
+    
     @PutMapping("/{idStreak}")
     public ResponseEntity<Void> putStreak(@PathVariable("idSreak") int idStreak){
         streakService.putStreak(idStreak);
