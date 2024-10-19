@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.habitoplus.habitoplusback.dto.StreakDto;
 import com.habitoplus.habitoplusback.model.Streak;
 import com.habitoplus.habitoplusback.repository.StreakRepository;
-import com.habitoplus.habitoplusback.dto.StreakDTO;
 
 import jakarta.transaction.Transactional;
 
@@ -18,7 +18,6 @@ public class StreakService {
     @Autowired
     private StreakRepository streakRepository;
 
-    // obtener todas las rachas
     public List<Streak> getAllStreaks() {
         return streakRepository.findAll();
     }
@@ -27,19 +26,16 @@ public class StreakService {
         streakRepository.save(streak);
     }
     
-    // al consultar solo se extraen los dias consecutivos de racha por un id
-    public StreakDTO getStreak(int idStreak){
+    public StreakDto getStreak(int idStreak){
         Optional<Streak> optionalStreak = streakRepository.findById(idStreak);
         if (optionalStreak.isPresent()) {
             Streak streak = optionalStreak.get();
             // Usando el constructor de Streak
-            return new StreakDTO(streak.getStartDate(), streak.getConsecutiveDays());
+            return new StreakDto(streak.getStartDate(), streak.getConsecutiveDays());
         }
         return null;
     }
 
-    // al tener un dia en el que no se cumplan objetivos la racha se actualiza a 0
-    // automaticamente
     public void putStreak(int id) {
         Streak streak = streakRepository.findById(id).orElse(null);
         if (streak != null) {

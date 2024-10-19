@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.habitoplus.habitoplusback.model.Streak;
 import com.habitoplus.habitoplusback.service.StreakService;
-import com.habitoplus.habitoplusback.dto.StreakDTO;
+import com.habitoplus.habitoplusback.dto.StreakDto;
 
 
 @RestController
@@ -41,8 +41,8 @@ public class StreakController {
     }
     //obtener racha por id
     @GetMapping("/{idStreak}")
-    public ResponseEntity<StreakDTO> getStreak(@PathVariable("idStreak") int idStreak){
-        StreakDTO streakDTO = streakService.getStreak(idStreak);
+    public ResponseEntity<StreakDto> getStreak(@PathVariable("idStreak") int idStreak){
+        StreakDto streakDTO = streakService.getStreak(idStreak);
         if(streakDTO != null){
             return ResponseEntity.ok(streakDTO);
         }

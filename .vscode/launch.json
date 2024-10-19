@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-HabitoplusbackApplication<habitoplusback>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.habitoplus.habitoplusback.HabitoplusbackApplication",
+            "projectName": "habitoplusback",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
