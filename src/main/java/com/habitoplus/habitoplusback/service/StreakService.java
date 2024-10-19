@@ -23,6 +23,7 @@ public class StreakService {
     }
     
     public void createStreak(Streak streak) {
+        
         streakRepository.save(streak);
     }
     

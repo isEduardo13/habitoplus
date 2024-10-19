@@ -9,10 +9,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
@@ -25,8 +25,8 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idProfile;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_Streak", referencedColumnName = "idStreak")
+    @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Streak streak;
 
     @JsonManagedReference
@@ -90,6 +90,7 @@ public class Profile {
     @Size(min = 1, max = 19, message = "Last connection must be between 1 and 19 characters")
     private String lastConnection;
 
+    
     public Photo getPhoto() {
         return photo;
     }
@@ -223,5 +224,53 @@ public class Profile {
         this.birthDate = "xx-xx-xxxx";
         this.habits = null;
         this.streak = null;
+    }
+
+    public void setIdProfile(Integer idProfile) {
+        this.idProfile = idProfile;
+    }
+
+    public Streak getStreak() {
+        return streak;
+    }
+
+    public void setStreak(Streak streak) {
+        this.streak = streak;
+    }
+
+    public List<Habit> getHabits() {
+        return habits;
+    }
+
+    public void setHabits(List<Habit> habits) {
+        this.habits = habits;
+    }
+
+    public List<GroupMember> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<GroupMember> members) {
+        this.members = members;
+    }
+
+    public List<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

@@ -1,19 +1,22 @@
 package com.habitoplus.habitoplusback.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import com.habitoplus.habitoplusback.repository.AccountRepository;
-import com.habitoplus.habitoplusback.repository.ProfileRepository;
-import jakarta.transaction.Transactional;
-import java.util.NoSuchElementException;
 
 import com.habitoplus.habitoplusback.exception.UserAlreadyExistsException;
 import com.habitoplus.habitoplusback.model.Account;
 import com.habitoplus.habitoplusback.model.Profile;
+import com.habitoplus.habitoplusback.model.Streak;
+import com.habitoplus.habitoplusback.repository.AccountRepository;
+import com.habitoplus.habitoplusback.repository.ProfileRepository;
+import com.habitoplus.habitoplusback.repository.StreakRepository;
+
+import jakarta.transaction.Transactional;
 
 
 @Service
@@ -22,7 +25,8 @@ public class AccountService {
     private AccountRepository accountRepository;
     @Autowired
     private ProfileRepository profileRepository;
-
+    @Autowired
+    private StreakRepository streakRepository;
 
 
     public List<Account> getAllAccounts() {
@@ -50,23 +54,33 @@ public class AccountService {
         return accountRepository.getAccoutsByEmail(email);
     }
     
-    @Transactional
-    public Account addAccount(Account account)  {
-        if (accountRepository.findByEmail(account.getEmail()) != null) {
-            throw new UserAlreadyExistsException("User with email " + account.getEmail() + " already exists");   
-        }
-        if (account.getProfile() == null) {
-            Profile profile = new Profile();
-            profile.Inicializar();
-            profileRepository.save(profile);
-            account.setProfile(profile);
-        } else {
-            Profile profile = account.getProfile();
-            profileRepository.save(profile);
-        }
+        @Transactional
+        public Account addAccount(Account account)  {
+            if (accountRepository.findByEmail(account.getEmail()) != null) {
+                throw new UserAlreadyExistsException("User with email " + account.getEmail() + " already exists");   
+            }
 
-        return accountRepository.save(account);
-    }
+            Profile profile;
+            if (account.getProfile() == null) {
+                profile = new Profile();
+                profile.Inicializar();
+                profileRepository.save(profile);
+                account.setProfile(profile);
+            } else {
+                profile = account.getProfile();
+                profileRepository.save(profile);
+            }
+
+            Streak streak = new Streak();
+            streak.setConsecutiveDays(0);
+            streak.setStartDate(null);
+            streak.setEndDate(null);
+            streak.setProfile(profile);
+            streakRepository.save(streak);
+            
+            profile.setStreak(streak);
+            return accountRepository.save(account);
+        }
 
 
     public Account updateAccount(Account account) {
