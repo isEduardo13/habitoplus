@@ -23,7 +23,7 @@ public class ProfileService {
          return profileRepository.save(profile);
     }
 
-    public Profile getProfileById(int id) {
+    public Profile getProfileById(Integer id) {
         return profileRepository.findById(id).orElse(null);
     }
 

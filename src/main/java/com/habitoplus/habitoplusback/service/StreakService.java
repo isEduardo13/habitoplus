@@ -23,7 +23,8 @@ public class StreakService {
         return streakRepository.findAll();
     }
     
-    public void createStreak(Streak streak) {
+    public void createStreak(Streak streak) {   
+        
         streakRepository.save(streak);
     }
     
