@@ -9,16 +9,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import jakarta.persistence.Id;
 
 @Entity
 public class Account{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idAccount;
+
     @NotBlank
     @Size(min =  1 ,max = 50, message = "Email must be between 1 and 50 characters")
     @Column(unique = true, name = "email")
@@ -57,6 +58,7 @@ public class Account{
     public String getEmail() {
         return email;
     }
+
 
     public void setEmail(String email) {
         this.email = email;

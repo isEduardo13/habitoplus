@@ -14,17 +14,17 @@ import java.util.NoSuchElementException;
 
 import com.habitoplus.habitoplusback.exception.UserAlreadyExistsException;
 import com.habitoplus.habitoplusback.model.Account;
+import com.habitoplus.habitoplusback.model.Pixela;
 import com.habitoplus.habitoplusback.model.Profile;
 import com.habitoplus.habitoplusback.model.Streak;
 import com.habitoplus.habitoplusback.repository.AccountRepository;
+import com.habitoplus.habitoplusback.repository.PixelaRepository;
 import com.habitoplus.habitoplusback.repository.ProfileRepository;
 import com.habitoplus.habitoplusback.repository.StreakRepository;
 
-import jakarta.transaction.Transactional;
-
-
 @Service
 public class AccountService {
+
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
@@ -37,7 +37,6 @@ public class AccountService {
     }
 
     public List<Account> getAllAccountsWithPaginated(int page ,int pageSize) {
-    public List<Account> getAllAccountsWithPaginated(int page ,int pageSize) {
         PageRequest pageRequest = PageRequest.of(page, pageSize);
         Page<Account> pageResult = accountRepository.findAll(pageRequest);
         return pageResult.getContent();
@@ -46,7 +45,6 @@ public class AccountService {
     public Account getAccountById(int id) {
         if (accountRepository.findById(id).isEmpty()) {
             throw new NoSuchElementException();
-            
             
         }
         return accountRepository.findById(id).get();
@@ -65,44 +63,68 @@ public class AccountService {
             throw new UserAlreadyExistsException("User with email " + account.getEmail() + " already exists");   
         }
 
-            Profile profile;
-            if (account.getProfile() == null) {
-                profile = new Profile();
-                profile.Inicializar();
-                profileRepository.save(profile);
-                account.setProfile(profile);
-            } else {
-                profile = account.getProfile();
-                profileRepository.save(profile);
-            }
-
-            Streak streak = new Streak();
-            streak.setConsecutiveDays(0);
-            streak.setStartDate(null);
-            streak.setEndDate(null);
-            streak.setProfile(profile);
-            streakRepository.save(streak);
-            
-            profile.setStreak(streak);
-            return accountRepository.save(account);
+        // Crear o reutilizar el perfil
+        Profile profile;
+        if (account.getProfile() == null) {
+            profile = new Profile();
+            profile.Inicializar(); // Método que inicializa el perfil con valores predeterminados
+            profileRepository.save(profile);
+            account.setProfile(profile);
+        } else {
+            profile = account.getProfile();
+            profileRepository.save(profile);
         }
+
+        // Crear un nuevo Streak (rachas)
+        Streak streak = new Streak();
+        streak.setConsecutiveDays(0);
+        streak.setStartDate(null);
+        streak.setEndDate(null);
+        streak.setProfile(profile);
+        streakRepository.save(streak);
+
+        // Generar token para la cuenta de Pixela
+        String pixelaToken = generatePixelaToken();
+
+        // Intentar crear la cuenta de Pixela a través del servicio
+        boolean pixelaCreated = pixelaService.createPixelaAccount(account.getEmail(), pixelaToken, isNotMinor, thanksCode);
+        if (pixelaCreated) {
+            // Guardar la cuenta de la aplicación si Pixela fue creada exitosamente
+            Account savedAccount = accountRepository.save(account);
+
+            // Crear y asociar Pixela a la cuenta
+            Pixela pixela = new Pixela();
+            pixela.setUsername(account.getEmail()); // El username en Pixela se basa en el email
+            pixela.setToken(pixelaToken);
+            pixela.setAccount(savedAccount);
+            pixelaRepository.save(pixela);
+
+            // Asociar el streak al perfil de la cuenta
+            profile.setStreak(streak);
+
+            return savedAccount;
+        } else {
+            // Si la cuenta de Pixela no se pudo crear, lanza una excepción
+            throw new RuntimeException("Failed to create Pixela account for user: " + account.getEmail());
+        }
+    }
+
+    // Método para generar un token de Pixela (esto puede ser dinámico si lo prefieres)
+    private String generatePixelaToken() {
+        // Aquí puedes generar un token más seguro si lo necesitas
+        return "vtoken2889hsjwi";
+    }
 
 
     public Account updateAccount(Account account) {
 
         if (accountRepository.findById(account.getAccount_id()).isEmpty()) {
             throw new NoSuchElementException();     
-        if (accountRepository.findById(account.getAccount_id()).isEmpty()) {
-            throw new NoSuchElementException();     
         }
-        Account existingAccount = accountRepository.findById(account.getAccount_id()).get();
-        
         Account existingAccount = accountRepository.findById(account.getAccount_id()).get();
         
         existingAccount.setEmail(account.getEmail());
         existingAccount.setPassword(account.getPassword());
-        existingAccount.setStatus(account.isStatus());  
-        
         existingAccount.setStatus(account.isStatus());  
         
         return accountRepository.save(existingAccount);
@@ -110,9 +132,7 @@ public class AccountService {
 
     public boolean deleteAccount(int id) {
         
-        
         if (accountRepository.findById(id).isEmpty()) {
-            throw new NoSuchElementException();     
             throw new NoSuchElementException();     
         }
         Account existingAccount = accountRepository.findById(id).get();
@@ -126,9 +146,7 @@ public class AccountService {
     }
     public boolean DefinitiveDeleteAccount(int id) {
         
-        
         if (accountRepository.findById(id).isEmpty()) {
-            throw new NoSuchElementException();     
             throw new NoSuchElementException();     
         }
         Account existingAccount = accountRepository.findById(id).get();
@@ -136,8 +154,4 @@ public class AccountService {
         accountRepository.delete(existingAccount);
         return true;
     }
-
 }
-
-    
-
