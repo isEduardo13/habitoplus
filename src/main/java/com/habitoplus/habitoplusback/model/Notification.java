@@ -1,6 +1,11 @@
 package com.habitoplus.habitoplusback.model;
 
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,9 +28,11 @@ public class Notification {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "id_profile", nullable = false) 
+    @JoinColumn(name = "id_profile", nullable = false)
     @NotNull(message = "Profile cannot be null")
-    private Profile profile; 
+    @JsonProperty("profile")
+    @JsonBackReference
+    private Profile profile;
 
     @Column(name = "message", columnDefinition = "TEXT", nullable = false)
     @NotBlank(message = "Message cannot be blank")
@@ -38,12 +45,12 @@ public class Notification {
 
     @Column(name = "date", nullable = false)
     @NotNull(message = "Date cannot be null")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime date;
 
     @Column(name = "isRead", columnDefinition = "BIT")
     @NotNull(message = "Read status cannot be null")
-    private Boolean isRead; 
-
+    private Boolean isRead;
 
     public int getId() {
         return id;
@@ -91,5 +98,6 @@ public class Notification {
 
     public void setIsRead(Boolean isRead) {
         this.isRead = isRead;
+
     }
 }
