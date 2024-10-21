@@ -1,35 +1,36 @@
 package com.habitoplus.habitoplusback.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "pixela")
 public class Pixela {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPixela;
+    private String username; 
+    @JsonIgnore
+    private String token;  
+    private String graphId;  
+    private String graphName; 
+    private String unit;  
+    private String type;  
+    private String color; 
 
-    // Atributos creados al mismo tiempo que la cuenta de Pixela
-    private String username; // El nombre de usuario en Pixela
-    private String token;  // Token del usuario en Pixela
-
-    // Atributos creados al crear la gráfica (cuando se crea un hábito)
-    private String graphId;  // ID de la gráfica en Pixela
-    private String graphName; // Nombre de la gráfica
-    private String unit;  // Unidad de medida de la gráfica (e.g. "commit")
-    private String type;  // Tipo de la gráfica (e.g. "int")
-    private String color; // Color de la gráfica (e.g. "shibafu")
-
-    @ManyToOne
-    @JoinColumn(name = "idAccount")
+    @OneToOne
+    @JoinColumn(name = "idAccount", referencedColumnName = "idAccount")
+    @JsonBackReference(value = "account-pixela")  // Evita serialización recíproca
     private Account account;
-
-    // Getters y setters
 
     public Pixela() {
     }
@@ -114,9 +115,10 @@ public class Pixela {
 
     @Override
     public String toString() {
-        return "Pixela [idPixela=" + idPixela + ", username=" + username + ", graphId=" + graphId + ", graphName="
-                + graphName + ", token=" + token + ", unit=" + unit + ", type=" + type + ", color=" + color
-                + ", account=" + account + "]";
+        return "Pixela [idPixela=" + idPixela + ", username=" + username + ", token=" + token + ", graphId=" + graphId
+                + ", graphName=" + graphName + ", unit=" + unit + ", type=" + type + ", color=" + color + ", account="
+                + account + "]";
     }
+
     
 }

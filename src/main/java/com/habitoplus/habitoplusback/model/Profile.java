@@ -5,32 +5,43 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 @Entity
+@Table(name = "profile")
+@JsonIgnoreProperties({"habits", "members", "requests"}) 
 public class Profile {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idProfile;
 
-    @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @OneToOne
+    @JoinColumn(name = "idAccount", referencedColumnName = "idAccount")
+    @JsonBackReference(value = "account-profile")  // Evita serialización recíproca
+    private Account account;
+
+    @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "profile-streak")
     private Streak streak;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "profile-habits")
     private List<Habit> habits;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -64,6 +75,7 @@ public class Profile {
     @NotBlank
     @Size(min = 1, max = 3, message = "Age must be between 1 and 3 characters")
     private String age;
+
     @NotBlank
     @Size(min = 1, max = 17, message = "Gender must be between 1 and 17 characters example Male / male / MALE / M / m\r\n"+ "Female / female / FEMALE / F / f\r\n" + "Not prefer to say ")
     private String gender;
@@ -78,9 +90,6 @@ public class Profile {
     @NotBlank
     @Size(min = 1, max = 15, message = "Number phone must be between 1 and 15 characters")
     private String numberPhone;
-    @NotBlank
-    @Size(min = 1, max = 1, message = "Status must be 1 or 0")
-    private Boolean status;
 
     @NotBlank
     @Size(min = 1, max = 10, message = "Date of registration must be between 1 and 10 characters")
@@ -90,7 +99,84 @@ public class Profile {
     @Size(min = 1, max = 19, message = "Last connection must be between 1 and 19 characters")
     private String lastConnection;
 
-    
+    public void Inicializar() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+        String formattedDate = LocalDate.now().format(dateFormatter);
+        String formattedLastConnection = LocalDateTime.now().format(dateTimeFormatter);
+
+        this.dateOfRegistration = formattedDate;
+        this.lastConnection = formattedLastConnection;
+        this.age = "xx";
+        this.gender = "Prefer not to say";
+        this.numberPhone = "xxx-xxx-xxxx";
+        this.preferences = "preference";
+        this.description = "description";
+        this.lastName = "LasterName";
+        this.name = "Name";
+        this.username = "Username";
+        this.birthDate = "xx-xx-xxxx";
+        this.habits = null;
+        this.streak = null;
+    }
+
+    public Integer getIdProfile() {
+        return idProfile;
+    }
+
+    public void setIdProfile(Integer idProfile) {
+        this.idProfile = idProfile;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Streak getStreak() {
+        return streak;
+    }
+
+    public void setStreak(Streak streak) {
+        this.streak = streak;
+    }
+
+    public List<Habit> getHabits() {
+        return habits;
+    }
+
+    public void setHabits(List<Habit> habits) {
+        this.habits = habits;
+    }
+
+    public List<GroupMember> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<GroupMember> members) {
+        this.members = members;
+    }
+
+    public List<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
     public Photo getPhoto() {
         return photo;
     }
@@ -155,12 +241,12 @@ public class Profile {
         this.preferences = preferences;
     }
 
-    public String setDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(String desciption) {
-        this.description = desciption;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getNumberPhone() {
@@ -169,14 +255,6 @@ public class Profile {
 
     public void setNumberPhone(String numberPhone) {
         this.numberPhone = numberPhone;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
     }
 
     public String getDateOfRegistration() {
@@ -191,86 +269,18 @@ public class Profile {
         return lastConnection;
     }
 
-    public void setLastConnection(String lastConnnetion) {
-        lastConnection = lastConnnetion;
+    public void setLastConnection(String lastConnection) {
+        this.lastConnection = lastConnection;
     }
 
-    public int getIdProfile() {
-        return idProfile;
+    @Override
+    public String toString() {
+        return "Profile [idProfile=" + idProfile + ", account=" + account + ", streak=" + streak + ", habits=" + habits
+                + ", members=" + members + ", requests=" + requests + ", comments=" + comments + ", photo=" + photo
+                + ", username=" + username + ", name=" + name + ", lastName=" + lastName + ", birthDate=" + birthDate
+                + ", age=" + age + ", gender=" + gender + ", preferences=" + preferences + ", description="
+                + description + ", numberPhone=" + numberPhone + ", dateOfRegistration=" + dateOfRegistration
+                + ", lastConnection=" + lastConnection + "]";
     }
 
-    public void setIdProfile(int idProfile) {
-        this.idProfile = idProfile;
-    }
-
-    public void Inicializar() {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-
-        String formattedDate = LocalDate.now().format(dateFormatter);
-        String formattedLastConnection = LocalDateTime.now().format(dateTimeFormatter);
-
-        this.dateOfRegistration = formattedDate;
-        this.status = true;
-        this.lastConnection = formattedLastConnection;
-        this.age = "xx";
-        this.gender = "Prefer not to say";
-        this.numberPhone = "xxx-xxx-xxxx";
-        this.preferences = "preference";
-        this.description = "description";
-        this.lastName = "LasterName";
-        this.name = "Name";
-        this.username = "Username";
-        this.birthDate = "xx-xx-xxxx";
-        this.habits = null;
-        this.streak = null;
-    }
-
-    public void setIdProfile(Integer idProfile) {
-        this.idProfile = idProfile;
-    }
-
-    public Streak getStreak() {
-        return streak;
-    }
-
-    public void setStreak(Streak streak) {
-        this.streak = streak;
-    }
-
-    public List<Habit> getHabits() {
-        return habits;
-    }
-
-    public void setHabits(List<Habit> habits) {
-        this.habits = habits;
-    }
-
-    public List<GroupMember> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<GroupMember> members) {
-        this.members = members;
-    }
-
-    public List<Request> getRequests() {
-        return requests;
-    }
-
-    public void setRequests(List<Request> requests) {
-        this.requests = requests;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 }
