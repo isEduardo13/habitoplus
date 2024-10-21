@@ -27,7 +27,7 @@ public class Streak {
     @OneToMany(mappedBy = "streak", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Habit> habits;
 
-    @JsonBackReference(value = "profile-streak")
+    @JsonBackReference
     @OneToOne
     @JoinColumn(name = "idProfile", referencedColumnName = "idProfile")
     private Profile profile;
@@ -36,43 +36,56 @@ public class Streak {
     private Date startDate;
     private Date endDate;
 
-
+    
     public Integer getIdStreak() {
         return idStreak;
     }
+
     public void setIdStreak(Integer idStreak) {
         this.idStreak = idStreak;
     }
+
+
     public List<Habit> getHabits() {
         return habits;
     }
+
     public void setHabits(List<Habit> habits) {
         this.habits = habits;
     }
-    public Profile getProfile() {
-        return profile;
-    }
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
+
     public Integer getConsecutiveDays() {
         return consecutiveDays;
     }
+
     public void setConsecutiveDays(Integer consecutiveDays) {
         this.consecutiveDays = consecutiveDays;
     }
+
     public Date getStartDate() {
         return startDate;
     }
+
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
+
     public Date getEndDate() {
         return endDate;
     }
+
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
     @Override
     public String toString() {
         return "Streak [idStreak=" + idStreak + ", habits=" + habits + ", profile=" + profile + ", consecutiveDays="
@@ -80,4 +93,5 @@ public class Streak {
     }
 
     
+
 }

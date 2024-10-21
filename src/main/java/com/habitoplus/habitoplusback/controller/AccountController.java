@@ -7,11 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -34,23 +32,6 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
-
-    @Operation(summary = "Create a new account")
-    @ApiResponse(responseCode = "201", description = "Account created successfully", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))})
-    @PostMapping
-    public ResponseEntity<Account> createAccount(
-            @RequestBody Account account,
-            @RequestParam boolean isNotMinor, 
-            @RequestParam(required = false) String thanksCode 
-    ) {
-
-        // Llamar al servicio para agregar la nueva cuenta
-        Account createdAccount = accountService.addAccount(account, isNotMinor, thanksCode);
-        
-        // Retornar la cuenta creada con un código HTTP 201 (CREATED)
-        return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
-    }
 
     @Operation(summary = "Get all accounts")
     @ApiResponse(responseCode = "200", description = "Return all accounts", content = {
