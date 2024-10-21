@@ -2,19 +2,15 @@ package com.habitoplus.habitoplusback.dto;
 
 
 public class HabitDTO {
-    private Integer categoryId; // Solo el ID de la categoría
-
+    private Integer categoryId;
     private String description;
-
     private Boolean status;
-
     private String priority;
-
-    private Integer streakId; // Solo el ID de la racha
-
-    private Integer profileId; // Solo el ID del perfil
-
+    private Integer streakId;
+    private Integer profileId;
     private String habitName;
+
+    
 
     public Integer getCategoryId() {
         return categoryId;

@@ -7,6 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import com.habitoplus.habitoplusback.repository.AccountRepository;
+import com.habitoplus.habitoplusback.repository.ProfileRepository;
+import jakarta.transaction.Transactional;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import com.habitoplus.habitoplusback.exception.UserAlreadyExistsException;
 import com.habitoplus.habitoplusback.model.Account;
@@ -25,12 +31,7 @@ public class AccountService {
     private AccountRepository accountRepository;
     @Autowired
     private ProfileRepository profileRepository;
-    @Autowired
-    private StreakRepository streakRepository;
-    @Autowired
-    private PixelaService pixelaService;
-    @Autowired
-    private PixelaRepository pixelaRepository;
+
 
     public List<Account> getAllAccounts() {
         return accountRepository.findAll();
@@ -50,7 +51,7 @@ public class AccountService {
         return accountRepository.findById(id).get();
     }
 
-    public Account getAccountByEmail(String email) {
+    public Optional<Account> getAccountByEmail(String email) {
         return accountRepository.findByEmail(email);
     }
 
@@ -58,8 +59,8 @@ public class AccountService {
         return accountRepository.getAccoutsByEmail(email);
     }
 
-    public Account addAccount(Account account, boolean isNotMinor, String thanksCode) {
-        // Verificar si el correo ya existe en el sistema
+    @Transactional
+    public Account addAccount(Account account) {
         if (accountRepository.findByEmail(account.getEmail()) != null) {
             throw new UserAlreadyExistsException("User with email " + account.getEmail() + " already exists");
         }

@@ -16,15 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.habitoplus.habitoplusback.model.Category;
 import com.habitoplus.habitoplusback.model.Habit;
-import com.habitoplus.habitoplusback.model.Profile;
-import com.habitoplus.habitoplusback.model.Streak;
-import com.habitoplus.habitoplusback.service.CategoryService;
 import com.habitoplus.habitoplusback.service.HabitService;
-import com.habitoplus.habitoplusback.service.ProfileService;
-import com.habitoplus.habitoplusback.service.StreakService;
 import com.habitoplus.habitoplusback.dto.HabitDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,15 +39,6 @@ public class HabitController {
 
         @Autowired
         private HabitService service;
-
-        @Autowired
-        private CategoryService categoryService;
-
-        @Autowired
-        private StreakService streakService;
-
-        @Autowired
-        private ProfileService profileService;
 
         @Operation(summary = "Get all the user's habits")
         @ApiResponses(value = {
@@ -108,28 +93,8 @@ public class HabitController {
                         })
         })
         public ResponseEntity<?> registerHabit(@Valid @RequestBody HabitDTO habitDTO) {
-                Habit habit = new Habit();
-                habit.setDescription(habitDTO.getDescription());
-                habit.setStatus(habitDTO.getStatus());
-                habit.setPriority(habitDTO.getPriority());
-                habit.setHabit_name(habitDTO.getHabitName());
-
-                // Obtener la categoría por ID
-                Category category = categoryService.getByCategoryId(habitDTO.getCategoryId());
-                habit.setCategory(category);
-
-                //Cargar la racha por ID
-                Streak streak = streakService.getByStreaktId(habitDTO.getStreakId());
-                habit.setStreak(streak);
-
-                //Cargar el perfil por ID
-                Profile profile = profileService.getProfileById(habitDTO.getProfileId());
-                habit.setProfile(profile);
-
-                // Guardar el hábito
-                service.save(habit);
-
-                return ResponseEntity.status(HttpStatus.CREATED).body(habitDTO);
+                service.saveHabit(habitDTO);
+                return new ResponseEntity<String>("Saved Successfully", HttpStatus.OK);
         }
 
         @Operation(summary = "Update a habit")
@@ -149,24 +114,8 @@ public class HabitController {
         })
         @PutMapping("{idHabit}")
         public ResponseEntity<?> updateHabit(@RequestBody HabitDTO habitDTO, @PathVariable Integer idHabit) {
-                // Buscar entidades relacionadas
-                Category category = categoryService.getByCategoryId(habitDTO.getCategoryId());
-                Streak streak = streakService.getByStreaktId(habitDTO.getStreakId());
-                Profile profile = profileService.getProfileById(habitDTO.getProfileId());
-
-                // Crear un objeto Habit a partir de HabitDTO y establecer las relaciones
-                Habit habit = new Habit();
-                habit.setCategory(category);
-                habit.setDescription(habitDTO.getDescription());
-                habit.setStatus(habitDTO.getStatus());
-                habit.setPriority(habitDTO.getPriority());
-                habit.setStreak(streak);
-                habit.setProfile(profile);
-                habit.setHabit_name(habitDTO.getHabitName());
-
-                // Llamar al servicio para actualizar
-                service.update(idHabit, habit);
-                return new ResponseEntity<String>("Update record", HttpStatus.OK);
+                service.updateHabit(idHabit, habitDTO);
+                return new ResponseEntity<>("Habit updated successfully", HttpStatus.OK);
         }
 
         @Operation(summary = "Update habit status")
