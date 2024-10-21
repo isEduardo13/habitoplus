@@ -1,6 +1,6 @@
 package com.habitoplus.habitoplusback.enums;
 
-public enum RoleAccpunts {
+public enum RoleAccounts {
     ADMIN,
     USER
 }
