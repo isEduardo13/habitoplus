@@ -1,5 +1,7 @@
 package com.habitoplus.habitoplusback.controller;
 
+import com.habitoplus.habitoplusback.dto.AuthResponseDTO;
+import com.habitoplus.habitoplusback.model.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -27,22 +29,20 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-
     @Operation(summary = "login")
         @ApiResponse(responseCode = "200", description = "Return token", content = {
             @Content(mediaType = "application/json")})
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        String token = authService.login(loginRequest.getEmail(), loginRequest.getPassword());
-        return new ResponseEntity<>(token, HttpStatus.OK);
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequest loginRequest) {
+
+        return new ResponseEntity<>(authService.login(loginRequest), HttpStatus.OK);
     }
         @Operation(summary = "register")
         @ApiResponse(responseCode = "201", description = "Return account", content = {
             @Content(mediaType = "application/json",array = @ArraySchema(schema = @Schema(implementation = RegisterRequest.class)))})
     @PostMapping("/register")
-    public ResponseEntity<RegisterRequest> register(@RequestBody RegisterRequest request) {
-        RegisterRequest registerRequest = authService.register(request);
-        return new ResponseEntity<>(registerRequest, HttpStatus.CREATED);
+    public ResponseEntity<AuthResponseDTO> register(@RequestBody RegisterRequest request) {
+        return new ResponseEntity<>(authService.register(request), HttpStatus.CREATED);
     }
 
     @Operation(summary = "forgot-password")

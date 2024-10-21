@@ -1,6 +1,16 @@
 package com.habitoplus.habitoplusback.service;
 
+import com.habitoplus.habitoplusback.dto.AuthResponseDTO;
+import com.habitoplus.habitoplusback.dto.LoginRequest;
+import com.habitoplus.habitoplusback.enums.Role;
+import com.habitoplus.habitoplusback.enums.RoleAccounts;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
@@ -17,30 +27,39 @@ import com.habitoplus.habitoplusback.dto.ForgotPasswordRequest;
 import com.habitoplus.habitoplusback.dto.RegisterRequest;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
-    @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
-    private ProfileRepository profileRepository;
+    private final AccountRepository accountRepository;
 
-    public String login(String email, String password) {
-        Account account = accountRepository.findByEmail(email);
-        if (account != null && account.getPassword().equals(password)) {
-            return "generated-token";
-        } else {
-            throw new InvalidCredentialsException("Email or password incorrect");
-        }
+    private final ProfileRepository profileRepository;
+
+    private final JsonWebTokenService jwtService;
+
+    private final AuthenticationManager authenticationManager;
+
+    private final PasswordEncoder passwordEncoder;
+
+    public AuthResponseDTO login(LoginRequest request) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        Account user = accountRepository.findByEmail(request.getEmail()).orElseThrow();
+        String token = jwtService.getToken(user);
+
+        return AuthResponseDTO.builder().token(token).build();
     }
 
-    public RegisterRequest register(RegisterRequest request) {
-        if (accountRepository.findByEmail(request.getEmail()) != null) {
+    public AuthResponseDTO register(RegisterRequest request) {
+        if (accountRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new UserAlreadyExistsException("User with email " + request.getEmail() + " already exists");
         }
-        Account account = new Account();
-        account.setEmail(request.getEmail());
-        account.setPassword(request.getPassword());
-        account.setStatus(true);
+        Account account = Account.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(RoleAccounts.USER)
+                .status(true)
+                .build();
+
+
             Profile profile = new Profile();
             profile.Inicializar();
             profileRepository.save(profile);
@@ -48,20 +67,22 @@ public class AuthService {
         
 
         accountRepository.save(account);
-        return request;
+        return AuthResponseDTO.builder()
+                .token(jwtService.getToken(account))
+                .build();
     }
       
         
 
         public void forgotPassword(ForgotPasswordRequest request) {
             String email = request.getEmail();
-            System.out.println("Buscando cuenta con email: " + email); // Mensaje de depuración
-            Account account = accountRepository.findByEmail(email);
-            if (account != null) {
-                System.out.println("Cuenta encontrada: " + account.getEmail()); // Mensaje de depuración
+            System.out.println("Buscando cuenta con email: " + email);
+            Optional<Account> account = accountRepository.findByEmail(email);
+            if (account.isPresent()) {
+                System.out.println("Cuenta encontrada: " + account.get().getEmail());
                 // send email with password reset code
             } else {
-                System.out.println("Cuenta no encontrada para el email: " + email); // Mensaje de depuración
+                System.out.println("Cuenta no encontrada para el email: " + email);
                 throw new InvalidCredentialsException("Email not found");
             }
         }

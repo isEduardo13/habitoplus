@@ -17,6 +17,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -33,6 +34,10 @@ public class Profile {
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Habit> habits;
 
+    @JsonManagedReference  
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
+    
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupMember> members;
 
@@ -78,8 +83,7 @@ public class Profile {
     @NotBlank
     @Size(min = 1, max = 15, message = "Number phone must be between 1 and 15 characters")
     private String numberPhone;
-    @NotBlank
-    @Size(min = 1, max = 1, message = "Status must be 1 or 0")
+    @NotNull
     private Boolean status;
 
     @NotBlank
@@ -200,6 +204,14 @@ public class Profile {
 
     public void setIdProfile(int idProfile) {
         this.idProfile = idProfile;
+    }
+
+    public List<Habit> getHabits() {
+        return habits;
+    }
+
+    public void setHabits(List<Habit> habits) {
+        this.habits = habits;
     }
 
     public void Inicializar() {
