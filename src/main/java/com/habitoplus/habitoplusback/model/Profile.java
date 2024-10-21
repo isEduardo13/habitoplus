@@ -17,6 +17,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -78,8 +79,7 @@ public class Profile {
     @NotBlank
     @Size(min = 1, max = 15, message = "Number phone must be between 1 and 15 characters")
     private String numberPhone;
-    @NotBlank
-    @Size(min = 1, max = 1, message = "Status must be 1 or 0")
+    @NotNull
     private Boolean status;
 
     @NotBlank

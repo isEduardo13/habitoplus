@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
+
 import com.habitoplus.habitoplusback.model.Account;
 import com.habitoplus.habitoplusback.service.AccountService;
 
@@ -52,8 +54,8 @@ public class AccountController {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))})
     @GetMapping("/byEmail/{email}")
     public ResponseEntity<Account> getAccountByEmail(@PathVariable String email) {
-        Account account= accountService.getAccountByEmail(email);
-        return new ResponseEntity<Account>(account, HttpStatus.OK);
+        Optional<Account> account= accountService.getAccountByEmail(email);
+        return new ResponseEntity<Account>(HttpStatus.OK);
     }
     @Operation(summary = "Get account by Id")
     @ApiResponse(responseCode = "200", description = "Return account by id", content = {
@@ -69,7 +71,7 @@ public class AccountController {
             @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))})
     @PutMapping("/{id}")
     public ResponseEntity<Account> updateAccount(@PathVariable int id, @RequestBody Account account) {
-        account.setAccount_id(id); 
+        account.setIdAccount(id); 
         Account updatedAccount = accountService.updateAccount(account);
         return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
     }
