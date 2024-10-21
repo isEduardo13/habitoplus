@@ -1,13 +1,6 @@
 package com.habitoplus.habitoplusback.service;
 
-import com.habitoplus.habitoplusback.dto.AuthResponseDTO;
-import com.habitoplus.habitoplusback.dto.LoginRequest;
-import com.habitoplus.habitoplusback.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
@@ -31,33 +24,23 @@ public class AuthService {
     @Autowired
     private ProfileRepository profileRepository;
 
-    @Autowired
-    private JsonWebTokenService tokenService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    public AuthResponseDTO login(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        UserDetails user = accountRepository.findByEmail(request.getEmail()).orElseThrow(() -> new InvalidCredentialsException("Invalid credentials"));
-        String token = tokenService.getToken(user);
-        return AuthResponseDTO.builder().token(token).build();
+    public String login(String email, String password) {
+        Account account = accountRepository.findByEmail(email);
+        if (account != null && account.getPassword().equals(password)) {
+            return "generated-token";
+        } else {
+            throw new InvalidCredentialsException("Email or password incorrect");
+        }
     }
 
-    public AuthResponseDTO register(RegisterRequest request) {
-        if (accountRepository.findByEmail(request.getEmail()).isPresent()) {
+    public RegisterRequest register(RegisterRequest request) {
+        if (accountRepository.findByEmail(request.getEmail()) != null) {
             throw new UserAlreadyExistsException("User with email " + request.getEmail() + " already exists");
         }
-        String PasswordEncoder = passwordEncoder.encode(request.getPassword());
-        Account account = Account.builder()
-                .email(request.getEmail())
-                .password(PasswordEncoder)
-                .role(Role.USER)
-                .status(true)
-                .build();
-
-
+        Account account = new Account();
+        account.setEmail(request.getEmail());
+        account.setPassword(request.getPassword());
+        account.setStatus(true);
             Profile profile = new Profile();
             profile.Inicializar();
             profileRepository.save(profile);
@@ -65,20 +48,20 @@ public class AuthService {
         
 
         accountRepository.save(account);
-        return AuthResponseDTO.builder().token(tokenService.getToken(account)).build();
+        return request;
     }
       
         
 
         public void forgotPassword(ForgotPasswordRequest request) {
             String email = request.getEmail();
-            System.out.println("Buscando cuenta con email: " + email);
-            Optional<Account> account = accountRepository.findByEmail(email);
-            if (account.isPresent()) {
-                System.out.println("Cuenta encontrada: " + account.get().getEmail());
+            System.out.println("Buscando cuenta con email: " + email); // Mensaje de depuración
+            Account account = accountRepository.findByEmail(email);
+            if (account != null) {
+                System.out.println("Cuenta encontrada: " + account.getEmail()); // Mensaje de depuración
                 // send email with password reset code
             } else {
-                System.out.println("Cuenta no encontrada para el email: " + email);
+                System.out.println("Cuenta no encontrada para el email: " + email); // Mensaje de depuración
                 throw new InvalidCredentialsException("Email not found");
             }
         }

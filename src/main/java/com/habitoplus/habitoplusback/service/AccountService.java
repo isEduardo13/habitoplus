@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import com.habitoplus.habitoplusback.repository.AccountRepository;
 import com.habitoplus.habitoplusback.repository.ProfileRepository;
 import jakarta.transaction.Transactional;
-
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import com.habitoplus.habitoplusback.exception.UserAlreadyExistsException;
 import com.habitoplus.habitoplusback.model.Account;
@@ -33,11 +31,12 @@ public class AccountService {
     private ProfileRepository profileRepository;
 
 
+
     public List<Account> getAllAccounts() {
         return accountRepository.findAll();
     }
 
-    public List<Account> getAllAccountsWithPaginated(int page, int pageSize) {
+    public List<Account> getAllAccountsWithPaginated(int page ,int pageSize) {
         PageRequest pageRequest = PageRequest.of(page, pageSize);
         Page<Account> pageResult = accountRepository.findAll(pageRequest);
         return pageResult.getContent();
@@ -46,23 +45,22 @@ public class AccountService {
     public Account getAccountById(int id) {
         if (accountRepository.findById(id).isEmpty()) {
             throw new NoSuchElementException();
-
+            
         }
         return accountRepository.findById(id).get();
     }
-
-    public Optional<Account> getAccountByEmail(String email) {
+    public Account getAccountByEmail(String email) {
         return accountRepository.findByEmail(email);
     }
 
     public List<Account> getAccountsByEmail(String email) {
         return accountRepository.getAccoutsByEmail(email);
     }
-
+    
     @Transactional
-    public Account addAccount(Account account) {
+    public Account addAccount(Account account)  {
         if (accountRepository.findByEmail(account.getEmail()) != null) {
-            throw new UserAlreadyExistsException("User with email " + account.getEmail() + " already exists");
+            throw new UserAlreadyExistsException("User with email " + account.getEmail() + " already exists");   
         }
 
         // Crear o reutilizar el perfil
@@ -120,22 +118,22 @@ public class AccountService {
 
     public Account updateAccount(Account account) {
 
-        if (accountRepository.findById(account.getIdAccount()).isEmpty()) {
-            throw new NoSuchElementException();
+        if (accountRepository.findById(account.getAccount_id()).isEmpty()) {
+            throw new NoSuchElementException();     
         }
-        Account existingAccount = accountRepository.findById(account.getIdAccount()).get();
-
+        Account existingAccount = accountRepository.findById(account.getAccount_id()).get();
+        
         existingAccount.setEmail(account.getEmail());
         existingAccount.setPassword(account.getPassword());
-        existingAccount.setStatus(account.getStatus());
-
+        existingAccount.setStatus(account.isStatus());  
+        
         return accountRepository.save(existingAccount);
     }
 
     public boolean deleteAccount(int id) {
-
+        
         if (accountRepository.findById(id).isEmpty()) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException();     
         }
         Account existingAccount = accountRepository.findById(id).get();
 
@@ -146,11 +144,10 @@ public class AccountService {
         }
         return false;
     }
-
     public boolean DefinitiveDeleteAccount(int id) {
-
+        
         if (accountRepository.findById(id).isEmpty()) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException();     
         }
         Account existingAccount = accountRepository.findById(id).get();
         profileRepository.delete(existingAccount.getProfile());
