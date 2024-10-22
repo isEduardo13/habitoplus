@@ -44,11 +44,8 @@ public class AccountController {
             @RequestParam boolean isNotMinor, 
             @RequestParam(required = false) String thanksCode 
     ) {
-
-        // Llamar al servicio para agregar la nueva cuenta
         Account createdAccount = accountService.addAccount(account, isNotMinor, thanksCode);
         
-        // Retornar la cuenta creada con un código HTTP 201 (CREATED)
         return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
     }
 
