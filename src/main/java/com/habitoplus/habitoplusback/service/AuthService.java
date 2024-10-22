@@ -1,28 +1,30 @@
 package com.habitoplus.habitoplusback.service;
 
-import java.time.LocalDateTime;
+import com.habitoplus.habitoplusback.dto.AuthResponseDTO;
+import com.habitoplus.habitoplusback.dto.LoginRequest;
+import com.habitoplus.habitoplusback.enums.Role;
+import com.habitoplus.habitoplusback.enums.RoleAccounts;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import com.habitoplus.habitoplusback.dto.AuthResponseDTO;
-import com.habitoplus.habitoplusback.dto.ForgotPasswordRequest;
-import com.habitoplus.habitoplusback.dto.LoginRequest;
-import com.habitoplus.habitoplusback.dto.RegisterRequest;
-import com.habitoplus.habitoplusback.enums.RoleAccounts;
 import com.habitoplus.habitoplusback.exception.InvalidCredentialsException;
 import com.habitoplus.habitoplusback.exception.UserAlreadyExistsException;
 import com.habitoplus.habitoplusback.model.Account;
 import com.habitoplus.habitoplusback.model.Profile;
 import com.habitoplus.habitoplusback.repository.AccountRepository;
 import com.habitoplus.habitoplusback.repository.ProfileRepository;
-
-import lombok.RequiredArgsConstructor;
+import com.habitoplus.habitoplusback.dto.ForgotPasswordRequest;
+import com.habitoplus.habitoplusback.dto.RegisterRequest;
 
 @Service
 @RequiredArgsConstructor
