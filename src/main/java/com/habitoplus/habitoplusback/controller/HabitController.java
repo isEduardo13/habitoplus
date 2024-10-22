@@ -40,7 +40,7 @@ public class HabitController {
         @Autowired
         private HabitService service;
 
-        @Operation(summary = "Get all the user's habits")
+        @Operation(summary = "Get all habits")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Found habits", content = {
                                         @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Category.class)))
@@ -158,5 +158,25 @@ public class HabitController {
         public ResponseEntity<?> deleteHabit(@PathVariable Integer idHabit) {
                 service.deleteHabit(idHabit);
                 return new ResponseEntity<String>("Deleted record", HttpStatus.OK);
+        }
+
+        @Operation(summary = "Get habits of a profile by category")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Habits retrieved successfully", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = Habit.class))
+                        }),
+                        @ApiResponse(responseCode = "400", description = "Invalid profile or category ID", content = {
+                                        @Content
+                        }),
+                        @ApiResponse(responseCode = "404", description = "Profile or category not found", content = {
+                                        @Content
+                        }),
+                        @ApiResponse(responseCode = "500", description = "Internal server error", content = {
+                                        @Content
+                        })
+        })
+        @GetMapping("{idProfile}/{idCatgory}")
+        public List<Habit> getHabitsByCategory(@PathVariable Integer idProfile, @PathVariable Integer idCategory) {
+                return service.getHabitsByCategory(idProfile, idCategory);
         }
 }

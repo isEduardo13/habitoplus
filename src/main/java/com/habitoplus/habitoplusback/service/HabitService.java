@@ -89,4 +89,9 @@ public class HabitService {
         repo.deleteById(idHabit);
     }
 
+    public List<Habit> getHabitsByCategory(Integer idProfile, Integer idCategory) {
+        return repo.findHabitsByCategory(idProfile, idCategory);
+    }
+
+    
 }
