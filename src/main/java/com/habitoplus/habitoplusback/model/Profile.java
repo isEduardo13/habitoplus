@@ -34,11 +34,12 @@ public class Profile {
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Habit> habits;
     
-    @JsonManagedReference("profile-groups")
+    @JsonManagedReference
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupMember> groups;
 
-    @JsonManagedReference("profile-requests")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications;
 
     @JsonManagedReference
