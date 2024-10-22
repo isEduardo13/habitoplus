@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.habitoplus.habitoplusback.dto.StreakDTO;
 import com.habitoplus.habitoplusback.model.Streak;
 import com.habitoplus.habitoplusback.repository.StreakRepository;
-import com.habitoplus.habitoplusback.dto.StreakDTO;
 
 import jakarta.transaction.Transactional;
 

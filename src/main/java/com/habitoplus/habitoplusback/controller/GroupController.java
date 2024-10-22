@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.habitoplus.habitoplusback.model.Group;
 import com.habitoplus.habitoplusback.service.GroupService;
-import com.habitoplus.habitoplusback.dto.CommentWithProfileDto;
-import com.habitoplus.habitoplusback.dto.GroupMemberWithProfileDto;
-import com.habitoplus.habitoplusback.dto.RequestWithProfileDto;
+import com.habitoplus.habitoplusback.dto.CommentWithProfileDTO;
+import com.habitoplus.habitoplusback.dto.GroupDTO;
+import com.habitoplus.habitoplusback.dto.GroupMemberWithProfileDTO;
+import com.habitoplus.habitoplusback.dto.RequestWithProfileDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -41,6 +41,7 @@ public class GroupController {
 	@Autowired
 	private GroupService service;
 
+
 	@Operation(summary = "Get all groups")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Found groups", content = {
@@ -55,8 +56,15 @@ public class GroupController {
 			})
 	})
 	@GetMapping
-	public List<Group> getAll() {
+	public List<Group> consultGroups() {
 		return service.getAll();
+	}
+
+	@Operation(summary = "Get all groups with pagination")
+	@GetMapping(value="pagination/{page}/{pageSize}")
+	public List<Group> consultGroupsPaginated(@PathVariable Integer page, @PathVariable Integer pageSize){
+		List<Group> groups = service.getAll(page, pageSize);
+		return groups;
 	}
 
 	@Operation(summary = "Get a Group by its ID")
@@ -75,12 +83,12 @@ public class GroupController {
 			})
 	})
 	@GetMapping("{idGroup}")
-	public ResponseEntity<?> getByControlNumber(@PathVariable Integer idGroup) {
+	public ResponseEntity<?> consultGroup(@PathVariable Integer idGroup) {
 		Group group = service.getById(idGroup);
 		return new ResponseEntity<Group>(group, HttpStatus.OK);
 	}
 
-	@Operation(summary = "Register a new group")
+	@Operation(summary = "Create a new group")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Group successfully registered", content = {
 					@Content(mediaType = "application/json", schema = @Schema(implementation = Group.class))
@@ -95,13 +103,13 @@ public class GroupController {
 					@Content
 			})
 	})
-	@PostMapping("{idProfile}")
-	public ResponseEntity<?> add(@RequestBody Group group, @PathVariable Integer idProfile) {
+	@PostMapping("/profiles/{idProfile}")
+	public ResponseEntity<?> createGroup(@RequestBody GroupDTO group, @PathVariable Integer idProfile) {
 		service.save(group, idProfile);
 		return new ResponseEntity<String>("Saved record", HttpStatus.OK);
 	}
 
-	@Operation(summary = "Update a group")
+	@Operation(summary = "Update group information by its id and the group admin id. (Only the group admin can do this)")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Group successfully updated", content = {
 					@Content(mediaType = "application/json", schema = @Schema(implementation = Group.class))
@@ -116,13 +124,13 @@ public class GroupController {
 					@Content
 			})
 	})
-	@PutMapping("{idGroup}")
-	public ResponseEntity<?> update(@RequestBody Group group, @PathVariable Integer idGroup) {
-		service.update(group, idGroup);
+	@PutMapping("{idGroup}/administrators/{idAdmin}")
+	public ResponseEntity<?> updateGroupInformation(@RequestBody GroupDTO groupDTO, @PathVariable Integer idGroup, @PathVariable Integer idAdmin) {
+		service.save(groupDTO, idGroup, idAdmin);
 		return new ResponseEntity<String>("Updated record", HttpStatus.OK);
 	}
 
-	@Operation(summary = "Delete a group by ID")
+	@Operation(summary = "Delete a group by its id and the group admin id. (Only the group admin can do this)")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Group successfully deleted", content = {
 					@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
@@ -137,15 +145,15 @@ public class GroupController {
 					@Content
 			})
 	})
-	@DeleteMapping("{idGroup}")
-	public ResponseEntity<?> delete(@PathVariable Integer idGroup) {
-		service.delete(idGroup);
+	@DeleteMapping("{idGroup}/administrators/{idAdmin}")
+	public ResponseEntity<?> deleteGroup(@PathVariable Integer idGroup, @PathVariable Integer idAdmin) {
+		service.delete(idGroup, idAdmin);
 		return new ResponseEntity<String>("Deleted record", HttpStatus.OK);
 	}
 
-	@Operation(summary = "Get all the group's member")
+	@Operation(summary = "Get list of group members by group id")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Found memembers", content = {
+			@ApiResponse(responseCode = "200", description = "Found all users in the group", content = {
 					@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Group.class)))
 			}),
 			@ApiResponse(responseCode = "204", description = "No habits found"),
@@ -156,22 +164,35 @@ public class GroupController {
 					@Content
 			})
 	})
-	@GetMapping("/{idGroup}/members")
-	public List<GroupMemberWithProfileDto> getGroupMembers(@PathVariable Integer idGroup) {
+	@GetMapping("/{idGroup}/groupMembers")
+	public List<GroupMemberWithProfileDTO> consultTheGroupUsers(@PathVariable Integer idGroup) {
 		return service.getGroupMembers(idGroup);
 	}
+	
+	@Operation(summary = "Get list of group members by group id with pagination")
+	@GetMapping(value="/{idGroup}/groupMembers/pagination/{page}/{pageSize}")
+	public List<GroupMemberWithProfileDTO> consultTheGroupUsersPaginated(@PathVariable Integer idGroup, @PathVariable Integer page, @PathVariable Integer pageSize){
+		List<GroupMemberWithProfileDTO> members = service.getGroupMembers(idGroup, page, pageSize);
+		return members;
+	}
 
-	@Operation(summary = "Get a group by its ID")
+	@Operation(summary = "Get list of requests by group id and the group's admin id")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Group found", content = {
 					@Content(mediaType = "application/json", schema = @Schema(implementation = Group.class)) }),
 			@ApiResponse(responseCode = "400", description = "Invalid identifier supplied", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Group not found", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal error on the server", content = @Content) })
-	@GetMapping("{idGroup}/requests")
-	public ResponseEntity<?> getRequests(@PathVariable Integer idGroup) {
-		List<RequestWithProfileDto> requests = service.getRequests(idGroup);
-		return new ResponseEntity<List<RequestWithProfileDto>>(requests, HttpStatus.OK);
+	@GetMapping("{idGroup}/requests/administrators/{idAdmin}")
+	public ResponseEntity<?> consultRequests(@PathVariable Integer idGroup, @PathVariable Integer idAdmin) {
+		List<RequestWithProfileDTO> requests = service.getRequests(idGroup, idAdmin);
+		return new ResponseEntity<List<RequestWithProfileDTO>>(requests, HttpStatus.OK);
+	}
+
+	@Operation(summary = "Get list of requests by group id and the group's admin id with pagination")
+	@GetMapping(value="{idGroup}/requests/administrators/{idAdmin}/pagination/{page}/{pageSize}")
+	public List<RequestWithProfileDTO> consultRequestsPaginated(@PathVariable Integer idGroup, @PathVariable Integer idAdmin, @PathVariable Integer page, @PathVariable Integer pageSize){
+		return service.getRequests(idGroup, idAdmin, page, pageSize);
 	}
 
 	@Operation(summary = "Get list of comments by group id")
@@ -183,16 +204,14 @@ public class GroupController {
 			@ApiResponse(responseCode = "500", description = "Internal error on the server", content = @Content) })
 	@GetMapping("{idGroup}/comments")
 	public ResponseEntity<?> getComments(@PathVariable Integer idGroup) {
-		List<CommentWithProfileDto> comments = service.getComments(idGroup);
-		return new ResponseEntity<List<CommentWithProfileDto>>(comments, HttpStatus.OK);
+		List<CommentWithProfileDTO> comments = service.getComments(idGroup);
+		return new ResponseEntity<List<CommentWithProfileDTO>>(comments, HttpStatus.OK);
 	}
 
-	@Operation(summary = "Get all groups with pagination")
-	@GetMapping(value="pagination", params = {"page", "size"})
-	public List<Group> getAllPaginated(@RequestParam(value = "page", defaultValue="0", required=false) int
-	page, @RequestParam(value = "pageSize", defaultValue="10", required = false) int pageSize){
-		List<Group> groups = service.getAll(page, pageSize);
-		return groups;
+	@Operation(summary = "Get list of comments by group id with pagination")
+	@GetMapping(value="{idGroup}/comments/pagination/{page}/{pageSize}")
+	public List<CommentWithProfileDTO> consultCommentsPaginated(@PathVariable Integer idGroup, @PathVariable Integer page, @PathVariable Integer pageSize){
+		return service.getComments(idGroup, page, pageSize);
 	}
 
 }

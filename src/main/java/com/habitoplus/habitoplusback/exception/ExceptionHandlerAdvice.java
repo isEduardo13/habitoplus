@@ -1,5 +1,7 @@
 package com.habitoplus.habitoplusback.exception;
 
+import java.util.NoSuchElementException;
+
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -15,9 +17,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
-
-import java.util.NoSuchElementException;
 
 @ControllerAdvice
 public class ExceptionHandlerAdvice {

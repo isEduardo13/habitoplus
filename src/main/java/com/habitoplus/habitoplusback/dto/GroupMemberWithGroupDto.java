@@ -4,12 +4,12 @@ import java.util.Date;
 
 import com.habitoplus.habitoplusback.enums.Role;
 
-public class GroupMemberWithGroupDto {
+public class GroupMemberWithGroupDTO {
     private Role role;
     private Date unionDate;
-    private GroupDto group;
+    private GroupDTO group;
 
-    public GroupMemberWithGroupDto(GroupDto group, Role role, Date unionDate) {
+    public GroupMemberWithGroupDTO(GroupDTO group, Role role, Date unionDate) {
         this.group = group;
         this.role = role;
         this.unionDate = unionDate;
@@ -31,11 +31,11 @@ public class GroupMemberWithGroupDto {
         this.unionDate = unionDate;
     }
 
-    public GroupDto getGroup() {
+    public GroupDTO getGroup() {
         return group;
     }
 
-    public void setGroup(GroupDto group) {
+    public void setGroup(GroupDTO group) {
         this.group = group;
     }
 

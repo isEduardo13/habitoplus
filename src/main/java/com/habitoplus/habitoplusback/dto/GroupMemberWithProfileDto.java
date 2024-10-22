@@ -4,12 +4,16 @@ import java.util.Date;
 
 import com.habitoplus.habitoplusback.enums.Role;
 
-public class GroupMemberWithProfileDto {
+public class GroupMemberWithProfileDTO {
     private Role role;
     private Date unionDate;
-    private ProfileDto profile;
+    private ProfileDTO profile;
 
-    public GroupMemberWithProfileDto(ProfileDto profile, Role role, Date unionDate) {
+    public GroupMemberWithProfileDTO() {
+    }
+
+
+    public GroupMemberWithProfileDTO(ProfileDTO profile, Role role, Date unionDate) {
         this.profile = profile;
         this.role = role;
         this.unionDate = unionDate;
@@ -31,11 +35,11 @@ public class GroupMemberWithProfileDto {
         this.unionDate = unionDate;
     }
 
-    public ProfileDto getProfile() {
+    public ProfileDTO getProfile() {
         return profile;
     }
 
-    public void setProfile(ProfileDto profile) {
+    public void setProfile(ProfileDTO profile) {
         this.profile = profile;
     }
 

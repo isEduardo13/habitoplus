@@ -2,9 +2,10 @@ package com.habitoplus.habitoplusback.model;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.habitoplus.habitoplusback.enums.Role;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,22 +21,21 @@ import jakarta.persistence.Table;
 @IdClass(GroupMemberPK.class)
 public class GroupMember {
     @Id
-    @ManyToOne
-    @JoinColumn(name = "idProfile")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonBackReference("profile-groups")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_profile", nullable = false)
     private Profile profile;
 
     @Id
+    @JsonBackReference("group-members")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @JoinColumn(name = "idGroup")
+    @JoinColumn(name = "id_group", nullable = false)
     private Group group;
 
-    // @ValidEnum(enumClass = Role.class, message = "The role must be one of the allowed values:ADMIN, MEMBER")
-    // @Pattern(regexp = "^(ADMIN|MEMBER)$", message = "The role must be one of the allowed values: ADMIN, MEMBER")
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(nullable = false, name="union_date")
     private Date unionDate;
 
     public Profile getProfile() {
