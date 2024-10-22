@@ -1,16 +1,19 @@
-package com.habitoplus.habitoplusback.Dto;
+package com.habitoplus.habitoplusback.dto;
 
 import java.time.LocalDateTime;
 
-public class CommentWithProfileDto {
+public class CommentWithProfileDTO {
     private String content;
     private LocalDateTime dateTime;
-    private ProfileDto profile;
+    private ProfileDTO profile;
 
-    public CommentWithProfileDto(ProfileDto profile, String content, LocalDateTime dateTime ) {
+    public CommentWithProfileDTO(ProfileDTO profile, String content, LocalDateTime dateTime ) {
         this.content = content;
         this.dateTime = dateTime;
         this.profile = profile;
+    }
+
+    public CommentWithProfileDTO() {
     }
 
     public String getContent() {
@@ -29,11 +32,11 @@ public class CommentWithProfileDto {
         this.dateTime = dateTime;
     }
 
-    public ProfileDto getProfile() {
+    public ProfileDTO getProfile() {
         return profile;
     }
 
-    public void setProfile(ProfileDto profile) {
+    public void setProfile(ProfileDTO profile) {
         this.profile = profile;
     }
 

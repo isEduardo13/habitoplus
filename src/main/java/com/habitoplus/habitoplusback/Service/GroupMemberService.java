@@ -3,16 +3,19 @@ package com.habitoplus.habitoplusback.Service;
 import java.util.Date;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import com.habitoplus.habitoplusback.Dto.GroupDto;
-import com.habitoplus.habitoplusback.Dto.GroupMemberWithGroupDto;
+import com.habitoplus.habitoplusback.Exception.InvalidCredentialsException;
 import com.habitoplus.habitoplusback.Model.GroupMember;
 import com.habitoplus.habitoplusback.Model.GroupMemberPK;
 import com.habitoplus.habitoplusback.Repository.GroupMemberRepository;
+import com.habitoplus.habitoplusback.dto.GroupMemberDTO;
 import com.habitoplus.habitoplusback.enums.Role;
 
 import jakarta.transaction.Transactional;
@@ -23,19 +26,34 @@ public class GroupMemberService {
 	@Autowired
 	private GroupMemberRepository repository;
 
-    public GroupMemberWithGroupDto convertToGroupDto(GroupMember groupMember) {
-        GroupDto groupDto = new GroupDto(
-                groupMember.getGroup().getIdGroup(),
-                groupMember.getGroup().getName(),
-                groupMember.getGroup().getDescription(),
-                groupMember.getGroup().getGroupType()
-        );
-        return new GroupMemberWithGroupDto(groupDto, groupMember.getRole(), groupMember.getUnionDate());
-    }
+	@Autowired
+	private ModelMapper modelMapper;
 
-	public void save(GroupMember member) {
+	public GroupMember convertToEntity(GroupMemberDTO memberDTO) {
+		return modelMapper.map(memberDTO, GroupMember.class);
+	}
+
+	public GroupMemberDTO convertToDTO(GroupMember member) {
+		return modelMapper.map(member, GroupMemberDTO.class);
+	}
+
+	public void save(GroupMemberDTO memberDTO) {
+		GroupMember member = this.convertToEntity(memberDTO);
 		member.setUnionDate(new Date());
 		repository.save(member);
+
+	}
+
+	public void save(GroupMemberDTO memberDTO, Integer idAdmin) {
+		if (!repository.existsByGroupIdGroupAndProfileIdProfileAndRole(memberDTO.getGroup().getIdGroup(), idAdmin,
+				Role.ADMIN))
+			throw new InvalidCredentialsException("Unauthorized action");
+
+		GroupMember member = this.convertToEntity(memberDTO);
+		
+		member.setUnionDate(new Date());
+		repository.save(member);
+
 	}
 
 	public List<GroupMember> getAll() {
@@ -43,30 +61,44 @@ public class GroupMemberService {
 	}
 
 	public GroupMember getById(Integer idGroup, Integer idProfile) {
-		GroupMemberPK groupMemberPK = new GroupMemberPK();
-		groupMemberPK.setGroup(idGroup);
-		groupMemberPK.setProfile(idProfile);
-		return repository.findById(groupMemberPK).get();
+		return repository.findById(new GroupMemberPK(idGroup, idProfile)).orElseThrow(
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+						"Group member with ID group " + idGroup + " and ID profile " + idProfile + " not found."));
 	}
 
 	public void delete(Integer idGroup, Integer idProfile) {
-		GroupMemberPK groupMemberPK = new GroupMemberPK();
-		groupMemberPK.setGroup(idGroup);
-		groupMemberPK.setProfile(idProfile);
-
-		if(repository.existsByGroupIdGroupAndProfileIdProfileAndRole(idGroup, idProfile, Role.ADMIN)){
-			GroupMember oldestMember = repository.findFirstByGroupIdGroupOrderByUnionDateAsc(idGroup);
+		if (repository.existsByGroupIdGroupAndProfileIdProfileAndRole(idGroup, idProfile, Role.ADMIN)) {
+			GroupMember oldestMember = repository.findFirstNonAdminByGroupIdGroupOrderByUnionDateAsc(idGroup);
 			oldestMember.setRole(Role.ADMIN);
 			repository.save(oldestMember);
 		}
 
-		repository.deleteById(groupMemberPK);
+		repository.deleteById(new GroupMemberPK(idGroup, idProfile));
+
+		// if(!repository.existsGroupMembersByGroupId(idGroup))
+		
 	}
 
-	public List<GroupMember> getAll(int page, int pageSize){
-        PageRequest pageReq = PageRequest.of(page, pageSize);
-        Page<GroupMember> members = repository.findAll(pageReq);
-        return members.getContent();
-    }
+	public void delete(Integer idGroup, Integer idProfile, Integer idAdmin) {
+		if (!repository.existsByGroupIdGroupAndProfileIdProfileAndRole(idGroup, idAdmin, Role.ADMIN))
+			throw new InvalidCredentialsException("Unauthorized action");
 
+		if (repository.existsByGroupIdGroupAndProfileIdProfileAndRole(idGroup, idProfile, Role.ADMIN)) {
+			GroupMember oldestMember = repository.findFirstNonAdminByGroupIdGroupOrderByUnionDateAsc(idGroup);
+			oldestMember.setRole(Role.ADMIN);
+			repository.save(oldestMember);
+		}
+
+		repository.deleteById(new GroupMemberPK(idGroup, idProfile));
+	}
+
+	public List<GroupMember> getAll(Integer idGroup, int page, int pageSize) {
+		PageRequest pageReq = PageRequest.of(page, pageSize);
+		Page<GroupMember> members = repository.findMembersByIdGroup(idGroup, pageReq);
+		return members.getContent();
+	}
+
+	public boolean validateGroupAdmin(Integer idGroup, Integer idProfile, Role role) {
+		return repository.existsByGroupIdGroupAndProfileIdProfileAndRole(idGroup, idProfile, role);
+	}
 }

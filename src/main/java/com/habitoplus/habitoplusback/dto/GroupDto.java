@@ -1,48 +1,22 @@
-package com.habitoplus.habitoplusback.Dto;
+package com.habitoplus.habitoplusback.dto;
 
 import com.habitoplus.habitoplusback.enums.GroupType;
 
-public class GroupDto{
+public class GroupDTO{
     private Integer idGroup;
     private String name;
     private String description;
     private GroupType groupType;
 
-    public GroupDto(Integer idGroup, String name, String description, GroupType groupType) {
+    public GroupDTO() {
+    }
+
+    public GroupDTO(Integer idGroup, String name, String description, GroupType groupType) {
         this.description = description;
         this.groupType = groupType;
         this.idGroup = idGroup;
         this.name = name;
     }
-
-   
-
-    // // public static class Builder{
-    //     private Integer idGroup;
-    //     private String name;
-    //     private String description;
-    //     private GroupType groupType;
-
-    //     public Builder idGroup(Integer idGroup) {
-    //         this.idGroup = idGroup;
-    //         return this;
-    //     }
-        
-    //     public Builder name(String name) {
-    //         this.name = name;
-    //     }
-    //     public Builder description(String description) {
-    //         this.description = description;
-    //     }
-    //     public Builder groupType(GroupType groupType) {
-    //         this.groupType = groupType;
-    //     }
-
-    //     public GroupDto build() {
-    //         return new GroupDto(this);
-    //     }
-        
-    // }
 
     public Integer getIdGroup() {
         return idGroup;

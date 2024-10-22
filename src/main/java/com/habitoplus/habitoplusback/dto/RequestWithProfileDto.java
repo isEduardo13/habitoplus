@@ -1,18 +1,21 @@
-package com.habitoplus.habitoplusback.Dto;
+package com.habitoplus.habitoplusback.dto;
 
 import java.util.Date;
 
 import com.habitoplus.habitoplusback.enums.Status;
 
-public class RequestWithProfileDto {
+public class RequestWithProfileDTO {
     private Date dateRequest;
     private Status status;
-    private ProfileDto profile;
+    private ProfileDTO profile;
     
-    public RequestWithProfileDto(ProfileDto profile, Date dateRequest, Status status) {
+    public RequestWithProfileDTO(ProfileDTO profile, Date dateRequest, Status status) {
         this.dateRequest = dateRequest;
         this.status = status;
         this.profile = profile;
+    }
+
+    public RequestWithProfileDTO() {
     }
 
     public Date getDateRequest() {
@@ -31,11 +34,11 @@ public class RequestWithProfileDto {
         this.status = status;
     }
 
-    public ProfileDto getProfile() {
+    public ProfileDTO getProfile() {
         return profile;
     }
 
-    public void setProfile(ProfileDto profile) {
+    public void setProfile(ProfileDTO profile) {
         this.profile = profile;
     }
 
