@@ -17,7 +17,16 @@ public class ProfileService {
    public List<Profile> getAllProfiles() {
        return profileRepository.findAll();
    }
-   //add a profile
+
+   public String UploadImage(Profile profile) {
+       Profile existingProfile = profileRepository.findById(profile.getIdProfile()).orElse(null);
+       if (existingProfile != null) {
+           existingProfile.setPhoto(p);
+           profileRepository.save(existingProfile);
+           return "Image uploaded successfully";
+       } else {
+           return "Profile not found";
+       }
 
     public Profile addProfile(Profile profile) {
          return profileRepository.save(profile);
