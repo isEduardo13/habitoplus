@@ -2,6 +2,7 @@ package com.habitoplus.habitoplusback.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -10,7 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import com.habitoplus.habitoplusback.enums.RoleAccounts;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -29,7 +29,6 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name="account")
 @JsonIgnoreProperties({"profile", "pixela"}) 
 @Data
 @Builder
@@ -74,19 +73,6 @@ public class Account implements UserDetails {
                 + ", profile=" + profile + ", pixela=" + pixela + "]";
     }
 
-
-    public Integer getIdAccount() {
-        return idAccount;
-    }
-
-
-    public void setIdAccount(Integer idAccount) {
-        this.idAccount = idAccount;
-    }
-
-
-    public String getEmail() {
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority((role.name())));
@@ -97,60 +83,19 @@ public class Account implements UserDetails {
         return email;
     }
 
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-
-    public String getPassword() {
-        return password;
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-    public Boolean getStatus() {
-        return status;
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
-
-    public void setStatus(Boolean status) {
-        this.status = status;
     @Override
     public boolean isEnabled() {
         return true;
     }
-
-
-    public Profile getProfile() {
-        return profile;
-    }
-
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
-
-
-    public Pixela getPixela() {
-        return pixela;
-    }
-
-
-    public void setPixela(Pixela pixela) {
-        this.pixela = pixela;
-    }
-    
 }
     

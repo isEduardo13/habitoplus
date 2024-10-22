@@ -128,12 +128,12 @@ public class AccountService {
 
         if (accountRepository.findById(account.getIdAccount()).isEmpty()) {
             throw new NoSuchElementException();
+        }
         if (accountRepository.findById(account.getIdAccount()).isEmpty()) {
             throw new NoSuchElementException();
         }
         Account existingAccount = accountRepository.findById(account.getIdAccount()).get();
 
-        Account existingAccount = accountRepository.findById(account.getIdAccount()).get();
 
         existingAccount.setEmail(account.getEmail());
         existingAccount.setPassword(account.getPassword());
@@ -148,7 +148,6 @@ public class AccountService {
 
 
         if (accountRepository.findById(id).isEmpty()) {
-            throw new NoSuchElementException();
             throw new NoSuchElementException();
         }
         Account existingAccount = accountRepository.findById(id).get();

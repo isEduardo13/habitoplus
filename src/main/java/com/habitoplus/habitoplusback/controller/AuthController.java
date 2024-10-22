@@ -1,7 +1,6 @@
 package com.habitoplus.habitoplusback.controller;
 
 import com.habitoplus.habitoplusback.dto.AuthResponseDTO;
-import com.habitoplus.habitoplusback.model.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
