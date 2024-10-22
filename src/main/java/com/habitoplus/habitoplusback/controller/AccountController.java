@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
+
 import com.habitoplus.habitoplusback.model.Account;
 import com.habitoplus.habitoplusback.service.AccountService;
 
@@ -35,20 +38,6 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @Operation(summary = "Create a new account")
-    @ApiResponse(responseCode = "201", description = "Account created successfully", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))})
-    @PostMapping
-    public ResponseEntity<Account> createAccount(
-            @RequestBody Account account,
-            @RequestParam boolean isNotMinor, 
-            @RequestParam(required = false) String thanksCode 
-    ) {
-        Account createdAccount = accountService.addAccount(account, isNotMinor, thanksCode);
-        
-        return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
-    }
-
     @Operation(summary = "Get all accounts")
     @ApiResponse(responseCode = "200", description = "Return all accounts", content = {
             @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Account.class))) })
@@ -68,8 +57,8 @@ public class AccountController {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))})
     @GetMapping("/byEmail/{email}")
     public ResponseEntity<Account> getAccountByEmail(@PathVariable String email) {
-        Account account= accountService.getAccountByEmail(email);
-        return new ResponseEntity<Account>(account, HttpStatus.OK);
+        Optional<Account> account= accountService.getAccountByEmail(email);
+        return new ResponseEntity<Account>(HttpStatus.OK);
     }
     @Operation(summary = "Get account by Id")
     @ApiResponse(responseCode = "200", description = "Return account by id", content = {

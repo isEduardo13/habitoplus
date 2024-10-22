@@ -11,19 +11,37 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import com.habitoplus.habitoplusback.enums.RoleAccounts;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name="account")
 @JsonIgnoreProperties({"profile", "pixela"}) 
-public class Account{
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Account implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idAccount;
 
     @NotBlank
-    @Size(min =  1 ,max = 50, message = "Email must be between 1 and 50 characters")
+    @Size(min = 1, max = 50, message = "Email must be between 1 and 50 characters")
     @Column(unique = true, name = "email")
     private String email;
 
@@ -32,11 +50,18 @@ public class Account{
     @Column(name = "password")
     private String password;
 
-    @Column( name = "status")
+    @Column(name = "status")
+    @NotNull
     private Boolean status;
 
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "account-profile")  // Serializa del lado de Account hacia Profile
+    @Enumerated(EnumType.STRING)
+    RoleAccounts role;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_Profile", referencedColumnName = "idProfile")
+    @JsonProperty("profile")
+    @JsonManagedReference
     private Profile profile;
 
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
@@ -61,6 +86,14 @@ public class Account{
 
 
     public String getEmail() {
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority((role.name())));
+    }
+
+    @Override
+    public String getUsername() {
         return email;
     }
 
@@ -72,6 +105,10 @@ public class Account{
 
     public String getPassword() {
         return password;
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
 
@@ -82,11 +119,17 @@ public class Account{
 
     public Boolean getStatus() {
         return status;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
 
     public void setStatus(Boolean status) {
         this.status = status;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
 
@@ -110,4 +153,4 @@ public class Account{
     }
     
 }
-
+    

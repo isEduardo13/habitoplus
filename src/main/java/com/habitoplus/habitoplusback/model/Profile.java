@@ -20,6 +20,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -44,6 +45,10 @@ public class Profile {
     @JsonManagedReference(value = "profile-habits")
     private List<Habit> habits;
 
+    @JsonManagedReference  
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
+    
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupMember> members;
 
@@ -90,6 +95,8 @@ public class Profile {
     @NotBlank
     @Size(min = 1, max = 15, message = "Number phone must be between 1 and 15 characters")
     private String numberPhone;
+    @NotNull
+    private Boolean status;
 
     @NotBlank
     @Size(min = 1, max = 10, message = "Date of registration must be between 1 and 10 characters")
@@ -281,6 +288,43 @@ public class Profile {
                 + ", age=" + age + ", gender=" + gender + ", preferences=" + preferences + ", description="
                 + description + ", numberPhone=" + numberPhone + ", dateOfRegistration=" + dateOfRegistration
                 + ", lastConnection=" + lastConnection + "]";
+    public int getIdProfile() {
+        return idProfile;
+    }
+
+    public void setIdProfile(int idProfile) {
+        this.idProfile = idProfile;
+    }
+
+    public List<Habit> getHabits() {
+        return habits;
+    }
+
+    public void setHabits(List<Habit> habits) {
+        this.habits = habits;
+    }
+
+    public void Inicializar() {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+        String formattedDate = LocalDate.now().format(dateFormatter);
+        String formattedLastConnection = LocalDateTime.now().format(dateTimeFormatter);
+
+        this.dateOfRegistration = formattedDate;
+        this.status = true;
+        this.lastConnection = formattedLastConnection;
+        this.age = "xx";
+        this.gender = "Prefer not to say";
+        this.numberPhone = "xxx-xxx-xxxx";
+        this.preferences = "preference";
+        this.description = "description";
+        this.lastName = "LasterName";
+        this.name = "Name";
+        this.username = "Username";
+        this.birthDate = "xx-xx-xxxx";
+        this.habits = null;
+        this.streak = null;
     }
 
 }

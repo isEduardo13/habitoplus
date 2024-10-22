@@ -7,6 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import com.habitoplus.habitoplusback.repository.AccountRepository;
+import com.habitoplus.habitoplusback.repository.ProfileRepository;
+import jakarta.transaction.Transactional;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import com.habitoplus.habitoplusback.exception.UserAlreadyExistsException;
 import com.habitoplus.habitoplusback.model.Account;
@@ -46,11 +52,12 @@ public class AccountService {
         if (accountRepository.findById(id).isEmpty()) {
             throw new NoSuchElementException();
 
+
         }
         return accountRepository.findById(id).get();
     }
 
-    public Account getAccountByEmail(String email) {
+    public Optional<Account> getAccountByEmail(String email) {
         return accountRepository.findByEmail(email);
     }
 
@@ -121,11 +128,17 @@ public class AccountService {
 
         if (accountRepository.findById(account.getIdAccount()).isEmpty()) {
             throw new NoSuchElementException();
+        if (accountRepository.findById(account.getIdAccount()).isEmpty()) {
+            throw new NoSuchElementException();
         }
+        Account existingAccount = accountRepository.findById(account.getIdAccount()).get();
+
         Account existingAccount = accountRepository.findById(account.getIdAccount()).get();
 
         existingAccount.setEmail(account.getEmail());
         existingAccount.setPassword(account.getPassword());
+        existingAccount.setStatus(account.getStatus());
+
         existingAccount.setStatus(account.getStatus());
 
         return accountRepository.save(existingAccount);
@@ -133,7 +146,9 @@ public class AccountService {
 
     public boolean deleteAccount(int id) {
 
+
         if (accountRepository.findById(id).isEmpty()) {
+            throw new NoSuchElementException();
             throw new NoSuchElementException();
         }
         Account existingAccount = accountRepository.findById(id).get();
@@ -145,6 +160,7 @@ public class AccountService {
         }
         return false;
     }
+
 
     public boolean DefinitiveDeleteAccount(int id) {
 
