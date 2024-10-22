@@ -3,8 +3,7 @@ package com.habitoplus.habitoplusback.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import com.habitoplus.habitoplusback.enums.Role;
-import com.habitoplus.habitoplusback.enums.RoleAccount;
+import com.habitoplus.habitoplusback.enums.RoleAccounts;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -43,27 +42,13 @@ public class Account implements UserDetails {
     @NotNull
     private Boolean status;
     @Enumerated(EnumType.STRING)
-    Role role;
+    RoleAccounts role;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_Profile", referencedColumnName = "idProfile")
     @JsonProperty("profile")
     @JsonManagedReference
     private Profile profile;
 
-    public void setEmail(String email) {
-        this.email = email;
-
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    public void setRole(Role role) {
-        this.role = role;
-    }
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -71,14 +56,10 @@ public class Account implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
     public String getUsername() {
         return email;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {

@@ -33,9 +33,12 @@ public class Profile {
     @JsonManagedReference
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Habit> habits;
-
-    @JsonManagedReference  
+    
+    @JsonManagedReference("profile-groups")
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GroupMember> groups;
+
+    @JsonManagedReference("profile-requests")
     private List<Notification> notifications;
 
     @JsonManagedReference
@@ -47,6 +50,9 @@ public class Profile {
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Request> requests;
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HabitRecommendation> recommendations;
 
     @Transient
     private List<Comment> comments;
@@ -162,7 +168,7 @@ public class Profile {
         this.preferences = preferences;
     }
 
-    public String setDescription() {
+    public String getDescription() {
         return description;
     }
 

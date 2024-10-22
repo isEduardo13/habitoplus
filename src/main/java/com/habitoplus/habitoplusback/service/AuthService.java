@@ -3,6 +3,9 @@ package com.habitoplus.habitoplusback.service;
 import com.habitoplus.habitoplusback.dto.AuthResponseDTO;
 import com.habitoplus.habitoplusback.dto.LoginRequest;
 import com.habitoplus.habitoplusback.enums.Role;
+import com.habitoplus.habitoplusback.enums.RoleAccounts;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,24 +27,24 @@ import com.habitoplus.habitoplusback.dto.ForgotPasswordRequest;
 import com.habitoplus.habitoplusback.dto.RegisterRequest;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
-    @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
-    private ProfileRepository profileRepository;
+    private final AccountRepository accountRepository;
 
-    @Autowired
-    private JsonWebTokenService tokenService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final ProfileRepository profileRepository;
+
+    private final JsonWebTokenService jwtService;
+
+    private final AuthenticationManager authenticationManager;
+
+    private final PasswordEncoder passwordEncoder;
 
     public AuthResponseDTO login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        UserDetails user = accountRepository.findByEmail(request.getEmail()).orElseThrow(() -> new InvalidCredentialsException("Invalid credentials"));
-        String token = tokenService.getToken(user);
+        Account user = accountRepository.findByEmail(request.getEmail()).orElseThrow();
+        String token = jwtService.getToken(user);
+
         return AuthResponseDTO.builder().token(token).build();
     }
 
@@ -49,11 +52,10 @@ public class AuthService {
         if (accountRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new UserAlreadyExistsException("User with email " + request.getEmail() + " already exists");
         }
-        String PasswordEncoder = passwordEncoder.encode(request.getPassword());
         Account account = Account.builder()
                 .email(request.getEmail())
-                .password(PasswordEncoder)
-                .role(Role.USER)
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(RoleAccounts.USER)
                 .status(true)
                 .build();
 
@@ -65,7 +67,9 @@ public class AuthService {
         
 
         accountRepository.save(account);
-        return AuthResponseDTO.builder().token(tokenService.getToken(account)).build();
+        return AuthResponseDTO.builder()
+                .token(jwtService.getToken(account))
+                .build();
     }
       
         
