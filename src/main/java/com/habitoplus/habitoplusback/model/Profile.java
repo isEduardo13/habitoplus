@@ -22,9 +22,11 @@ import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 @Entity
 @Table(name = "profile")
+@Data
 @JsonIgnoreProperties({"habits", "members", "requests"}) 
 public class Profile {
 
@@ -106,27 +108,6 @@ public class Profile {
     @Size(min = 1, max = 19, message = "Last connection must be between 1 and 19 characters")
     private String lastConnection;
 
-    public void Inicializar() {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-
-        String formattedDate = LocalDate.now().format(dateFormatter);
-        String formattedLastConnection = LocalDateTime.now().format(dateTimeFormatter);
-
-        this.dateOfRegistration = formattedDate;
-        this.lastConnection = formattedLastConnection;
-        this.age = "xx";
-        this.gender = "Prefer not to say";
-        this.numberPhone = "xxx-xxx-xxxx";
-        this.preferences = "preference";
-        this.description = "description";
-        this.lastName = "LasterName";
-        this.name = "Name";
-        this.username = "Username";
-        this.birthDate = "xx-xx-xxxx";
-        this.habits = null;
-        this.streak = null;
-    }
 
     public Integer getIdProfile() {
         return idProfile;
@@ -288,20 +269,6 @@ public class Profile {
                 + ", age=" + age + ", gender=" + gender + ", preferences=" + preferences + ", description="
                 + description + ", numberPhone=" + numberPhone + ", dateOfRegistration=" + dateOfRegistration
                 + ", lastConnection=" + lastConnection + "]";
-    public int getIdProfile() {
-        return idProfile;
-    }
-
-    public void setIdProfile(int idProfile) {
-        this.idProfile = idProfile;
-    }
-
-    public List<Habit> getHabits() {
-        return habits;
-    }
-
-    public void setHabits(List<Habit> habits) {
-        this.habits = habits;
     }
 
     public void Inicializar() {
