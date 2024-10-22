@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.habitoplus.habitoplusback.dto.StreakDto;
+import com.habitoplus.habitoplusback.dto.StreakDTO;
 import com.habitoplus.habitoplusback.model.Streak;
 import com.habitoplus.habitoplusback.repository.StreakRepository;
 
@@ -27,12 +27,12 @@ public class StreakService {
         streakRepository.save(streak);
     }
     
-    public StreakDto getStreak(int idStreak){
+    public StreakDTO getStreak(int idStreak){
         Optional<Streak> optionalStreak = streakRepository.findById(idStreak);
         if (optionalStreak.isPresent()) {
             Streak streak = optionalStreak.get();
             // Usando el constructor de Streak
-            return new StreakDto(streak.getStartDate(), streak.getConsecutiveDays());
+            return new StreakDTO(streak.getStartDate(), streak.getConsecutiveDays());
         }
         return null;
     }

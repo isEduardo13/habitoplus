@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.habitoplus.habitoplusback.model.Streak;
 import com.habitoplus.habitoplusback.service.StreakService;
-import com.habitoplus.habitoplusback.dto.StreakDto;
+import com.habitoplus.habitoplusback.dto.StreakDTO;
 
 
 @RestController
@@ -41,10 +41,10 @@ public class StreakController {
     }
 
     @GetMapping("/{idStreak}")
-    public ResponseEntity<StreakDto> getStreak(@PathVariable("idStreak") int idStreak){
-        StreakDto streakDTO = streakService.getStreak(idStreak);
-        if(streakDTO != null){
-            return ResponseEntity.ok(streakDTO);
+    public ResponseEntity<StreakDTO> getStreak(@PathVariable("idStreak") int idStreak){
+        StreakDTO streakDto = (StreakDTO) streakService.getStreak(idStreak);
+        if(streakDto != null){
+            return ResponseEntity.ok(streakDto);
         }
         return ResponseEntity.notFound().build();
     }
