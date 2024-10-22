@@ -34,15 +34,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .authenticationManager(authenticationManager)
-                .authenticationProvider(authenticationProvider)
                 .build();
     }
-
+  
 }

@@ -53,15 +53,10 @@ public class NotificationControllerTest {
         notificationDTO.setIsRead(false);
         notificationDTO.setIdProfile(1);
 
-        Profile profile = new Profile();
-        profile.setIdProfile(1);
-
-        when(profileService.getProfileById(1)).thenReturn(profile);
-
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
-        mockMvc.perform(post("/notifications/create")
+        mockMvc.perform(post("/notifications/registerNotificaton")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(notificationDTO)))
                 .andExpect(status().isCreated());
@@ -76,7 +71,7 @@ public class NotificationControllerTest {
         when(notificationService.getNotificationsByProfileId(1))
                 .thenReturn(Arrays.asList(notification));
 
-        mockMvc.perform(get("/notifications/profile/1"))
+        mockMvc.perform(get("/profiles/1/notifications"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].message").value("Test message"));
     }
@@ -84,11 +79,10 @@ public class NotificationControllerTest {
     @Test
     void testDeleteNotificationByProfile() throws Exception {
         int notificationId = 1;
-        int profileId = 1;
+        
+        doNothing().when(notificationService).deleteNotification(notificationId);
 
-        doNothing().when(notificationService).deleteNotificationByProfile(notificationId, profileId);
-
-        mockMvc.perform(delete("/notifications/{notificationId}/profile/{profileId}", notificationId, profileId))
-                .andExpect(status().isNoContent());
+        mockMvc.perform(delete("/notifications/{idNotification}", notificationId))
+                .andExpect(status().isOk());
     }
 }
