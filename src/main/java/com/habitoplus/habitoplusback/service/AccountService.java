@@ -2,18 +2,14 @@ package com.habitoplus.habitoplusback.service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import com.habitoplus.habitoplusback.repository.AccountRepository;
-import com.habitoplus.habitoplusback.repository.ProfileRepository;
-import jakarta.transaction.Transactional;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
+import com.habitoplus.habitoplusback.enums.RoleAccounts;
 import com.habitoplus.habitoplusback.exception.UserAlreadyExistsException;
 import com.habitoplus.habitoplusback.model.Account;
 import com.habitoplus.habitoplusback.model.Pixela;
@@ -23,6 +19,9 @@ import com.habitoplus.habitoplusback.repository.AccountRepository;
 import com.habitoplus.habitoplusback.repository.PixelaRepository;
 import com.habitoplus.habitoplusback.repository.ProfileRepository;
 import com.habitoplus.habitoplusback.repository.StreakRepository;
+
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.transaction.Transactional;
 
 @Service
 public class AccountService {
@@ -52,7 +51,6 @@ public class AccountService {
         if (accountRepository.findById(id).isEmpty()) {
             throw new NoSuchElementException();
 
-
         }
         return accountRepository.findById(id).get();
     }
@@ -65,17 +63,26 @@ public class AccountService {
         return accountRepository.getAccoutsByEmail(email);
     }
 
+    @Transactional
     public Account addAccount(Account account, boolean isNotMinor, String thanksCode) {
-        // Verificar si el correo ya existe en el sistema
-        if (accountRepository.findByEmail(account.getEmail()) != null) {
+        Optional<Account> existingAccount = accountRepository.findByEmail(account.getEmail());
+
+        if (existingAccount.isPresent()) {
             throw new UserAlreadyExistsException("User with email " + account.getEmail() + " already exists");
         }
 
-        // Crear o reutilizar el perfil
+        if (account.getStatus() == null) {
+            account.setStatus(true); 
+        }
+
+        if (account.getRole() == null) {
+            account.setRole(RoleAccounts.USER); 
+        }
+
         Profile profile;
         if (account.getProfile() == null) {
             profile = new Profile();
-            profile.Inicializar(); // Método que inicializa el perfil con valores predeterminados
+            profile.Inicializar(); 
             profileRepository.save(profile);
             account.setProfile(profile);
         } else {
@@ -83,7 +90,6 @@ public class AccountService {
             profileRepository.save(profile);
         }
 
-        // Crear un nuevo Streak (rachas)
         Streak streak = new Streak();
         streak.setConsecutiveDays(0);
         streak.setStartDate(null);
@@ -91,38 +97,28 @@ public class AccountService {
         streak.setProfile(profile);
         streakRepository.save(streak);
 
-        // Generar token para la cuenta de Pixela
         String pixelaToken = generatePixelaToken();
-
-        // Intentar crear la cuenta de Pixela a través del servicio
         boolean pixelaCreated = pixelaService.createPixelaAccount(account.getEmail(), pixelaToken, isNotMinor, thanksCode);
         if (pixelaCreated) {
-            // Guardar la cuenta de la aplicación si Pixela fue creada exitosamente
             Account savedAccount = accountRepository.save(account);
 
-            // Crear y asociar Pixela a la cuenta
             Pixela pixela = new Pixela();
-            pixela.setUsername(account.getEmail()); // El username en Pixela se basa en el email
+            pixela.setUsername(account.getEmail()); 
             pixela.setToken(pixelaToken);
             pixela.setAccount(savedAccount);
             pixelaRepository.save(pixela);
 
-            // Asociar el streak al perfil de la cuenta
             profile.setStreak(streak);
 
             return savedAccount;
         } else {
-            // Si la cuenta de Pixela no se pudo crear, lanza una excepción
             throw new RuntimeException("Failed to create Pixela account for user: " + account.getEmail());
         }
     }
 
-    // Método para generar un token de Pixela (esto puede ser dinámico si lo prefieres)
     private String generatePixelaToken() {
-        // Aquí puedes generar un token más seguro si lo necesitas
-        return "vtoken2889hsjwi";
+        return "thisissecret";
     }
-
 
     public Account updateAccount(Account account) {
 
@@ -134,7 +130,6 @@ public class AccountService {
         }
         Account existingAccount = accountRepository.findById(account.getIdAccount()).get();
 
-
         existingAccount.setEmail(account.getEmail());
         existingAccount.setPassword(account.getPassword());
         existingAccount.setStatus(account.getStatus());
@@ -145,7 +140,6 @@ public class AccountService {
     }
 
     public boolean deleteAccount(int id) {
-
 
         if (accountRepository.findById(id).isEmpty()) {
             throw new NoSuchElementException();
@@ -159,7 +153,6 @@ public class AccountService {
         }
         return false;
     }
-
 
     public boolean DefinitiveDeleteAccount(int id) {
 

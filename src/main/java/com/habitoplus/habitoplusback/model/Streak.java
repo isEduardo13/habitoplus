@@ -32,11 +32,12 @@ public class Streak {
     @JoinColumn(name = "idProfile", referencedColumnName = "idProfile")
     private Profile profile;
 
-    private Integer consecutiveDays;
+    private Integer consecutiveDays = 0;
+    private Integer completeHabits = 0;
     private Date startDate;
     private Date endDate;
 
-
+    
     public Integer getIdStreak() {
         return idStreak;
     }
@@ -73,11 +74,20 @@ public class Streak {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+
+    
     @Override
     public String toString() {
         return "Streak [idStreak=" + idStreak + ", habits=" + habits + ", profile=" + profile + ", consecutiveDays="
-                + consecutiveDays + ", startDate=" + startDate + ", endDate=" + endDate + "]";
+                + consecutiveDays + ", habitsCompleted=" + completeHabits + ", startDate=" + startDate + ", endDate="
+                + endDate + "]";
     }
-
+    public Integer getCompleteHabits() {
+        return completeHabits;
+    }
+    public void setCompleteHabits(Integer completeHabits) {
+        this.completeHabits = completeHabits;
+    }
+    
     
 }

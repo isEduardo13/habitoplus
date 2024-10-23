@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.habitoplus.habitoplusback.model.Category;
@@ -38,7 +39,7 @@ import jakarta.validation.Valid;
 public class HabitController {
 
         @Autowired
-        private HabitService service;
+        private HabitService habitService;
 
         @Operation(summary = "Get all the user's habits")
         @ApiResponses(value = {
@@ -55,7 +56,7 @@ public class HabitController {
         })
         @GetMapping
         public List<Habit> getAll() {
-                return service.getAll();
+                return habitService.getAll();
         }
 
         @Operation(summary = "Get habit by ID")
@@ -75,7 +76,7 @@ public class HabitController {
         })
         @GetMapping("{idHabit}")
         public ResponseEntity<?> getByHabitId(@PathVariable Integer idHabit) {
-                Habit habit = service.getByHabitId(idHabit);
+                Habit habit = habitService.getByHabitId(idHabit);
                 return new ResponseEntity<Habit>(habit, HttpStatus.OK);
         }
 
@@ -93,7 +94,7 @@ public class HabitController {
                         })
         })
         public ResponseEntity<?> registerHabit(@Valid @RequestBody HabitDTO habitDTO) {
-                service.saveHabit(habitDTO);
+                habitService.saveHabit(habitDTO);
                 return new ResponseEntity<String>("Saved Successfully", HttpStatus.OK);
         }
 
@@ -114,7 +115,7 @@ public class HabitController {
         })
         @PutMapping("{idHabit}")
         public ResponseEntity<?> updateHabit(@RequestBody HabitDTO habitDTO, @PathVariable Integer idHabit) {
-                service.updateHabit(idHabit, habitDTO);
+                habitService.updateHabit(idHabit, habitDTO);
                 return new ResponseEntity<>("Habit updated successfully", HttpStatus.OK);
         }
 
@@ -135,7 +136,7 @@ public class HabitController {
         })
         @PutMapping("{idHabit}/status")
         public ResponseEntity<?> update(@PathVariable Integer idHabit, @RequestBody Boolean status) {
-                service.update(idHabit, status);
+                habitService.update(idHabit, status);
                 return new ResponseEntity<String>("Updated status", HttpStatus.OK);
         }
 
@@ -156,7 +157,29 @@ public class HabitController {
         })
         @DeleteMapping("{idHabit}")
         public ResponseEntity<?> deleteHabit(@PathVariable Integer idHabit) {
-                service.deleteHabit(idHabit);
+                habitService.deleteHabit(idHabit);
                 return new ResponseEntity<String>("Deleted record", HttpStatus.OK);
         }
+
+        @PutMapping("/updateStatus/{idHabit}")
+        @Operation(summary = "Update habit status and streak")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Habit status and streak updated", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+                        }),
+                        @ApiResponse(responseCode = "404", description = "Habit not found", content = {
+                                        @Content
+                        }),
+                        @ApiResponse(responseCode = "500", description = "Internal server error", content = {
+                                        @Content
+                        })
+        })
+        public ResponseEntity<String> updateHabitStatus(
+                        @PathVariable Integer idHabit,
+                        @RequestParam Integer idProfile, // Añadimos el idProfile como parámetro
+                        @RequestParam Boolean status) {
+                habitService.updateHabitStatus(idHabit, idProfile, status); // Ahora pasamos el idProfile al servicio
+                return new ResponseEntity<>("Habit status and streak updated successfully", HttpStatus.OK);
+        }
+
 }

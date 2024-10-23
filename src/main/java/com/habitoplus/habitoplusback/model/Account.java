@@ -3,14 +3,6 @@ package com.habitoplus.habitoplusback.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import com.habitoplus.habitoplusback.enums.RoleAccounts;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -53,18 +45,17 @@ public class Account implements UserDetails {
     @NotNull
     private Boolean status;
 
-    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "account-profile")  // Serializa del lado de Account hacia Profile
+
     @Enumerated(EnumType.STRING)
     RoleAccounts role;
+
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_Profile", referencedColumnName = "idProfile")
-    @JsonProperty("profile")
-    @JsonManagedReference
+    @JoinColumn(name = "idProfile", referencedColumnName = "idProfile")
+    @JsonManagedReference(value = "account-profile")
     private Profile profile;
 
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "account-pixela")  // Serializa del lado de Account hacia Pixela
+    @JsonManagedReference(value = "account-pixela") 
     private Pixela pixela;
 
     @Override

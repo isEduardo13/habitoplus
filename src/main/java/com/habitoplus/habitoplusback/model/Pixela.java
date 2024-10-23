@@ -9,10 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "pixela")
 public class Pixela {
 
     @Id
@@ -29,7 +27,7 @@ public class Pixela {
 
     @OneToOne
     @JoinColumn(name = "idAccount", referencedColumnName = "idAccount")
-    @JsonBackReference(value = "account-pixela")  // Evita serialización recíproca
+    @JsonBackReference(value = "account-pixela")  
     private Account account;
 
     public Pixela() {

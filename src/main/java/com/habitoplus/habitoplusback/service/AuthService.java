@@ -59,33 +59,29 @@ public class AuthService {
                 .status(true)
                 .build();
 
-
-            Profile profile = new Profile();
-            profile.Inicializar();
-            profileRepository.save(profile);
-            account.setProfile(profile);
-        
+        Profile profile = new Profile();
+        profile.Inicializar();
+        profileRepository.save(profile);
+        account.setProfile(profile);
 
         accountRepository.save(account);
         return AuthResponseDTO.builder()
                 .token(jwtService.getToken(account))
                 .build();
     }
-      
-        
 
-        public void forgotPassword(ForgotPasswordRequest request) {
-            String email = request.getEmail();
-            System.out.println("Buscando cuenta con email: " + email);
-            Optional<Account> account = accountRepository.findByEmail(email);
-            if (account.isPresent()) {
-                System.out.println("Cuenta encontrada: " + account.get().getEmail());
-                // send email with password reset code
-            } else {
-                System.out.println("Cuenta no encontrada para el email: " + email);
-                throw new InvalidCredentialsException("Email not found");
-            }
+    public void forgotPassword(ForgotPasswordRequest request) {
+        String email = request.getEmail();
+        System.out.println("Buscando cuenta con email: " + email);
+        Optional<Account> account = accountRepository.findByEmail(email);
+        if (account.isPresent()) {
+            System.out.println("Cuenta encontrada: " + account.get().getEmail());
+            // send email with password reset code
+        } else {
+            System.out.println("Cuenta no encontrada para el email: " + email);
+            throw new InvalidCredentialsException("Email not found");
         }
+    }
 
     public void logout(Integer id) {
         Optional<Profile> optionalProfile = profileRepository.findById(id);

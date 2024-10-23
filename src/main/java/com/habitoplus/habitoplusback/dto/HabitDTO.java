@@ -10,7 +10,6 @@ public class HabitDTO {
     private Integer profileId;
     private String habitName;
 
-    
 
     public Integer getCategoryId() {
         return categoryId;

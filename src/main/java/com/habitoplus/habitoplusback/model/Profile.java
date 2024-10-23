@@ -17,7 +17,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,9 +24,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Entity
-@Table(name = "profile")
 @Data
-@JsonIgnoreProperties({"habits", "members", "requests"}) 
+//@JsonIgnoreProperties({"habits", "members", "requests"}) 
 public class Profile {
 
     @Id
@@ -36,7 +34,7 @@ public class Profile {
 
     @OneToOne
     @JoinColumn(name = "idAccount", referencedColumnName = "idAccount")
-    @JsonBackReference(value = "account-profile")  // Evita serialización recíproca
+    @JsonBackReference(value = "account-profile")  
     private Account account;
 
     @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL)

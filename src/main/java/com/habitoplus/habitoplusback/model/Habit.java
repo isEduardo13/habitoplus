@@ -1,5 +1,7 @@
 package com.habitoplus.habitoplusback.model;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -35,6 +37,8 @@ public class Habit {
     @Size(min = 4, max = 5)
     private String priority;
 
+    private LocalDate lastCompletedDate;
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idStreak")
@@ -46,6 +50,7 @@ public class Habit {
     @JoinColumn(name = "idProfile")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Profile profile;
+
 
     public Integer getIdHabit() {
         return idHabit;
@@ -116,6 +121,14 @@ public class Habit {
         return "Habit [id_habit=" + idHabit + ", category_id=" + category + ", habit_name=" + habit_name
                 + ", description=" + description + ", status=" + status + ", priority=" + priority + ", streak="
                 + streak + "]";
+    }
+
+    public LocalDate getLastCompletedDate() {
+        return lastCompletedDate;
+    }
+
+    public void setLastCompletedDate(LocalDate lastCompletedDate) {
+        this.lastCompletedDate = lastCompletedDate;
     }
 
 }
