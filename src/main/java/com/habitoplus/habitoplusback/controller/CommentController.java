@@ -34,46 +34,6 @@ public class CommentController {
     @Autowired
     private CommentService service;
 
-    // @Operation(summary = "Get all comments")
-	// @ApiResponses(value = {
-	// 		@ApiResponse(responseCode = "200", description = "Found comments", content = {
-	// 				@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Comment.class)))
-	// 		}),
-	// 		@ApiResponse(responseCode = "204", description = "No comments found"),
-	// 		@ApiResponse(responseCode = "400", description = "Bad request", content = {
-	// 				@Content
-	// 		}),
-	// 		@ApiResponse(responseCode = "500", description = "Internal server error", content = {
-	// 				@Content
-	// 		})
-	// })
-    // @GetMapping
-    // public List<Comment> getAll(){
-    //     return service.getAll();
-    // }
-
-    // @Operation(summary = "Get a Comment by its ID")
-	// @ApiResponses(value = {
-	// 		@ApiResponse(responseCode = "200", description = "Found comment", content = {
-	// 				@Content(mediaType = "application/json", schema = @Schema(implementation = Comment.class))
-	// 		}),
-	// 		@ApiResponse(responseCode = "400", description = "Invalid group ID, profile Id or date time", content = {
-	// 				@Content
-	// 		}),
-	// 		@ApiResponse(responseCode = "404", description = "Comment not found", content = {
-	// 				@Content
-	// 		}),
-	// 		@ApiResponse(responseCode = "500", description = "Internal server error", content = {
-	// 				@Content
-	// 		})
-	// })
-	// @GetMapping("{idGroup}/{idProfile}/{dateTime}")
-	// public ResponseEntity<?> SelectComment(@PathVariable Integer idGroup, @PathVariable Integer idProfile, @PathVariable LocalDateTime dateTime) {
-	// 	Comment comment = service.getById(idGroup, idProfile, dateTime);
-	// 	return new ResponseEntity<Comment>(comment, HttpStatus.OK);
-	// }
-
-
 	@Operation(summary = "Add a new comment")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Comment successfully registered", content = {

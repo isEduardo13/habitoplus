@@ -1,8 +1,5 @@
 package com.habitoplus.habitoplusback.model;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -21,9 +18,18 @@ import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "profiles")
+@Table(name = "Profiles")
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -105,158 +111,6 @@ public class Profile {
     @Size(min = 1, max = 19, message = "Last connection must be between 1 and 19 characters")
     private String lastConnection;
 
-    public Photo getPhoto() {
-        return photo;
-    }
+  
 
-    public void setPhoto(Photo photo) {
-        this.photo = photo;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getPreferences() {
-        return preferences;
-    }
-
-    public void setPreferences(String preferences) {
-        this.preferences = preferences;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String desciption) {
-        this.description = desciption;
-    }
-
-    public String getNumberPhone() {
-        return numberPhone;
-    }
-
-    public void setNumberPhone(String numberPhone) {
-        this.numberPhone = numberPhone;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    public String getDateOfRegistration() {
-        return dateOfRegistration;
-    }
-
-    public void setDateOfRegistration(String dateOfRegistration) {
-        this.dateOfRegistration = dateOfRegistration;
-    }
-
-    public String getLastConnection() {
-        return lastConnection;
-    }
-
-    public void setLastConnection(String lastConnnetion) {
-        lastConnection = lastConnnetion;
-    }
-
-    public int getIdProfile() {
-        return idProfile;
-    }
-
-    public void setIdProfile(int idProfile) {
-        this.idProfile = idProfile;
-    }
-
-    public List<Habit> getHabits() {
-        return habits;
-    }
-
-    public void setHabits(List<Habit> habits) {
-        this.habits = habits;
-    }
-    public List<Notification> getNotifications() {
-        return notifications;
-    }
-    public void setNotifications(List<Notification> notifications) {
-        this.notifications = notifications;
-    }
-    public List<Note> getNotes() {
-        return notes;
-    }
-    public void setNotes(List<Note> notes) {
-        this.notes = notes;
-    }
-
-    public void Inicializar() {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-
-        String formattedDate = LocalDate.now().format(dateFormatter);
-        String formattedLastConnection = LocalDateTime.now().format(dateTimeFormatter);
-
-        this.dateOfRegistration = formattedDate;
-        this.status = true;
-        this.lastConnection = formattedLastConnection;
-        this.age = "xx";
-        this.gender = "Prefer not to say";
-        this.numberPhone = "xxx-xxx-xxxx";
-        this.preferences = "preference";
-        this.description = "description";
-        this.lastName = "LasterName";
-        this.name = "Name";
-        this.username = "Username";
-        this.birthDate = "xx-xx-xxxx";
-        this.habits = null;
-        this.streak = null;
-    }
 }
