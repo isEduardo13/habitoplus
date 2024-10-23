@@ -5,8 +5,11 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import jakarta.persistence.Table;
+
 
 @Document(collection = "Comment")
+@Table(name = "comments")
 public class Comment {
 
     @Id

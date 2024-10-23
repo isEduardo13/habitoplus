@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -15,12 +16,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
+@Table(name = "profiles")
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,11 +37,21 @@ public class Profile {
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Habit> habits;
     
-    @JsonManagedReference("profile-groups")
+    @JsonManagedReference
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupMember> groups;
 
-    @JsonManagedReference("profile-requests")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Note> notes;
+    
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GroupMember> members;
+
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Request> requests;
 
@@ -210,6 +223,18 @@ public class Profile {
 
     public void setHabits(List<Habit> habits) {
         this.habits = habits;
+    }
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
+    }
+    public List<Note> getNotes() {
+        return notes;
+    }
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
 
     public void Inicializar() {
