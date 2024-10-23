@@ -2,13 +2,20 @@ package com.habitoplus.habitoplusback.dto;
 
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.NotNull;
+
 public class NotificationDTO {
 
     private Integer idProfile;
+    @NotNull(message = "Message cannot be null")
     private String message;
+    @NotNull(message = "Type cannot be null")
     private String type;
+    @NotNull(message = "Date cannot be null")
     private LocalDateTime date;
+    @NotNull(message = "isRead cannot be null")
     private Boolean isRead;
+    
     public NotificationDTO() {
 
     }
