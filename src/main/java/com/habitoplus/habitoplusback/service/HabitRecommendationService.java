@@ -1,6 +1,5 @@
 package com.habitoplus.habitoplusback.service;
 
-import java.time.LocalDate;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.habitoplus.habitoplusback.model.HabitRecommendation;
 import com.habitoplus.habitoplusback.model.Profile;
-import com.habitoplus.habitoplusback.repository.HabitRecommendationRepository;
-
 import jakarta.transaction.Transactional;
 
 @Service
@@ -25,8 +21,6 @@ import jakarta.transaction.Transactional;
 public class HabitRecommendationService {
     @Value("${api.key.OpenIA}")
     private String keyAPI;
-    @Autowired
-    private HabitRecommendationRepository repository;
     @Autowired
     private ProfileService profileService;
     @Autowired
@@ -66,13 +60,6 @@ public class HabitRecommendationService {
                     .getJSONObject("message")
                     .getString("content");
 
-            // Almacenar la respuesta
-            HabitRecommendation a = new HabitRecommendation();
-            a.setProfile(profile);
-            a.setRecommendations(recommendations);
-            a.setDate(LocalDate.now());
-
-            repository.save(a);
             // Retornar la respuesta
             return recommendations;
         } catch (Exception e) {

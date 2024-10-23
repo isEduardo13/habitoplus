@@ -1,16 +1,14 @@
 package com.habitoplus.habitoplusback.dto;
 
+import com.habitoplus.habitoplusback.enums.Priority;
 
 public class HabitDTO {
     private Integer categoryId;
     private String description;
-    private Boolean status;
-    private String priority;
+    private Priority priority;
     private Integer streakId;
     private Integer profileId;
     private String habitName;
-
-    
 
     public Integer getCategoryId() {
         return categoryId;
@@ -28,19 +26,11 @@ public class HabitDTO {
         this.description = description;
     }
 
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    public String getPriority() {
+    public Priority getPriority() {
         return priority;
     }
 
-    public void setPriority(String priority) {
+    public void setPriority(Priority priority) {
         this.priority = priority;
     }
 

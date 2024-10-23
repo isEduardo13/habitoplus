@@ -42,9 +42,6 @@ public class Profile {
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Request> requests;
 
-    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HabitRecommendation> recommendations;
-
     @Transient
     private List<Comment> comments;
 

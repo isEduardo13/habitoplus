@@ -20,6 +20,7 @@ import com.habitoplus.habitoplusback.model.Category;
 import com.habitoplus.habitoplusback.model.Habit;
 import com.habitoplus.habitoplusback.service.HabitService;
 import com.habitoplus.habitoplusback.dto.HabitDTO;
+import com.habitoplus.habitoplusback.enums.Priority;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -176,7 +177,28 @@ public class HabitController {
                         })
         })
         @GetMapping("{idProfile}/{idCatgory}")
-        public List<Habit> getHabitsByCategory(@PathVariable Integer idProfile, @PathVariable Integer idCategory) {
+        public List<Habit> getHabitsByCategory(@PathVariable Integer idProfile, Integer idCategory) {
                 return service.getHabitsByCategory(idProfile, idCategory);
         }
+
+        @Operation(summary = "Get habits of a profile by priority")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Habits retrieved successfully", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = Habit.class))
+                        }),
+                        @ApiResponse(responseCode = "400", description = "Invalid profile ID or priority", content = {
+                                        @Content
+                        }),
+                        @ApiResponse(responseCode = "404", description = "Profile not found", content = {
+                                        @Content
+                        }),
+                        @ApiResponse(responseCode = "500", description = "Internal server error", content = {
+                                        @Content
+                        })
+        })
+        @GetMapping("{idProfile}/priority/{priority}")
+        public List<Habit> getHabitsByPriority(@PathVariable Integer idProfile, @PathVariable Priority priority) {
+                return service.getHabitsByPriority(idProfile, priority);
+        }
+
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.habitoplus.habitoplusback.dto.HabitDTO;
+import com.habitoplus.habitoplusback.enums.Priority;
 import com.habitoplus.habitoplusback.model.Category;
 import com.habitoplus.habitoplusback.model.Habit;
 import com.habitoplus.habitoplusback.model.Profile;
@@ -47,7 +48,7 @@ public class HabitService {
     public void saveHabit(HabitDTO habitDTO) {
         Habit habit = new Habit();
         habit.setDescription(habitDTO.getDescription());
-        habit.setStatus(habitDTO.getStatus());
+        habit.setStatus(false);
         habit.setPriority(habitDTO.getPriority());
         habit.setHabit_name(habitDTO.getHabitName());
         Category category = categoryService.getByCategoryId(habitDTO.getCategoryId());
@@ -68,7 +69,6 @@ public class HabitService {
             Profile profile = profileService.getProfileById(habitDTO.getProfileId());
             habitTemp.setCategory(category);
             habitTemp.setDescription(habitDTO.getDescription());
-            habitTemp.setStatus(habitDTO.getStatus());
             habitTemp.setPriority(habitDTO.getPriority());
             habitTemp.setStreak(streak);
             habitTemp.setProfile(profile);
@@ -93,5 +93,8 @@ public class HabitService {
         return repo.findHabitsByCategory(idProfile, idCategory);
     }
 
+    public List<Habit> getHabitsByPriority(Integer idProfile, Priority priority) {
+        return repo.findHabitsByPriority(idProfile, priority);
+    }
     
 }
