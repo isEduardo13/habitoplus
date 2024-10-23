@@ -1,9 +1,7 @@
 package com.habitoplus.habitoplusback.model;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -15,12 +13,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
+@Table(name = "Profiles")
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,16 +43,23 @@ public class Profile {
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Habit> habits;
     
-    @JsonManagedReference("profile-groups")
+    @JsonManagedReference
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupMember> groups;
 
-    @JsonManagedReference("profile-requests")
+    @JsonManagedReference
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Request> requests;
+    private List<Notification> notifications;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Note> notes;
+    
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GroupMember> members;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HabitRecommendation> recommendations;
+    private List<Request> requests;
 
     @Transient
     private List<Comment> comments;
@@ -95,146 +111,6 @@ public class Profile {
     @Size(min = 1, max = 19, message = "Last connection must be between 1 and 19 characters")
     private String lastConnection;
 
-    public Photo getPhoto() {
-        return photo;
-    }
+  
 
-    public void setPhoto(Photo photo) {
-        this.photo = photo;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getPreferences() {
-        return preferences;
-    }
-
-    public void setPreferences(String preferences) {
-        this.preferences = preferences;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String desciption) {
-        this.description = desciption;
-    }
-
-    public String getNumberPhone() {
-        return numberPhone;
-    }
-
-    public void setNumberPhone(String numberPhone) {
-        this.numberPhone = numberPhone;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    public String getDateOfRegistration() {
-        return dateOfRegistration;
-    }
-
-    public void setDateOfRegistration(String dateOfRegistration) {
-        this.dateOfRegistration = dateOfRegistration;
-    }
-
-    public String getLastConnection() {
-        return lastConnection;
-    }
-
-    public void setLastConnection(String lastConnnetion) {
-        lastConnection = lastConnnetion;
-    }
-
-    public int getIdProfile() {
-        return idProfile;
-    }
-
-    public void setIdProfile(int idProfile) {
-        this.idProfile = idProfile;
-    }
-
-    public List<Habit> getHabits() {
-        return habits;
-    }
-
-    public void setHabits(List<Habit> habits) {
-        this.habits = habits;
-    }
-
-    public void Inicializar() {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-
-        String formattedDate = LocalDate.now().format(dateFormatter);
-        String formattedLastConnection = LocalDateTime.now().format(dateTimeFormatter);
-
-        this.dateOfRegistration = formattedDate;
-        this.status = true;
-        this.lastConnection = formattedLastConnection;
-        this.age = "xx";
-        this.gender = "Prefer not to say";
-        this.numberPhone = "xxx-xxx-xxxx";
-        this.preferences = "preference";
-        this.description = "description";
-        this.lastName = "LasterName";
-        this.name = "Name";
-        this.username = "Username";
-        this.birthDate = "xx-xx-xxxx";
-        this.habits = null;
-        this.streak = null;
-    }
 }

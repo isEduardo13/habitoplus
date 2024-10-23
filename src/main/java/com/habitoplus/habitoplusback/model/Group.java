@@ -21,7 +21,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "`group`")
+@Table(name = "`groups`")
 public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
