@@ -76,7 +76,7 @@ public class HabitController {
         })
         @GetMapping("{idHabit}")
         public ResponseEntity<?> getByHabitId(@PathVariable Integer idHabit) {
-                Habit habit = service.getByHabitId(idHabit);
+                Habit habit = service.getById(idHabit);
                 return new ResponseEntity<Habit>(habit, HttpStatus.OK);
         }
 
@@ -94,7 +94,7 @@ public class HabitController {
                         })
         })
         public ResponseEntity<?> registerHabit(@Valid @RequestBody HabitDTO habitDTO) {
-                service.saveHabit(habitDTO);
+                service.save(habitDTO);
                 return new ResponseEntity<String>("Saved Successfully", HttpStatus.OK);
         }
 
@@ -115,7 +115,7 @@ public class HabitController {
         })
         @PutMapping("{idHabit}")
         public ResponseEntity<?> updateHabit(@RequestBody HabitDTO habitDTO, @PathVariable Integer idHabit) {
-                service.updateHabit(idHabit, habitDTO);
+                service.save(idHabit, habitDTO);
                 return new ResponseEntity<>("Habit updated successfully", HttpStatus.OK);
         }
 
@@ -135,8 +135,8 @@ public class HabitController {
                         })
         })
         @PutMapping("{idHabit}/status")
-        public ResponseEntity<?> update(@PathVariable Integer idHabit, @RequestBody Boolean status) {
-                service.update(idHabit, status);
+        public ResponseEntity<?> updateStatus(@PathVariable Integer idHabit, @RequestBody Boolean status) {
+                service.save(idHabit, status);
                 return new ResponseEntity<String>("Updated status", HttpStatus.OK);
         }
 
@@ -157,7 +157,7 @@ public class HabitController {
         })
         @DeleteMapping("{idHabit}")
         public ResponseEntity<?> deleteHabit(@PathVariable Integer idHabit) {
-                service.deleteHabit(idHabit);
+                service.delete(idHabit);
                 return new ResponseEntity<String>("Deleted record", HttpStatus.OK);
         }
 
