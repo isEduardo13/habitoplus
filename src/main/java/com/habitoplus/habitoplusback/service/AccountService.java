@@ -66,54 +66,7 @@ public class AccountService {
     }
 
     public Account addAccount(Account account, boolean isNotMinor, String thanksCode) {
-        // Verificar si el correo ya existe en el sistema
-        if (accountRepository.findByEmail(account.getEmail()) != null) {
-            throw new UserAlreadyExistsException("User with email " + account.getEmail() + " already exists");
-        }
-
-        // Crear o reutilizar el perfil
-        Profile profile;
-        if (account.getProfile() == null) {
-            Profile profile = new Profile();
-            profileRepository.save(profile);
-            account.setProfile(profile);
-        } else {
-            profile = account.getProfile();
-            profileRepository.save(profile);
-        }
-
-        // Crear un nuevo Streak (rachas)
-        Streak streak = new Streak();
-        streak.setConsecutiveDays(0);
-        streak.setStartDate(null);
-        streak.setEndDate(null);
-        streak.setProfile(profile);
-        streakRepository.save(streak);
-
-        // Generar token para la cuenta de Pixela
-        String pixelaToken = generatePixelaToken();
-
-        // Intentar crear la cuenta de Pixela a través del servicio
-        boolean pixelaCreated = pixelaService.createPixelaAccount(account.getEmail(), pixelaToken, isNotMinor, thanksCode);
-        if (pixelaCreated) {
-            // Guardar la cuenta de la aplicación si Pixela fue creada exitosamente
-            Account savedAccount = accountRepository.save(account);
-
-            // Crear y asociar Pixela a la cuenta
-            Pixela pixela = new Pixela();
-            pixela.setUsername(account.getEmail()); // El username en Pixela se basa en el email
-            pixela.setToken(pixelaToken);
-            pixela.setAccount(savedAccount);
-            pixelaRepository.save(pixela);
-
-            // Asociar el streak al perfil de la cuenta
-            profile.setStreak(streak);
-
-            return savedAccount;
-        } else {
-            // Si la cuenta de Pixela no se pudo crear, lanza una excepción
-            throw new RuntimeException("Failed to create Pixela account for user: " + account.getEmail());
-        }
+        return accountRepository.save(account);
     }
 
     // Método para generar un token de Pixela (esto puede ser dinámico si lo prefieres)

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.habitoplus.habitoplusback.dto.AuthResponseDTO;
@@ -44,8 +45,8 @@ public class AuthController {
         @ApiResponse(responseCode = "201", description = "Return account", content = {
             @Content(mediaType = "application/json",array = @ArraySchema(schema = @Schema(implementation = RegisterRequest.class)))})
     @PostMapping("/register")
-    public ResponseEntity<AuthResponseDTO> register(@RequestBody RegisterRequest request) {
-        return new ResponseEntity<>(authService.register(request), HttpStatus.CREATED);
+    public ResponseEntity<AuthResponseDTO> register(@RequestBody RegisterRequest request,@RequestParam boolean isNotMinor, @RequestParam String thanksCode) {
+        return new ResponseEntity<>(authService.register(request, isNotMinor,thanksCode), HttpStatus.CREATED);
     }
 
     @Operation(summary = "forgot-password")

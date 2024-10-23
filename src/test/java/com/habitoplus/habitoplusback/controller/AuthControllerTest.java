@@ -111,7 +111,7 @@ class AuthControllerTest {
 
     @Test
     void testRegisterSuccess() throws Exception {
-        when(authService.register(any(RegisterRequest.class))).thenReturn(authResponse);
+        when(authService.register(any(RegisterRequest.class),true,"sda")).thenReturn(authResponse);
 
         mockMvc.perform(post("/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -154,7 +154,7 @@ class AuthControllerTest {
 
     @Test
     void testRegisterWithExistingEmail() throws Exception {
-        when(authService.register(any(RegisterRequest.class)))
+        when(authService.register(any(RegisterRequest.class),true, "ThisIsThanksCode"))
                 .thenThrow(new UserAlreadyExistsException("User with email already exists"));
 
         mockMvc.perform(post("/auth/register")
