@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class RequestPK implements Serializable{
-    private Integer group; // Debe coincidir con el tipo de ID en Group
-    private Integer profile; // Debe coincidir con el tipo de ID en Profile
+    private Integer group; 
+    private Integer profile; 
 
     public RequestPK() {
     }
