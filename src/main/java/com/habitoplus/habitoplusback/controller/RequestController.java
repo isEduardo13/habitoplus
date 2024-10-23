@@ -32,7 +32,7 @@ public class RequestController {
 	@Autowired
 	private RequestService service;
 
-	@Operation(summary = "Register a new request")
+	@Operation(summary = "Add a new request to a group")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Request successfully registered", content = {
 					@Content(mediaType = "application/json", schema = @Schema(implementation = Request.class))

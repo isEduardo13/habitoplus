@@ -2,6 +2,7 @@ package com.habitoplus.habitoplusback.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -62,9 +63,10 @@ public class GroupService {
 	}
 
 	public Group getById(Integer idGroup) {
-		Group group = repository.findById(idGroup).orElseThrow(
-				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Group with ID " + idGroup + " not found."));
-		return group;
+		if(repository.findById(idGroup).isEmpty())
+			throw new NoSuchElementException();
+		
+		return repository.findById(idGroup).get();
 	}
 
 	public void save(GroupDTO groupDTO, Integer idProfile) {

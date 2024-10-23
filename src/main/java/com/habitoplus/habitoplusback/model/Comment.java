@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-@Document(collection = "Comment")
+@Document(collection = "comment")
 public class Comment {
 
     @Id
@@ -29,6 +29,10 @@ public class Comment {
     }
 
     
+    public Comment() {
+    }
+
+
     public Integer getIdGroup() {
         return idGroup;
     }
