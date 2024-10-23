@@ -74,8 +74,7 @@ public class AccountService {
         // Crear o reutilizar el perfil
         Profile profile;
         if (account.getProfile() == null) {
-            profile = new Profile();
-            profile.Inicializar(); // Método que inicializa el perfil con valores predeterminados
+            Profile profile = new Profile();
             profileRepository.save(profile);
             account.setProfile(profile);
         } else {
