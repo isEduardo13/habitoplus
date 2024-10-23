@@ -72,17 +72,17 @@ public class AccountService {
         }
 
         if (account.getStatus() == null) {
-            account.setStatus(true); 
+            account.setStatus(true);
         }
 
         if (account.getRole() == null) {
-            account.setRole(RoleAccounts.USER); 
+            account.setRole(RoleAccounts.USER);
         }
 
         Profile profile;
         if (account.getProfile() == null) {
             profile = new Profile();
-            profile.Inicializar(); 
+            profile.Inicializar();
             profileRepository.save(profile);
             account.setProfile(profile);
         } else {
@@ -98,12 +98,13 @@ public class AccountService {
         streakRepository.save(streak);
 
         String pixelaToken = generatePixelaToken();
-        boolean pixelaCreated = pixelaService.createPixelaAccount(account.getEmail(), pixelaToken, isNotMinor, thanksCode);
+        boolean pixelaCreated = pixelaService.createPixelaAccount(account.getEmail(), pixelaToken, isNotMinor,
+                thanksCode);
         if (pixelaCreated) {
             Account savedAccount = accountRepository.save(account);
 
             Pixela pixela = new Pixela();
-            pixela.setUsername(account.getEmail()); 
+            pixela.setUsername(account.getEmail());
             pixela.setToken(pixelaToken);
             pixela.setAccount(savedAccount);
             pixelaRepository.save(pixela);

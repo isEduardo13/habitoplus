@@ -53,6 +53,7 @@ public class Habit {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Profile profile;
 
+    
 
     public Integer getIdHabit() {
         return idHabit;

@@ -166,7 +166,7 @@ public class AuthService {
         profileRepository.save(profileValid);
     }
    // Método para generar un token de Pixela (esto puede ser dinámico si lo prefieres)
-   private String generatePixelaToken() {
+    private String generatePixelaToken() {
     // Aquí puedes generar un token más seguro si lo necesitas
     return "vtoken2889hsjwi";
     }
