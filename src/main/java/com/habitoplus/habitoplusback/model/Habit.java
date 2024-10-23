@@ -2,8 +2,11 @@ package com.habitoplus.habitoplusback.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.habitoplus.habitoplusback.enums.Priority;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,8 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "habits")
@@ -33,16 +34,15 @@ public class Habit {
     @NotBlank
     private String description;
     private Boolean status;
-    @NotNull
-    @Size(min = 4, max = 5)
-    private String priority;
+    @Enumerated(EnumType.STRING)
+    private Priority priority;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idStreak")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Streak streak;
-    
+
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idProfile")
@@ -89,11 +89,11 @@ public class Habit {
         this.status = status;
     }
 
-    public String getPriority() {
+    public Priority getPriority() {
         return priority;
     }
 
-    public void setPriority(String priority) {
+    public void setPriority(Priority priority) {
         this.priority = priority;
     }
 

@@ -20,6 +20,7 @@ import com.habitoplus.habitoplusback.model.Category;
 import com.habitoplus.habitoplusback.model.Habit;
 import com.habitoplus.habitoplusback.service.HabitService;
 import com.habitoplus.habitoplusback.dto.HabitDTO;
+import com.habitoplus.habitoplusback.enums.Priority;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -75,7 +76,7 @@ public class HabitController {
         })
         @GetMapping("{idHabit}")
         public ResponseEntity<?> getByHabitId(@PathVariable Integer idHabit) {
-                Habit habit = service.getByHabitId(idHabit);
+                Habit habit = service.getById(idHabit);
                 return new ResponseEntity<Habit>(habit, HttpStatus.OK);
         }
 
@@ -93,7 +94,7 @@ public class HabitController {
                         })
         })
         public ResponseEntity<?> registerHabit(@Valid @RequestBody HabitDTO habitDTO) {
-                service.saveHabit(habitDTO);
+                service.save(habitDTO);
                 return new ResponseEntity<String>("Saved Successfully", HttpStatus.OK);
         }
 
@@ -114,7 +115,7 @@ public class HabitController {
         })
         @PutMapping("{idHabit}")
         public ResponseEntity<?> updateHabit(@RequestBody HabitDTO habitDTO, @PathVariable Integer idHabit) {
-                service.updateHabit(idHabit, habitDTO);
+                service.save(idHabit, habitDTO);
                 return new ResponseEntity<>("Habit updated successfully", HttpStatus.OK);
         }
 
@@ -134,8 +135,8 @@ public class HabitController {
                         })
         })
         @PutMapping("{idHabit}/status")
-        public ResponseEntity<?> update(@PathVariable Integer idHabit, @RequestBody Boolean status) {
-                service.update(idHabit, status);
+        public ResponseEntity<?> updateStatus(@PathVariable Integer idHabit, @RequestBody Boolean status) {
+                service.save(idHabit, status);
                 return new ResponseEntity<String>("Updated status", HttpStatus.OK);
         }
 
@@ -156,7 +157,7 @@ public class HabitController {
         })
         @DeleteMapping("{idHabit}")
         public ResponseEntity<?> deleteHabit(@PathVariable Integer idHabit) {
-                service.deleteHabit(idHabit);
+                service.delete(idHabit);
                 return new ResponseEntity<String>("Deleted record", HttpStatus.OK);
         }
 
@@ -176,7 +177,28 @@ public class HabitController {
                         })
         })
         @GetMapping("{idProfile}/{idCatgory}")
-        public List<Habit> getHabitsByCategory(@PathVariable Integer idProfile, @PathVariable Integer idCategory) {
+        public List<Habit> getHabitsByCategory(@PathVariable Integer idProfile, Integer idCategory) {
                 return service.getHabitsByCategory(idProfile, idCategory);
         }
+
+        @Operation(summary = "Get habits of a profile by priority")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Habits retrieved successfully", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = Habit.class))
+                        }),
+                        @ApiResponse(responseCode = "400", description = "Invalid profile ID or priority", content = {
+                                        @Content
+                        }),
+                        @ApiResponse(responseCode = "404", description = "Profile not found", content = {
+                                        @Content
+                        }),
+                        @ApiResponse(responseCode = "500", description = "Internal server error", content = {
+                                        @Content
+                        })
+        })
+        @GetMapping("{idProfile}/priority/{priority}")
+        public List<Habit> getHabitsByPriority(@PathVariable Integer idProfile, @PathVariable Priority priority) {
+                return service.getHabitsByPriority(idProfile, priority);
+        }
+
 }

@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class GroupMemberPK implements Serializable {
-    private Integer group; // Debe coincidir con el tipo de ID en Group
-    private Integer profile; // Debe coincidir con el tipo de ID en Profile
+    private Integer group; 
+    private Integer profile; 
 
     public GroupMemberPK() {}
 
@@ -27,7 +27,6 @@ public class GroupMemberPK implements Serializable {
         return Objects.hash(group, profile);
     }
 
-    // Getters y setters
     public Integer getGroup() {
         return group;
     }

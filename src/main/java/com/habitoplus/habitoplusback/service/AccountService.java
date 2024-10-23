@@ -59,7 +59,6 @@ public class AccountService {
         }
         if (account.getProfile() == null) {
             Profile profile = new Profile();
-            profile.Inicializar();
             profileRepository.save(profile);
             account.setProfile(profile);
         } else {
