@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -62,33 +63,50 @@ public class AuthService {
                 .status(true)
                 .build();
 
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
-            Profile profile = new Profile();
-            profile.Inicializar();
-            profileRepository.save(profile);
-            account.setProfile(profile);
-        
+        String formattedDate = LocalDate.now().format(dateFormatter);
+        String formattedLastConnection = LocalDateTime.now().format(dateTimeFormatter);
+
+        Profile profile = Profile.builder()
+                .age(request.getAge())
+                .dateOfRegistration(formattedDate)
+                .status(true)
+                .lastConnection(formattedLastConnection)
+                .gender(request.getGender())
+                .numberPhone(request.getNumberPhone())
+                .preferences(request.getPreferences())
+                .description(request.getDescription())
+                .lastName(request.getLastName())
+                .name(request.getName())
+                .username(request.getUSername())
+                .birthDate(request.getBirthDate())
+                .habits(null)
+                ///agregar el streak
+                .build();
+
+        profileRepository.save(profile);
+        account.setProfile(profile);
 
         accountRepository.save(account);
         return AuthResponseDTO.builder()
                 .token(jwtService.getToken(account))
                 .build();
     }
-      
-        
 
-        public void forgotPassword(ForgotPasswordRequest request) {
-            String email = request.getEmail();
-            System.out.println("Buscando cuenta con email: " + email);
-            Optional<Account> account = accountRepository.findByEmail(email);
-            if (account.isPresent()) {
-                System.out.println("Cuenta encontrada: " + account.get().getEmail());
-                // send email with password reset code
-            } else {
-                System.out.println("Cuenta no encontrada para el email: " + email);
-                throw new InvalidCredentialsException("Email not found");
-            }
+    public void forgotPassword(ForgotPasswordRequest request) {
+        String email = request.getEmail();
+        System.out.println("Buscando cuenta con email: " + email);
+        Optional<Account> account = accountRepository.findByEmail(email);
+        if (account.isPresent()) {
+            System.out.println("Cuenta encontrada: " + account.get().getEmail());
+            // send email with password reset code
+        } else {
+            System.out.println("Cuenta no encontrada para el email: " + email);
+            throw new InvalidCredentialsException("Email not found");
         }
+    }
 
     public void logout(Integer id) {
         Optional<Profile> optionalProfile = profileRepository.findById(id);
