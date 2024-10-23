@@ -37,13 +37,26 @@ public class Profile {
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Habit> habits;
     
-    @JsonManagedReference("profile-groups")
+    @JsonManagedReference
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupMember> groups;
 
-    @JsonManagedReference("profile-requests")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Note> notes;
+    
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GroupMember> members;
+
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Request> requests;
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HabitRecommendation> recommendations;
 
     @Transient
     private List<Comment> comments;
@@ -159,7 +172,7 @@ public class Profile {
         this.preferences = preferences;
     }
 
-    public String setDescription() {
+    public String getDescription() {
         return description;
     }
 
@@ -213,6 +226,18 @@ public class Profile {
 
     public void setHabits(List<Habit> habits) {
         this.habits = habits;
+    }
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
+    }
+    public List<Note> getNotes() {
+        return notes;
+    }
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
 
     public void Inicializar() {
