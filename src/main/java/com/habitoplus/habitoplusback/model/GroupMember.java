@@ -17,7 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "groupmember")
+@Table(name = "groupmembers")
 @IdClass(GroupMemberPK.class)
 public class GroupMember {
     @Id
