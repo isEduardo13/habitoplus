@@ -2,11 +2,10 @@ package com.habitoplus.habitoplusback.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.habitoplus.habitoplusback.model.Notification;
 
-;
+import com.habitoplus.habitoplusback.model.HabitRecommendation;
 
 @Repository
-public interface NotificationRepository extends JpaRepository<Notification, Integer> {
+public interface HabitRecommendationRepository extends JpaRepository<HabitRecommendation, Integer> {
 
 }

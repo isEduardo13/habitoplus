@@ -1,9 +1,9 @@
 package com.habitoplus.habitoplusback.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.habitoplus.habitoplusback.enums.GroupType;
 
 import jakarta.persistence.CascadeType;
@@ -17,35 +17,42 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "`group`")
+@Table(name = "`groups`")
 public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idGroup;
 
+    @NotBlank(message = "Group name cannot be empty")
+    @Size(min = 3, max = 50, message = "The name must be between 3 and 50 characters long.")
     @Column(nullable = false, name="name")
     private String name;
 
+    @NotBlank(message = "The group description must not be empty")
+    @Size(min = 3, max = 255, message = "The description must be between 3 and 255 characters.")
     @Column(nullable = false, name="description")
     private String description;
 
-    // @ValidEnum(enumClass = GroupType.class, message = "The group type must be one of the allowed values: PUBLIC, PRIVATE")
     @Enumerated(EnumType.STRING)
     private GroupType groupType; 
 
     @Column(nullable = false, name="creation_date")
     private Date creationDate;
 
+    @JsonManagedReference("group-members")
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GroupMember> members = new ArrayList<>();
+    private List<GroupMember> members;
 
+    @JsonManagedReference("group-requests")
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Request> requests = new ArrayList<>();
+    private List<Request> requests;
 
     @Transient
-    private List<Comment> comments;  // No se almacenará en la colección Group
+    private List<Comment> comments;
 
     public Integer getIdGroup() {
         return idGroup;

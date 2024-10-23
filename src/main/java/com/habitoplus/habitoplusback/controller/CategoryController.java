@@ -67,7 +67,7 @@ public class CategoryController {
     })
     @GetMapping("{idCategory}")
     public ResponseEntity<?> getByCategoryId(@PathVariable Integer idCategory) {
-        Category category = service.getByCategoryId(idCategory);
+        Category category = service.getById(idCategory);
         return new ResponseEntity<Category>(category, HttpStatus.OK);
     }
     

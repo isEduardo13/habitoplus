@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.habitoplus.habitoplusback.dto.HabitDTO;
+import com.habitoplus.habitoplusback.enums.Priority;
 import com.habitoplus.habitoplusback.model.Category;
 import com.habitoplus.habitoplusback.model.Habit;
 import com.habitoplus.habitoplusback.model.Profile;
@@ -36,8 +37,8 @@ public class HabitService {
         return habitRepository.findAll();
     }
 
-    public Habit getByHabitId(Integer idHabit) {
-        return habitRepository.findById(idHabit).get();
+    public Habit getById(Integer idHabit) {
+        return repo.findById(idHabit).get();
     }
 
     public List<Habit> getHabitsByProfile(Integer idProfile) {
@@ -56,9 +57,10 @@ public class HabitService {
     
         Habit habit = new Habit();
         habit.setDescription(habitDTO.getDescription());
-        habit.setStatus(habitDTO.getStatus() != null ? habitDTO.getStatus() : false); // Si no se especifica, por defecto es 'false'
+        habit.setStatus(false);
         habit.setPriority(habitDTO.getPriority());
         habit.setHabit_name(habitDTO.getHabitName());
+        Category category = categoryService.getById(habitDTO.getCategoryId());
         habit.setCategory(category);
         habit.setStreak(streak);
         habit.setProfile(profile);
@@ -67,16 +69,17 @@ public class HabitService {
         habitRepository.save(habit);
     }
 
+    public void save(Integer idHabit, HabitDTO habitDTO) {
+        Habit habitTemp = repo.findById(idHabit).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
     public void updateHabit(Integer idHabit, HabitDTO habitDTO) {
         Habit habitTemp = habitRepository.findById(idHabit).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                 "Habit with ID " + idHabit + " not found"));
         if (habitTemp != null) {
-            Category category = categoryService.getByCategoryId(habitDTO.getCategoryId());
+            Category category = categoryService.getById(habitDTO.getCategoryId());
             Streak streak = streakService.getByStreaktId(habitDTO.getStreakId());
             Profile profile = profileService.getProfileById(habitDTO.getProfileId());
             habitTemp.setCategory(category);
             habitTemp.setDescription(habitDTO.getDescription());
-            habitTemp.setStatus(habitDTO.getStatus());
             habitTemp.setPriority(habitDTO.getPriority());
             habitTemp.setStreak(streak);
             habitTemp.setProfile(profile);
@@ -145,4 +148,12 @@ public class HabitService {
         habitRepository.save(habit);
     }
 
+    public List<Habit> getHabitsByCategory(Integer idProfile, Integer idCategory) {
+        return repo.findHabitsByCategory(idProfile, idCategory);
+    }
+
+    public List<Habit> getHabitsByPriority(Integer idProfile, Priority priority) {
+        return repo.findHabitsByPriority(idProfile, priority);
+    }
+    
 }

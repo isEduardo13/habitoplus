@@ -21,6 +21,7 @@ import com.habitoplus.habitoplusback.model.Category;
 import com.habitoplus.habitoplusback.model.Habit;
 import com.habitoplus.habitoplusback.service.HabitService;
 import com.habitoplus.habitoplusback.dto.HabitDTO;
+import com.habitoplus.habitoplusback.enums.Priority;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -41,7 +42,7 @@ public class HabitController {
         @Autowired
         private HabitService habitService;
 
-        @Operation(summary = "Get all the user's habits")
+        @Operation(summary = "Get all habits")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Found habits", content = {
                                         @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Category.class)))
@@ -76,7 +77,7 @@ public class HabitController {
         })
         @GetMapping("{idHabit}")
         public ResponseEntity<?> getByHabitId(@PathVariable Integer idHabit) {
-                Habit habit = habitService.getByHabitId(idHabit);
+                Habit habit = habitService.getById(idHabit);
                 return new ResponseEntity<Habit>(habit, HttpStatus.OK);
         }
 
