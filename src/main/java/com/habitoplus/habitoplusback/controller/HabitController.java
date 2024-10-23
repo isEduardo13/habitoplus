@@ -177,8 +177,8 @@ public class HabitController {
                         })
         })
         @GetMapping("{idProfile}/{idCatgory}")
-        public List<Habit> getHabitsByCategory(@PathVariable Integer idProfile, Integer idCategory) {
-                return service.getHabitsByCategory(idProfile, idCategory);
+        public List<Habit> getHabitsByCategory(@PathVariable Integer idProfile, @PathVariable Integer idCatgory) {
+                return service.getHabitsByCategory(idProfile, idCatgory);
         }
 
         @Operation(summary = "Get habits of a profile by priority")
