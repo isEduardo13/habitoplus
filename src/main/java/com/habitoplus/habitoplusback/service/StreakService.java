@@ -31,7 +31,6 @@ public class StreakService {
         Optional<Streak> optionalStreak = streakRepository.findById(idStreak);
         if (optionalStreak.isPresent()) {
             Streak streak = optionalStreak.get();
-            // Usando el constructor de Streak
             return new StreakDTO(streak.getStartDate(), streak.getConsecutiveDays());
         }
         return null;
