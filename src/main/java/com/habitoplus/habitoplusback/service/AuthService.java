@@ -41,6 +41,9 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public AuthResponseDTO login(LoginRequest request) {
+        if (!accountRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new InvalidCredentialsException("Invalid email or password");
+        }
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         Account user = accountRepository.findByEmail(request.getEmail()).orElseThrow();
         String token = jwtService.getToken(user);
