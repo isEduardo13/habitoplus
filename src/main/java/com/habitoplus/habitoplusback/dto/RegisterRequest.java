@@ -21,4 +21,6 @@ public class RegisterRequest {
     private String lastName;
     private String USername;
     private String birthDate;
+
+    
 }

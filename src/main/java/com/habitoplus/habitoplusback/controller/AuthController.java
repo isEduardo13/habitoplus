@@ -15,6 +15,9 @@ import com.habitoplus.habitoplusback.dto.AuthResponseDTO;
 import com.habitoplus.habitoplusback.dto.ForgotPasswordRequest;
 import com.habitoplus.habitoplusback.dto.LoginRequest;
 import com.habitoplus.habitoplusback.dto.RegisterRequest;
+import com.habitoplus.habitoplusback.exception.UserAlreadyExistsException;
+import com.habitoplus.habitoplusback.model.Account;
+import com.habitoplus.habitoplusback.service.AccountService;
 import com.habitoplus.habitoplusback.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,37 +37,51 @@ public class AuthController {
     private AuthService authService;
 
     @Operation(summary = "login")
-        @ApiResponse(responseCode = "200", description = "Return token", content = {
-            @Content(mediaType = "application/json")})
+    @ApiResponse(responseCode = "200", description = "Return token", content = {
+        @Content(mediaType = "application/json")})
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequest loginRequest) {
 
         return new ResponseEntity<>(authService.login(loginRequest), HttpStatus.OK);
     }
-        @Operation(summary = "register")
-        @ApiResponse(responseCode = "201", description = "Return account", content = {
-            @Content(mediaType = "application/json",array = @ArraySchema(schema = @Schema(implementation = RegisterRequest.class)))})
+
+    @Operation(summary = "register")
+    @ApiResponse(responseCode = "201", description = "Account with pixela created successfully", content = {
+        @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))})
     @PostMapping("/register")
-    public ResponseEntity<AuthResponseDTO> register(@RequestBody RegisterRequest request,@RequestParam boolean isNotMinor, @RequestParam String thanksCode) {
-        return new ResponseEntity<>(authService.register(request, isNotMinor,thanksCode), HttpStatus.CREATED);
+    public ResponseEntity<?> createAccount(
+            @RequestBody RegisterRequest request,
+            @RequestParam boolean isNotMinor,
+            @RequestParam(required = false) String thanksCode
+    ) {
+        try {
+            AuthResponseDTO response = authService.register(request, isNotMinor, thanksCode);
+
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+
+        } catch (UserAlreadyExistsException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("An unexpected error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Operation(summary = "forgot-password")
-        @ApiResponse(responseCode = "200", description = "Return message", content = {
-            @Content(mediaType = "application/json")})
+    @ApiResponse(responseCode = "200", description = "Return message", content = {
+        @Content(mediaType = "application/json")})
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {
         authService.forgotPassword(request);
         return new ResponseEntity<>("Password reset code sent to email", HttpStatus.OK);
     }
+
     @Operation(summary = "logout")
-        @ApiResponse(responseCode = "200", description = "Return message ", content = {
-            @Content(mediaType = "application/json")})
+    @ApiResponse(responseCode = "200", description = "Return message ", content = {
+        @Content(mediaType = "application/json")})
     @PostMapping("/logout/{id}")
     public ResponseEntity<String> logout(@PathVariable Integer id) {
         authService.logout(id);
         return new ResponseEntity<>("Logged out successfully", HttpStatus.OK);
     }
 }
-
-

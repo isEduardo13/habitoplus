@@ -39,27 +39,27 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @Operation(summary = "Create a new account")
-    @ApiResponse(responseCode = "201", description = "Account created successfully", content = {
-        @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))})
-    @PostMapping
-    public ResponseEntity<?> createAccount(
-            @RequestBody Account account,
-            @RequestParam boolean isNotMinor,
-            @RequestParam(required = false) String thanksCode
-    ) {
-        try {
-            Account createdAccount = accountService.addAccount(account, isNotMinor, thanksCode);
+    // @Operation(summary = "Create a new account")
+    // @ApiResponse(responseCode = "201", description = "Account created successfully", content = {
+    //     @Content(mediaType = "application/json", schema = @Schema(implementation = Account.class))})
+    // @PostMapping
+    // public ResponseEntity<?> createAccount(
+    //         @RequestBody Account account,
+    //         @RequestParam boolean isNotMinor,
+    //         @RequestParam(required = false) String thanksCode
+    // ) {
+    //     try {
+    //         Account createdAccount = accountService.addAccount(account, isNotMinor, thanksCode);
 
-            return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
+    //         return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
 
-        } catch (UserAlreadyExistsException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-        } catch (Exception e) {
-            e.printStackTrace(); // Imprimir detalles del error en los logs
-            return new ResponseEntity<>("An unexpected error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    //     } catch (UserAlreadyExistsException e) {
+    //         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    //     } catch (Exception e) {
+    //         e.printStackTrace(); // Imprimir detalles del error en los logs
+    //         return new ResponseEntity<>("An unexpected error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
 
     @Operation(summary = "Get all accounts")
     @ApiResponse(responseCode = "200", description = "Return all accounts", content = {

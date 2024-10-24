@@ -46,23 +46,18 @@ public class HabitService {
         return profile.getHabits();
     }
 
-    public void saveHabit(HabitDTO habitDTO) {
-        Category category = categoryService.getById(habitDTO.getCategoryId());
-        Profile profile = profileService.getProfileById(habitDTO.getProfileId());    
-
-        Streak streak = profile.getStreak();
-        
+    public void save(HabitDTO habitDTO) {
         Habit habit = new Habit();
         habit.setDescription(habitDTO.getDescription());
         habit.setStatus(false);
         habit.setPriority(habitDTO.getPriority());
         habit.setHabit_name(habitDTO.getHabitName());
-        categoryService.getById(habitDTO.getCategoryId());
+        Category category = categoryService.getById(habitDTO.getCategoryId());
         habit.setCategory(category);
+        Streak streak = streakService.getByStreaktId(habitDTO.getStreakId());
         habit.setStreak(streak);
+        Profile profile = profileService.getProfileById(habitDTO.getProfileId());
         habit.setProfile(profile);
-        habit.setLastCompletedDate(null);
-    
         habitRepository.save(habit);
     }
 
@@ -98,32 +93,41 @@ public class HabitService {
     public void updateHabitStatus(Integer idHabit, Integer idProfile, Boolean status) {
         Habit habit = habitRepository.findById(idHabit)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Habit not found"));
-
+    
         Profile habitProfile = habit.getProfile();
-
+    
         if (!habitProfile.getIdProfile().equals(idProfile)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, 
                 "Habit does not belong to the provided profile. Habit profile ID: " + habitProfile.getIdProfile() + 
                 " , Provided profile ID: " + idProfile);
         }
+    
         habit.setStatus(status);
-
+    
         Streak streak = habit.getStreak();
-
+    
         if (status) {
             if (streak.getCompleteHabits() == null) {
                 streak.setCompleteHabits(0);
             }
+    
             streak.setCompleteHabits(streak.getCompleteHabits() + 1);
-
+            if (streak.getStartDate() == null) {
+                streak.setStartDate(new Date());
+            }
+    
             if (streak.getCompleteHabits() >= 5) {
                 streak.setConsecutiveDays(streak.getConsecutiveDays() + 1);
-                streak.setEndDate(new Date());  
-
                 streak.setCompleteHabits(0);
             }
+        } else {
+            if (streak.getCompleteHabits() == 0) {
+                streak.setEndDate(new Date());  
+                streak.setStartDate(null);     
+                streak.setConsecutiveDays(0);  
+            }
         }
-
+    
         streakService.createStreak(streak);
         habitRepository.save(habit);
     }

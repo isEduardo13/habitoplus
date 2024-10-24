@@ -36,10 +36,10 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idProfile;
 
-    @OneToOne
+    /*@OneToOne
     @JoinColumn(name = "idAccount", referencedColumnName = "idAccount")
     @JsonBackReference(value = "account-profile")  
-    private Account account;
+    private Account account;*/
 
     @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "profile-streak")
@@ -66,6 +66,7 @@ public class Profile {
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Request> requests;
+
 
     @Transient
     private List<Comment> comments;
@@ -117,4 +118,6 @@ public class Profile {
     @NotBlank
     @Size(min = 1, max = 19, message = "Last connection must be between 1 and 19 characters")
     private String lastConnection;
+
+    
 }

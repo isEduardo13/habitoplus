@@ -63,63 +63,63 @@ public class AccountService {
         return accountRepository.getAccoutsByEmail(email);
     }
 
-    @Transactional
-    public Account addAccount(Account account, boolean isNotMinor, String thanksCode) {
-        Optional<Account> existingAccount = accountRepository.findByEmail(account.getEmail());
+    // @Transactional
+    // public Account addAccount(Account account, boolean isNotMinor, String thanksCode) {
+    //     Optional<Account> existingAccount = accountRepository.findByEmail(account.getEmail());
 
-        if (existingAccount.isPresent()) {
-            throw new UserAlreadyExistsException("User with email " + account.getEmail() + " already exists");
-        }
+    //     if (existingAccount.isPresent()) {
+    //         throw new UserAlreadyExistsException("User with email " + account.getEmail() + " already exists");
+    //     }
 
-        if (account.getStatus() == null) {
-            account.setStatus(true);
-        }
+    //     if (account.getStatus() == null) {
+    //         account.setStatus(true);
+    //     }
 
-        if (account.getRole() == null) {
-            account.setRole(RoleAccounts.USER);
-        }
+    //     if (account.getRole() == null) {
+    //         account.setRole(RoleAccounts.USER);
+    //     }
 
-        Profile profile;
-        if (account.getProfile() == null) {
-            profile = new Profile();
-            profile.Inicializar();
-            profileRepository.save(profile);
-            account.setProfile(profile);
-        } else {
-            profile = account.getProfile();
-            profileRepository.save(profile);
-        }
+    //     Profile profile;
+    //     if (account.getProfile() == null) {
+    //         profile = new Profile();
+    //         profile.Inicializar();
+    //         profileRepository.save(profile);
+    //         account.setProfile(profile);
+    //     } else {
+    //         profile = account.getProfile();
+    //         profileRepository.save(profile);
+    //     }
 
-        Streak streak = new Streak();
-        streak.setConsecutiveDays(0);
-        streak.setStartDate(null);
-        streak.setEndDate(null);
-        streak.setProfile(profile);
-        streakRepository.save(streak);
+    //     Streak streak = new Streak();
+    //     streak.setConsecutiveDays(0);
+    //     streak.setStartDate(null);
+    //     streak.setEndDate(null);
+    //     streak.setProfile(profile);
+    //     streakRepository.save(streak);
 
-        String pixelaToken = generatePixelaToken();
-        boolean pixelaCreated = pixelaService.createPixelaAccount(account.getEmail(), pixelaToken, isNotMinor,
-                thanksCode);
-        if (pixelaCreated) {
-            Account savedAccount = accountRepository.save(account);
+    //     String pixelaToken = generatePixelaToken();
+    //     boolean pixelaCreated = pixelaService.createPixelaAccount(account.getEmail(), pixelaToken, isNotMinor,
+    //             thanksCode);
+    //     if (pixelaCreated) {
+    //         Account savedAccount = accountRepository.save(account);
 
-            Pixela pixela = new Pixela();
-            pixela.setUsername(account.getEmail());
-            pixela.setToken(pixelaToken);
-            pixela.setAccount(savedAccount);
-            pixelaRepository.save(pixela);
+    //         Pixela pixela = new Pixela();
+    //         pixela.setUsername(account.getEmail());
+    //         pixela.setToken(pixelaToken);
+    //         pixela.setAccount(savedAccount);
+    //         pixelaRepository.save(pixela);
 
-            profile.setStreak(streak);
+    //         profile.setStreak(streak);
 
-            return savedAccount;
-        } else {
-            throw new RuntimeException("Failed to create Pixela account for user: " + account.getEmail());
-        }
-    }
+    //         return savedAccount;
+    //     } else {
+    //         throw new RuntimeException("Failed to create Pixela account for user: " + account.getEmail());
+    //     }
+    // }
 
-    private String generatePixelaToken() {
-        return "thisissecret";
-    }
+    // private String generatePixelaToken() {
+    //     return "thisissecret";
+    // }
 
     public Account updateAccount(Account account) {
 

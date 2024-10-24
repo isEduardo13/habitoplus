@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@JsonIgnoreProperties({"profile", "pixela"}) 
+//@JsonIgnoreProperties({"profile", "pixela"}) 
 @Data
 @Builder
 @AllArgsConstructor
@@ -38,7 +38,7 @@ public class Account implements UserDetails {
     private String email;
 
     @NotBlank
-    @Size(min = 1, max = 15, message = "Password must be between 1 and 15 characters")
+    @Size(min = 8, max = 128, message = "Password must be between 8 and 128 characters")
     @Column(name = "password")
     private String password;
 
@@ -79,7 +79,6 @@ public class Account implements UserDetails {
     public boolean isAccountNonExpired() {
         return true;
     }
-
 
     @Override
     public boolean isCredentialsNonExpired() {

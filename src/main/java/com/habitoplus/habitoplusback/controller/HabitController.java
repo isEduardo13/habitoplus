@@ -95,7 +95,7 @@ public class HabitController {
                         })
         })
         public ResponseEntity<?> registerHabit(@Valid @RequestBody HabitDTO habitDTO) {
-                habitService.saveHabit(habitDTO);
+                habitService.save(habitDTO);
                 return new ResponseEntity<String>("Saved Successfully", HttpStatus.OK);
         }
 
@@ -177,9 +177,9 @@ public class HabitController {
         })
         public ResponseEntity<String> updateHabitStatus(
                         @PathVariable Integer idHabit,
-                        @RequestParam Integer idProfile, // Añadimos el idProfile como parámetro
+                        @RequestParam Integer idProfile, 
                         @RequestParam Boolean status) {
-                habitService.updateHabitStatus(idHabit, idProfile, status); // Ahora pasamos el idProfile al servicio
+                habitService.updateHabitStatus(idHabit, idProfile, status); 
                 return new ResponseEntity<>("Habit status and streak updated successfully", HttpStatus.OK);
         }
 
