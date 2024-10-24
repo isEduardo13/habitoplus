@@ -16,7 +16,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "streaks")
 public class Streak {
@@ -39,57 +47,4 @@ public class Streak {
     private Date startDate;
     private Date endDate;
 
-    
-    public Integer getIdStreak() {
-        return idStreak;
-    }
-    public void setIdStreak(Integer idStreak) {
-        this.idStreak = idStreak;
-    }
-    public List<Habit> getHabits() {
-        return habits;
-    }
-    public void setHabits(List<Habit> habits) {
-        this.habits = habits;
-    }
-    public Profile getProfile() {
-        return profile;
-    }
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
-    public Integer getConsecutiveDays() {
-        return consecutiveDays;
-    }
-    public void setConsecutiveDays(Integer consecutiveDays) {
-        this.consecutiveDays = consecutiveDays;
-    }
-    public Date getStartDate() {
-        return startDate;
-    }
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-    public Date getEndDate() {
-        return endDate;
-    }
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    
-    @Override
-    public String toString() {
-        return "Streak [idStreak=" + idStreak + ", habits=" + habits + ", profile=" + profile + ", consecutiveDays="
-                + consecutiveDays + ", habitsCompleted=" + completeHabits + ", startDate=" + startDate + ", endDate="
-                + endDate + "]";
-    }
-    public Integer getCompleteHabits() {
-        return completeHabits;
-    }
-    public void setCompleteHabits(Integer completeHabits) {
-        this.completeHabits = completeHabits;
-    }
-    
-    
 }
